@@ -33,9 +33,9 @@ jobs:
       ALEMBIC_DATABASE_URL: postgresql+psycopg://vendor_risk:vendor_risk@localhost:5432/vendor_risk_test
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
