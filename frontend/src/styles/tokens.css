@@ -1,0 +1,133 @@
+/*
+ * Design tokens — corporate minimalism.
+ * A single restrained slate-blue accent over a graphite/slate neutral base.
+ * Severity is the only place hue carries meaning, and it is always paired with a
+ * text label. Both themes are first-class; the inline script in index.html sets
+ * data-theme before first paint so there is no flash.
+ */
+
+:root {
+  /* Typography */
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-md: 1.0625rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.875rem;
+  --text-2xl: 2.5rem;
+
+  --tracking-tight: -0.014em;
+  --tracking-wide: 0.04em;
+  --tracking-caps: 0.06em;
+
+  /* Spacing (4px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius: 9px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition: 150ms var(--ease);
+  --transition-slow: 280ms var(--ease-out);
+
+  /* ---- Light theme (default) ---- */
+  --bg: #f6f8fb;
+  --bg-grid: #eceff4;
+  --surface: #ffffff;
+  --surface-2: #f0f3f7;
+  --surface-hover: #f4f6f9;
+  --border: #e3e7ee;
+  --border-strong: #ccd3de;
+
+  --text: #171b24;
+  --text-muted: #5a6474;
+  --text-subtle: #8b94a5;
+  --text-on-accent: #ffffff;
+
+  --accent: #385ea3;
+  --accent-hover: #2c4d8c;
+  --accent-active: #26437a;
+  --accent-soft: #eaf0fa;
+  --accent-border: #c3d2ec;
+
+  --focus: #5a7fc0;
+  --danger: #b42318;
+  --danger-soft: #fbeceb;
+
+  /* Severity — solid fills, WCAG-AA text on fill. */
+  --sev-critical: #b42318;
+  --sev-critical-fg: #ffffff;
+  --sev-high: #b45309;
+  --sev-high-fg: #ffffff;
+  --sev-medium: #8a6d16;
+  --sev-medium-fg: #ffffff;
+  --sev-low: #2f7d4f;
+  --sev-low-fg: #ffffff;
+  --sev-none: #737d8c;
+  --sev-none-fg: #ffffff;
+  --sev-empty: #eef1f5;
+
+  --shadow-sm: 0 1px 2px rgba(20, 27, 38, 0.06);
+  --shadow: 0 2px 6px rgba(20, 27, 38, 0.07), 0 1px 2px rgba(20, 27, 38, 0.05);
+  --shadow-lg: 0 12px 32px rgba(20, 27, 38, 0.12), 0 2px 8px rgba(20, 27, 38, 0.06);
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0d1017;
+  --bg-grid: #141922;
+  --surface: #161c26;
+  --surface-2: #1c232f;
+  --surface-hover: #202836;
+  --border: #262e3b;
+  --border-strong: #364152;
+
+  --text: #e7ebf1;
+  --text-muted: #9aa4b4;
+  --text-subtle: #66717f;
+  --text-on-accent: #0b0f16;
+
+  --accent: #7aa2e3;
+  --accent-hover: #93b3ea;
+  --accent-active: #a7c2ee;
+  --accent-soft: #1a2842;
+  --accent-border: #2f456e;
+
+  --focus: #7aa2e3;
+  --danger: #f0685b;
+  --danger-soft: #2a1614;
+
+  --sev-critical: #d9463c;
+  --sev-critical-fg: #ffffff;
+  --sev-high: #d17318;
+  --sev-high-fg: #16110a;
+  --sev-medium: #c39a2b;
+  --sev-medium-fg: #16130a;
+  --sev-low: #3fa066;
+  --sev-low-fg: #06130c;
+  --sev-none: #5b6472;
+  --sev-none-fg: #ffffff;
+  --sev-empty: #1a212c;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55), 0 3px 10px rgba(0, 0, 0, 0.4);
+
+  color-scheme: dark;
+}

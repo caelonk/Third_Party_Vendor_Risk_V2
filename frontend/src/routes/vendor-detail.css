@@ -1,0 +1,32 @@
+.vd__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+.vd__stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5) var(--space-4);
+}
+.stat__value {
+  margin-top: 4px;
+  font-size: var(--text-md);
+  font-weight: 500;
+  color: var(--text);
+}
+.vd__disclaimer {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  border-left: 3px solid var(--border-strong);
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  max-width: 80ch;
+}
+
+@media (max-width: 720px) {
+  .vd__grid {
+    grid-template-columns: 1fr;
+  }
+}

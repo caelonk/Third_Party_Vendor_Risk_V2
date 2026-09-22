@@ -1,0 +1,17 @@
+.modal__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: color-mix(in srgb, #05070c 55%, transparent);
+  backdrop-filter: blur(2px);
+}
+.modal {
+  width: 100%;
+  max-width: 460px;
+  box-shadow: var(--shadow-lg);
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+}

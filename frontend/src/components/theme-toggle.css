@@ -1,0 +1,33 @@
+.seg {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.seg__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 26px;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-subtle);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.seg__btn svg {
+  width: 15px;
+  height: 15px;
+}
+.seg__btn:hover {
+  color: var(--text);
+}
+.seg__btn--on {
+  background: var(--surface);
+  color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}

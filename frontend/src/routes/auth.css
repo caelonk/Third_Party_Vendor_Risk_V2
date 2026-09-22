@@ -1,0 +1,97 @@
+.auth {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+}
+
+/* Left: brand panel */
+.auth__brand {
+  position: relative;
+  padding: var(--space-8) var(--space-7);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+}
+.auth__brand::after {
+  /* quiet matrix grid, decorative */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(120% 90% at 90% 10%, #000 0%, transparent 62%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.auth__brand > * {
+  position: relative;
+  z-index: 1;
+}
+.auth__pitch h1 {
+  font-size: var(--text-2xl);
+  line-height: 1.08;
+  margin: var(--space-6) 0 var(--space-4);
+  max-width: 15ch;
+}
+.auth__pitch p {
+  color: var(--text-muted);
+  max-width: 42ch;
+  font-size: var(--text-md);
+}
+.auth__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  margin-top: var(--space-6);
+}
+.auth__disclaimer {
+  color: var(--text-subtle);
+  font-size: var(--text-xs);
+  max-width: 52ch;
+  border-left: 2px solid var(--border-strong);
+  padding-left: var(--space-3);
+  line-height: 1.5;
+}
+
+/* Right: form */
+.auth__form-wrap {
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
+  background: var(--bg);
+}
+.auth__form {
+  width: 100%;
+  max-width: 380px;
+}
+.auth__form h2 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-2);
+}
+.auth__form > p.subtle {
+  margin-bottom: var(--space-6);
+}
+.auth__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.auth__foot {
+  margin-top: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+@media (max-width: 860px) {
+  .auth {
+    grid-template-columns: 1fr;
+  }
+  .auth__brand {
+    display: none;
+  }
+}
