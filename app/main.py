@@ -10,7 +10,7 @@ from fastapi import APIRouter, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from .api import auth, health, invitations, me, orgs
+from .api import auth, health, invitations, me, orgs, vendors
 from .config import get_settings
 from .services.exceptions import (
     AuthError,
@@ -62,6 +62,7 @@ def create_app() -> FastAPI:
     api_v1 = APIRouter(prefix="/api/v1")
     api_v1.include_router(auth.router)
     api_v1.include_router(orgs.router)
+    api_v1.include_router(vendors.router)
     api_v1.include_router(invitations.router)
     api_v1.include_router(me.router)
     app.include_router(api_v1)
