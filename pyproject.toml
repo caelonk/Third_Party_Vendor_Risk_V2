@@ -23,6 +23,7 @@ dependencies = [
     "redis>=5.0",
     "argon2-cffi>=23.1",
     "pyjwt>=2.8",
+    "cryptography>=42",
     "requests>=2.31",
     "weasyprint>=61",
 ]
