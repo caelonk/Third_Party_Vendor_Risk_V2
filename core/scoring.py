@@ -74,7 +74,8 @@ def assess(vendor, cves) -> dict:
     eband = exposure_band(vendor) if mapped else None
     return {
         "vendor_name": vendor.get("vendor_name"),
-        "tier": MATRIX[(tband, eband)] if mapped else NOT_ASSESSED,
+        # When mapped, tband/eband are non-None (set from threat/exposure_band).
+        "tier": MATRIX[(tband, eband)] if mapped else NOT_ASSESSED,  # type: ignore[index]
         "threat_band": tband,
         "exposure_band": eband,
         "max_cvss": max_cvss(cves),

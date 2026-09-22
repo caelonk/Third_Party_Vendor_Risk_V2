@@ -1,0 +1,113 @@
+# Vendor Risk Platform
+
+Multi-tenant SaaS for continuous **third-party vendor vulnerability risk**
+scoring. Teams sign in, add the vendors they depend on, and get continuous
+published-vulnerability risk scoring from real NVD / CISA KEV data, with
+automated monitoring, alerting, reporting, and a customizable dashboard.
+
+Built on the proven, pure risk model from the original demo
+([`caelonk/vendor-risk-dashboard`](https://github.com/caelonk/vendor-risk-dashboard)),
+now wrapped in a real web application.
+
+> **Scope.** This tool measures *published vulnerabilities in vendor products*.
+> It does not measure whether a vendor has been breached, the vendor's internal
+> security posture, or whether this organization is actually exposed. A high
+> score means "investigate," not "compromised."
+
+## Honest-data guarantees
+
+These are non-negotiable and carry from the demo into every layer:
+
+- **"Unscored" is never `0.0`.** A missing CVSS score stays `NULL`; it never
+  counts toward thresholds and never renders as a zero.
+- **"Not Assessed" is never "Low".** An unmapped or failed-fetch vendor is a
+  distinct state — absence of data is not evidence of low risk.
+- **A partial sync keeps prior good rows.** A vendor whose fetch fails is never
+  downgraded or wiped; its last good data stands.
+- **KEV floors a vendor at High, not Critical** — deliberately, so the exposure
+  axis is not collapsed. The final tier is a fixed lookup matrix, not arithmetic.
+
+## Architecture
+
+```
+React SPA ──HTTPS(JWT cookie)──▶ FastAPI API ──▶ PostgreSQL (system of record)
+                                     │      └──▶ Redis (broker + rate-limit)
+                                     ▼ enqueue
+                              Celery worker ──▶ NVD 2.0 / SMTP / Slack
+                              Celery Beat (cron dispatcher)
+```
+
+CVE data is public and identical for every tenant, so the `vulnerabilities`
+cache is **global** (deduplicated by CVE); everything derived from business
+context is **per-org**. The API and the worker both import the same dependency-
+light `core/` package, so business logic has exactly one home.
+
+| Layer | Stack |
+|-------|-------|
+| Backend | FastAPI, SQLAlchemy 2.0 (sync) + psycopg3, Alembic |
+| Domain core | `core/` — scoring, parser, NVD client, sync (only `requests`) |
+| Background | Celery + Redis + Celery Beat |
+| Auth | JWT (httpOnly cookies), Argon2id, RBAC (owner/admin/member/viewer) |
+| Database | PostgreSQL |
+| Frontend | React + TypeScript + Vite *(Phase 1)* |
+
+## Repository layout
+
+```
+core/          Pure domain library (scoring, parser, nvd_client, sync, constants)
+app/           FastAPI web layer (models, config, db, security, deps, api, workers)
+seed/          Dev-only offline pipeline (SQLite + static HTML snapshot)
+migrations/    Alembic (env + versions)
+tests/         Pytest suite + saved NVD fixture corpus
+config/        vendors.yml (CPE prefix map)
+```
+
+## Quickstart (Docker)
+
+```bash
+cp .env.example .env          # then edit secrets (see below)
+docker compose up --build
+```
+
+The API comes up on <http://localhost:8000> (`/healthz`, `/api/docs`). The `api`
+service runs `alembic upgrade head` on start; `worker` and `beat` share the same
+image.
+
+**Generate the required secrets** before first run:
+
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(48))"   # JWT_SECRET
+python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"  # APP_ENCRYPTION_KEY
+```
+
+## Local development
+
+```bash
+python -m venv .venv && . .venv/Scripts/activate   # Windows: .venv\Scripts\activate
+pip install -e ".[dev]"
+
+pytest                 # full suite (offline, SQLite)
+ruff check .           # lint
+mypy core app          # type-check
+
+# Offline dev seed: replay the saved NVD fixtures into a local SQLite snapshot.
+python -m seed.pipeline --offline
+```
+
+## Testing
+
+The suite is **offline and deterministic** — it replays a saved NVD fixture
+corpus, so there is no network dependency. Model and app-layer tests run against
+in-memory SQLite; the Alembic migration is verified against PostgreSQL in CI.
+
+## Roadmap status
+
+- **Phase 0 — Harden & refactor (done):** repo skeleton, ported `core/`,
+  SQLAlchemy models + first migration, app shell, Docker/CI. No user-facing change.
+- **Phase 1 — MVP SaaS:** auth/orgs/RBAC, vendor CRUD, on-demand sync, design
+  system + light/dark, customizable dashboard, vendor list/detail.
+- **Phase 2 — Automation:** scheduled incremental sync, risk trends, alerts.
+- **Phase 3 — Reporting & onboarding:** CSV/PDF export, CPE + SBOM onboarding.
+- **Phase 4 — Scale & polish:** OAuth/SSO, billing, observability.
+
+See [`PLAN.md`](PLAN.md) and [`HANDOFF.md`](HANDOFF.md) for the full plan.
