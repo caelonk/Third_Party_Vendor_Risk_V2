@@ -55,6 +55,20 @@ extend-exclude = ["migrations/versions"]
 select = ["E", "F", "I", "UP", "B"]
 ignore = ["E501"]  # line length is handled by the formatter, not enforced hard
 
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI dependency markers are designed to be called in argument defaults.
+extend-immutable-calls = [
+    "fastapi.Depends",
+    "fastapi.Query",
+    "fastapi.Path",
+    "fastapi.Cookie",
+    "fastapi.Header",
+    "fastapi.Body",
+    "fastapi.Form",
+    "fastapi.File",
+    "fastapi.Security",
+]
+
 [tool.mypy]
 python_version = "3.11"
 warn_unused_ignores = true
