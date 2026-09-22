@@ -1,0 +1,5143 @@
+{
+ "resultsPerPage": 31,
+ "startIndex": 0,
+ "totalResults": 31,
+ "format": "NVD_CVE",
+ "version": "2.0",
+ "timestamp": "2026-08-02T00:30:41.909",
+ "vulnerabilities": [
+  {
+   "cve": {
+    "id": "CVE-2026-3517",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-04-20T14:16:19.330",
+    "lastModified": "2026-06-17T10:43:42.390",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "OS Command Injection Remote Code Execution Vulnerability in API in Progress ADC Products allows an authenticated attacker with \u201cGeo Administration\u201d permissions to execute arbitrary commands on the LoadMaster appliance by exploiting unsanitized input in the 'addcountry' command"
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "LoadMaster",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "7.1.32.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "ECS Connections Manager",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "7.2.49.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "Object Scale Connection Manager",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "7.2.62.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "MOVEit WAF",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "7.2.62.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:A/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+        "baseScore": 8.4,
+        "baseSeverity": "HIGH",
+        "attackVector": "ADJACENT_NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.7,
+       "impactScore": 6.0
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 7.2,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.2,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-21T00:00:00+00:00",
+        "id": "CVE-2026-3517",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-77"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:connection_manager_for_objectscale:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "7.2.63.1",
+          "matchCriteriaId": "29595DEA-0B11-4F15-9D98-2FE6B921E1BB"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:ecs_connection_manager:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "7.2.63.1",
+          "matchCriteriaId": "73724463-A364-43DE-BF05-641226373DD6"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:loadmaster:*:*:*:*:ltsf:*:*:*",
+          "versionEndExcluding": "7.2.54.17",
+          "matchCriteriaId": "AC313444-74D6-491D-B7BA-36BF6382D4FC"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:loadmaster:*:*:*:*:ga:*:*:*",
+          "versionEndExcluding": "7.2.63.1",
+          "matchCriteriaId": "A03DB1D6-4225-406D-8A53-3730266390C1"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/LoadMaster-Security-Vulnerabilites-CVE-2026-3517-CVE-2026-3518-CVE-2026-3519-CVE-2026-4048-CVE-2026-21876",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-3518",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-04-20T14:16:19.517",
+    "lastModified": "2026-06-17T10:43:42.497",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "OS Command Injection Remote Code Execution Vulnerability in API in Progress ADC Products allows an authenticated attacker with \u201cAll\u201d permissions to execute arbitrary commands on the LoadMaster appliance by exploiting unsanitized input in the 'killsession' command"
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "LoadMaster",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.37.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "ECS Connections Manager",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.49.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "Object Scale Connection Manager",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.62.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "MOVEit WAF",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.62.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:A/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+        "baseScore": 8.4,
+        "baseSeverity": "HIGH",
+        "attackVector": "ADJACENT_NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.7,
+       "impactScore": 6.0
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 7.2,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.2,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-21T00:00:00+00:00",
+        "id": "CVE-2026-3518",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-77"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:connection_manager_for_objectscale:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "7.2.63.1",
+          "matchCriteriaId": "29595DEA-0B11-4F15-9D98-2FE6B921E1BB"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:ecs_connection_manager:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "7.2.63.1",
+          "matchCriteriaId": "73724463-A364-43DE-BF05-641226373DD6"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:loadmaster:*:*:*:*:ltsf:*:*:*",
+          "versionEndExcluding": "7.2.54.17",
+          "matchCriteriaId": "AC313444-74D6-491D-B7BA-36BF6382D4FC"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:loadmaster:*:*:*:*:ga:*:*:*",
+          "versionEndExcluding": "7.2.63.1",
+          "matchCriteriaId": "A03DB1D6-4225-406D-8A53-3730266390C1"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/LoadMaster-Security-Vulnerabilites-CVE-2026-3517-CVE-2026-3518-CVE-2026-3519-CVE-2026-4048-CVE-2026-21876",
+      "source": "security@progress.com",
+      "tags": [
+       "Patch",
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-3519",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-04-20T14:16:19.683",
+    "lastModified": "2026-06-17T10:43:42.607",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "OS Command Injection Remote Code Execution Vulnerability in API in Progress ADC Products allows an authenticated attacker with \u201cVS Administration\u201d permissions to execute arbitrary commands on the LoadMaster appliance by exploiting unsanitized input in the 'aclcontrol' command"
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "LoadMaster",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.45.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "ECS Connections Manager",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.49.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "Object Scale Connection Manager",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.62.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "MOVEit WAF",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.62.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:A/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+        "baseScore": 8.4,
+        "baseSeverity": "HIGH",
+        "attackVector": "ADJACENT_NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.7,
+       "impactScore": 6.0
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 7.2,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.2,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-21T00:00:00+00:00",
+        "id": "CVE-2026-3519",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-77"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:connection_manager_for_objectscale:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "7.2.63.1",
+          "matchCriteriaId": "29595DEA-0B11-4F15-9D98-2FE6B921E1BB"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:ecs_connection_manager:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "7.2.63.1",
+          "matchCriteriaId": "73724463-A364-43DE-BF05-641226373DD6"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:loadmaster:*:*:*:*:ltsf:*:*:*",
+          "versionEndExcluding": "7.2.54.17",
+          "matchCriteriaId": "AC313444-74D6-491D-B7BA-36BF6382D4FC"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:loadmaster:*:*:*:*:ga:*:*:*",
+          "versionEndExcluding": "7.2.63.1",
+          "matchCriteriaId": "A03DB1D6-4225-406D-8A53-3730266390C1"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/LoadMaster-Security-Vulnerabilites-CVE-2026-3517-CVE-2026-3518-CVE-2026-3519-CVE-2026-4048-CVE-2026-21876",
+      "source": "security@progress.com",
+      "tags": [
+       "Patch",
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-4048",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-04-20T14:16:20.700",
+    "lastModified": "2026-06-17T10:55:54.260",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "OS Command Injection Remote Code Execution Vulnerability in UI in Progress ADC Products allows an authenticated attacker with \u201cAll\u201d permissions to execute arbitrary commands on the LoadMaster appliance by exploiting unsanitized input in a custom WAF rule file during the file upload process."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "LoadMaster",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.1.20.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "ECS Connections Manager",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.49.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "Object Scale Connection Manager",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.62.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "MOVEit WAF",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.62.0",
+          "lessThan": "V7.2.63.0",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:A/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+        "baseScore": 8.4,
+        "baseSeverity": "HIGH",
+        "attackVector": "ADJACENT_NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.7,
+       "impactScore": 6.0
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 7.2,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.2,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-21T00:00:00+00:00",
+        "id": "CVE-2026-4048",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-77"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:connection_manager_for_objectscale:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "7.2.63.1",
+          "matchCriteriaId": "29595DEA-0B11-4F15-9D98-2FE6B921E1BB"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:ecs_connection_manager:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "7.2.63.1",
+          "matchCriteriaId": "73724463-A364-43DE-BF05-641226373DD6"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:loadmaster:*:*:*:*:ltsf:*:*:*",
+          "versionEndExcluding": "7.2.54.17",
+          "matchCriteriaId": "AC313444-74D6-491D-B7BA-36BF6382D4FC"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:loadmaster:*:*:*:*:ga:*:*:*",
+          "versionEndExcluding": "7.2.63.1",
+          "matchCriteriaId": "A03DB1D6-4225-406D-8A53-3730266390C1"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/LoadMaster-Security-Vulnerabilites-CVE-2026-3517-CVE-2026-3518-CVE-2026-3519-CVE-2026-4048-CVE-2026-21876",
+      "source": "security@progress.com",
+      "tags": [
+       "Patch",
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-6022",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-04-22T08:16:12.903",
+    "lastModified": "2026-06-17T11:00:10.707",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "In Progress\u00ae Telerik\u00ae UI for AJAX prior to 2026.1.421, RadAsyncUpload contains an uncontrolled resource consumption vulnerability that allows file uploads to exceed the configured maximum size due to missing cumulative size enforcement during chunk reassembly, leading to disk space exhaustion."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "Telerik UI for ASP.NET AJAX",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "2011.2.712",
+          "lessThan": "2026.1.421",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-22T12:25:41.076779Z",
+        "id": "CVE-2026-6022",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "yes"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-400"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:telerik_ui_for_asp.net_ajax:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2026.1.421",
+          "matchCriteriaId": "E2294D8C-7233-41C4-8A32-DB1239FC7805"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://www.telerik.com/products/aspnet-ajax/documentation/knowledge-base/kb-security-uncontrolled-resource-consumption-cve-2026-6022",
+      "source": "security@progress.com",
+      "tags": [
+       "Mitigation",
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-6023",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-04-22T08:16:13.040",
+    "lastModified": "2026-06-17T11:00:10.837",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "In Progress\u00ae Telerik\u00ae UI for AJAX versions 2024.4.1114 through 2026.1.421, the RadFilter control is vulnerable to insecure deserialization when restoring filter state if the state is exposed to the client. If an attacker tampers with this state, a server-side remote code execution is possible."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "Telerik UI for ASP.NET AJAX",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "2024.4.1114",
+          "lessThan": "2026.1.421",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 8.1,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.2,
+       "impactScore": 5.9
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 9.8,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-22T00:00:00+00:00",
+        "id": "CVE-2026-6023",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-502"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:telerik_ui_for_asp.net_ajax:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2024.4.1114",
+          "versionEndExcluding": "2026.1.421",
+          "matchCriteriaId": "B012BE59-AF83-4A7E-A693-11B6E0ACB2C2"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://www.telerik.com/products/aspnet-ajax/documentation/knowledge-base/kb-security-deserialization-of-untrusted-data-cve-2026-6023",
+      "source": "security@progress.com",
+      "tags": [
+       "Mitigation",
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-4670",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-04-30T16:16:44.167",
+    "lastModified": "2026-06-17T10:57:00.073",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Authentication bypass by primary weakness vulnerability in Progress Software MOVEit Automation allows Authentication Bypass.\n\nThis issue affects MOVEit Automation: from 2025.0.0 before 2025.0.9, from 2024.0.0 before 2024.1.8, versions prior to 2024.0.0."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "MOVEit Automation",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "2025.0.0",
+          "lessThan": "2025.0.9",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2024.0.0",
+          "lessThan": "2024.1.8",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "0",
+          "lessThan": "2024.0.0",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 9.8,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-30T00:00:00+00:00",
+        "id": "CVE-2026-4670",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "yes"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-305"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_automation:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2024.1.8",
+          "matchCriteriaId": "0413566A-895A-49F1-8055-3C5F695CBDF3"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_automation:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.0.0",
+          "versionEndExcluding": "2025.1.5",
+          "matchCriteriaId": "C8AEB9B6-4337-422F-85FB-B8146FC3F2CF"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/MOVEit-Automation-Critical-Security-Alert-Bulletin-April-2026-CVE-2026-4670-CVE-2026-5174",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-5174",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-04-30T16:16:44.330",
+    "lastModified": "2026-06-17T10:58:32.670",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Improper input validation vulnerability in Progress Software MOVEit Automation allows Privilege Escalation.\n\nThis issue affects MOVEit Automation: from 2025.1.0 before 2025.1.5, from 2025.0.0 before 2025.0.9, from 2024.0.0 before 2024.1.8, versions prior to 2024.0.0."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "MOVEit Automation",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.5",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2025.0.0",
+          "lessThan": "2025.0.9",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2024.0.0",
+          "lessThan": "2024.1.8",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "0",
+          "lessThan": "2024.0.0",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:N/I:N/A:H",
+        "baseScore": 7.7,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.1,
+       "impactScore": 4.0
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 8.8,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-01T03:55:59.615853Z",
+        "id": "CVE-2026-5174",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-20"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_automation:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2024.1.8",
+          "matchCriteriaId": "0413566A-895A-49F1-8055-3C5F695CBDF3"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_automation:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.0.0",
+          "versionEndExcluding": "2025.1.5",
+          "matchCriteriaId": "C8AEB9B6-4337-422F-85FB-B8146FC3F2CF"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/MOVEit-Automation-Critical-Security-Alert-Bulletin-April-2026-CVE-2026-4670-CVE-2026-5174",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-8485",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-05-20T14:17:04.603",
+    "lastModified": "2026-07-23T12:10:00.110",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Uncontrolled Memory Allocation vulnerability in Progress Software MOVEit Automation allows Excessive Allocation.\n\nThis issue affects MOVEit Automation: before 2025.0.11, from 2025.1.0 before 2025.1.7."
+     },
+     {
+      "lang": "es",
+      "value": "Vulnerabilidad de asignaci\u00f3n de memoria no controlada en Progress Software MOVEit Automation permite una asignaci\u00f3n excesiva.\n\nEste problema afecta a MOVEit Automation: anterior a 2025.0.11, desde 2025.1.0 anterior a 2025.1.7."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "MOVEit Automation",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "0",
+          "lessThan": "2025.0.11",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.7",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 5.9,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.2,
+       "impactScore": 3.6
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-20T14:24:42.780536Z",
+        "id": "CVE-2026-8485",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-789"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_automation:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.0.11",
+          "matchCriteriaId": "0D8444E8-7755-4579-8351-3059BC055832"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_automation:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.1.0",
+          "versionEndExcluding": "2025.1.7",
+          "matchCriteriaId": "F191F99D-6054-4A53-A20E-8181AFD0D483"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-automation-release-notes-2026/page/Fixed-Issues-2026.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-8486",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-05-20T16:16:27.347",
+    "lastModified": "2026-07-23T12:10:00.110",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Allocation of resources without limits or throttling vulnerability in Progress Software MOVEit Automation allows Flooding.\n\nThis issue affects MOVEit Automation: before 2025.0.11, from 2025.1.0 before 2025.1.7."
+     },
+     {
+      "lang": "es",
+      "value": "La vulnerabilidad de asignaci\u00f3n de recursos sin l\u00edmites ni limitaci\u00f3n en Progress Software MOVEit Automation permite la inundaci\u00f3n.\n\nEste problema afecta a MOVEit Automation: anterior a 2025.0.11, desde 2025.1.0 anterior a 2025.1.7."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "MOVEit Automation",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "0",
+          "lessThan": "2025.0.11",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.7",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+        "baseScore": 5.3,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "LOW"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 1.4
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-20T15:30:23.392021Z",
+        "id": "CVE-2026-8486",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "yes"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-770"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_automation:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.0.11",
+          "matchCriteriaId": "0D8444E8-7755-4579-8351-3059BC055832"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_automation:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.1.0",
+          "versionEndExcluding": "2025.1.7",
+          "matchCriteriaId": "F191F99D-6054-4A53-A20E-8181AFD0D483"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-automation-release-notes-2026/page/Fixed-Issues-2026.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Release Notes"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-8487",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-05-20T16:16:27.463",
+    "lastModified": "2026-07-23T12:10:00.110",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Incorrect default permissions vulnerability in Progress Software MOVEit Automation allows Retrieve Embedded Sensitive Data.\n\nThis issue affects MOVEit Automation: before 2025.0.11, from 2025.1.0 before 2025.1.7."
+     },
+     {
+      "lang": "es",
+      "value": "Vulnerabilidad de permisos predeterminados incorrectos en Progress Software MOVEit Automation permite recuperar datos sensibles incrustados.\n\nEste problema afecta a MOVEit Automation: anterior a 2025.0.11, desde 2025.1.0 anterior a 2025.1.7."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "MOVEit Automation",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "0",
+          "lessThan": "2025.0.11",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.7",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 3.6
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-20T15:30:05.094888Z",
+        "id": "CVE-2026-8487",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-276"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_automation:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.0.11",
+          "matchCriteriaId": "0D8444E8-7755-4579-8351-3059BC055832"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_automation:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.1.0",
+          "versionEndExcluding": "2025.1.7",
+          "matchCriteriaId": "F191F99D-6054-4A53-A20E-8181AFD0D483"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-automation-release-notes-2026/page/Fixed-Issues-2026.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Release Notes"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-8488",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-05-20T16:16:27.580",
+    "lastModified": "2026-07-23T12:10:00.110",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Allocation of resources without limits or throttling vulnerability in Progress Software MOVEit Automation allows Excessive Allocation.\n\nThis issue affects MOVEit Automation: before 2025.0.11, from 2025.1.0 before 2025.1.7."
+     },
+     {
+      "lang": "es",
+      "value": "Vulnerabilidad de asignaci\u00f3n de recursos sin l\u00edmites o limitaci\u00f3n en Progress Software MOVEit Automation permite Asignaci\u00f3n Excesiva.\n\nEste problema afecta a MOVEit Automation: anterior a 2025.0.11, desde 2025.1.0 anterior a 2025.1.7."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "MOVEit Automation",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "0",
+          "lessThan": "2025.0.11",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.7",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L",
+        "baseScore": 4.3,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "LOW"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 1.4
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-20T15:29:46.662981Z",
+        "id": "CVE-2026-8488",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-770"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_automation:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.0.11",
+          "matchCriteriaId": "0D8444E8-7755-4579-8351-3059BC055832"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_automation:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.1.0",
+          "versionEndExcluding": "2025.1.7",
+          "matchCriteriaId": "F191F99D-6054-4A53-A20E-8181AFD0D483"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-automation-release-notes-2026/page/Fixed-Issues-2026.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Release Notes"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-7195",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-06-02T14:17:14.073",
+    "lastModified": "2026-07-22T19:10:00.120",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "CWE-20: Improper Input Validation in web services in Progress Sitefinity 14.1.x through 14.3.x, 14.4.x before 14.4.8152, 15.0.x before 15.0.8234, 15.1.x before 15.1.8335, 15.2.x before 15.2.8441, 15.3.x before 15.3.8531, and 15.4.x before 15.4.8630 allows a remote unauthenticated attacker to compromise the integrity and confidentiality of user accounts. Successful exploitation requires user interaction and a non-default site configuration."
+     },
+     {
+      "lang": "es",
+      "value": "CWE-20: Validaci\u00f3n de Entrada Inadecuada en servicios web en Progress Sitefinity 14.1.x hasta 14.3.x, 14.4.x anterior a 14.4.8152, 15.0.x anterior a 15.0.8234, 15.1.x anterior a 15.1.8335, 15.2.x anterior a 15.2.8441, 15.3.x anterior a 15.3.8531, y 15.4.x anterior a 15.4.8630 permite a un atacante remoto no autenticado comprometer la integridad y confidencialidad de las cuentas de usuario. La explotaci\u00f3n exitosa requiere interacci\u00f3n del usuario y una configuraci\u00f3n del sitio no predeterminada."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "Sitefinity",
+        "defaultStatus": "unknown",
+        "versions": [
+         {
+          "version": "14.1.0",
+          "lessThan": "14.4.0",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "14.4.8100",
+          "lessThan": "14.4.8152",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "15.0.8200",
+          "lessThan": "15.0.8234",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "15.1.8300",
+          "lessThan": "15.1.8335",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "15.2.8400",
+          "lessThan": "15.2.8441",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "15.3.8500",
+          "lessThan": "15.3.8531",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "15.4.8600",
+          "lessThan": "15.4.8630",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+        "baseScore": 8.8,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "REQUIRED",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 5.9
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N",
+        "baseScore": 8.1,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "REQUIRED",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 5.2
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-06-02T00:00:00+00:00",
+        "id": "CVE-2026-7195",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-20"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "14.1.7800",
+          "versionEndExcluding": "14.4.8152",
+          "matchCriteriaId": "2F331A1B-FC71-4594-952C-0A74211E5904"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.0.8200",
+          "versionEndExcluding": "15.0.8234",
+          "matchCriteriaId": "60092E40-9CC0-4953-941B-716DA02A4544"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.1.8300",
+          "versionEndExcluding": "15.1.8335",
+          "matchCriteriaId": "301863BA-1B70-46DB-8239-46F54F3C9E9D"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.2.8400",
+          "versionEndExcluding": "15.2.8441",
+          "matchCriteriaId": "55CA60C2-DDDC-44BA-A47D-934F3F946F37"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.3.8500",
+          "versionEndExcluding": "15.3.8531",
+          "matchCriteriaId": "B6C4CF7C-2C10-46F6-93C4-AC37A25CABE4"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.4.8600",
+          "versionEndExcluding": "15.4.8630",
+          "matchCriteriaId": "A0699CBF-3C82-416C-AC88-747609F482AC"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/Sitefinity-Security-Advisory-for-Addressing-Security-Vulnerabilities-CVE-2026-7312-CVE-2026-7198-CVE-2026-7195-CVE-2026-7201-CVE-2026-7313-May-2026",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-7198",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-06-02T14:17:14.227",
+    "lastModified": "2026-07-22T19:10:00.120",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "CWE-284: Improper Access Control in web services in Progress Sitefinity 15.4.8623 before 15.4.8630 allows a remote unauthenticated attacker to access content that should be restricted, resulting in full compromise of confidentiality, integrity, and availability of affected installations."
+     },
+     {
+      "lang": "es",
+      "value": "CWE-284: Control de acceso inadecuado en servicios web en Progress Sitefinity 15.4.8623 anterior a 15.4.8630 permite a un atacante remoto no autenticado acceder a contenido que deber\u00eda estar restringido, lo que resulta en un compromiso total de la confidencialidad, integridad y disponibilidad de las instalaciones afectadas."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "Sitefinity",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "15.4.8623",
+          "lessThan": "15.4.8630",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 9.8,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-06-02T00:00:00+00:00",
+        "id": "CVE-2026-7198",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "yes"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-284"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.4.8623",
+          "versionEndExcluding": "15.4.8630",
+          "matchCriteriaId": "04C26DC6-E75C-4BFB-8DB3-63C0FC4C7FD6"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/Sitefinity-Security-Advisory-for-Addressing-Security-Vulnerabilities-CVE-2026-7312-CVE-2026-7198-CVE-2026-7195-CVE-2026-7201-CVE-2026-7313-May-2026",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-7201",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-06-02T14:17:14.360",
+    "lastModified": "2026-07-22T19:10:00.120",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "CWE-639: Authorization Bypass Through User-Controlled Key in web services in Progress Sitefinity 15.2.x before 15.2.8441, 15.3.x before 15.3.8531, and 15.4.x before 15.4.8630 allows a remote authenticated attacker to modify account properties of other users, potentially leading to account compromise. Successful exploitation requires knowledge of values that are not generally exposed to low-privileged users."
+     },
+     {
+      "lang": "es",
+      "value": "CWE-639: Omisi\u00f3n de autorizaci\u00f3n mediante clave controlada por el usuario en servicios web en Progress Sitefinity 15.2.x anterior a 15.2.8441, 15.3.x anterior a 15.3.8531 y 15.4.x anterior a 15.4.8630 permite a un atacante remoto autenticado modificar las propiedades de la cuenta de otros usuarios, lo que podr\u00eda llevar al compromiso de la cuenta. La explotaci\u00f3n exitosa requiere el conocimiento de valores que generalmente no est\u00e1n expuestos a usuarios con pocos privilegios."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "Sitefinity",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "15.2.8400",
+          "lessThan": "15.2.8441",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "15.3.8500",
+          "lessThan": "15.3.8531",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "15.4.8600",
+          "lessThan": "15.4.8630",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 8.8,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-06-02T15:12:20.415939Z",
+        "id": "CVE-2026-7201",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-639"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.2.8400",
+          "versionEndExcluding": "15.2.8441",
+          "matchCriteriaId": "55CA60C2-DDDC-44BA-A47D-934F3F946F37"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.3.8500",
+          "versionEndExcluding": "15.3.8531",
+          "matchCriteriaId": "B6C4CF7C-2C10-46F6-93C4-AC37A25CABE4"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.4.8600",
+          "versionEndExcluding": "15.4.8630",
+          "matchCriteriaId": "A0699CBF-3C82-416C-AC88-747609F482AC"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/Sitefinity-Security-Advisory-for-Addressing-Security-Vulnerabilities-CVE-2026-7312-CVE-2026-7198-CVE-2026-7195-CVE-2026-7201-CVE-2026-7313-May-2026",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-7312",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-06-02T14:17:14.470",
+    "lastModified": "2026-07-22T19:10:00.120",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "CWE\u2011522: Insufficiently Protected Credentials in web services in Progress Sitefinity version from 14.0.7700 to 14.4.8152, and 15.0.8200 to 15.0.8234, and 15.1.8300 to 15.1.8335, 15.2.8400 to 15.2.8441, 15.3.8500 to 15.3.8531, and 15.4.8600 to 15.4.8630 allows a remote unauthenticated attacker to obtain plain-text credentials used connect to Sitefinity Insight service. Successful exploitation requires active integration with Sitefinity Insight and non-default site configuration."
+     },
+     {
+      "lang": "es",
+      "value": "CWE?522: Credenciales Insuficientemente Protegidas en servicios web en la versi\u00f3n de Progress Sitefinity desde la 14.0.7700 hasta la 14.4.8152, y de la 15.0.8200 hasta la 15.0.8234, y de la 15.1.8300 hasta la 15.1.8335, de la 15.2.8400 hasta la 15.2.8441, de la 15.3.8500 hasta la 15.3.8531, y de la 15.4.8600 hasta la 15.4.8630 permite a un atacante remoto no autenticado obtener credenciales en texto plano utilizadas para conectarse al servicio Sitefinity Insight. La explotaci\u00f3n exitosa requiere integraci\u00f3n activa con Sitefinity Insight y una configuraci\u00f3n del sitio no predeterminada."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "Sitefinity",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "14.0.7700",
+          "lessThan": "14.4.8152",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "15.0.8200",
+          "lessThan": "15.0.8234",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "15.1.8300",
+          "lessThan": "15.1.8335",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "15.2.8400",
+          "lessThan": "15.2.8441",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "15.3.8500",
+          "lessThan": "15.3.8531",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "15.4.8600",
+          "lessThan": "15.4.8630",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:N",
+        "baseScore": 10.0,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 5.8
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-06-03T03:55:43.776367Z",
+        "id": "CVE-2026-7312",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "nvd@nist.gov",
+      "type": "Primary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-522"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "14.0.7700",
+          "versionEndExcluding": "14.4.8152",
+          "matchCriteriaId": "745C0B62-500E-4888-8507-23CF85CC90B0"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.0.8200",
+          "versionEndExcluding": "15.0.8234",
+          "matchCriteriaId": "60092E40-9CC0-4953-941B-716DA02A4544"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.1.8300",
+          "versionEndExcluding": "15.1.8335",
+          "matchCriteriaId": "301863BA-1B70-46DB-8239-46F54F3C9E9D"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.2.8400",
+          "versionEndExcluding": "15.2.8441",
+          "matchCriteriaId": "55CA60C2-DDDC-44BA-A47D-934F3F946F37"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.3.8500",
+          "versionEndExcluding": "15.3.8531",
+          "matchCriteriaId": "B6C4CF7C-2C10-46F6-93C4-AC37A25CABE4"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "15.4.8600",
+          "versionEndExcluding": "15.4.8630",
+          "matchCriteriaId": "A0699CBF-3C82-416C-AC88-747609F482AC"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/Sitefinity-Security-Advisory-for-Addressing-Security-Vulnerabilities-CVE-2026-7312-CVE-2026-7198-CVE-2026-7195-CVE-2026-7201-CVE-2026-7313-May-2026",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-7313",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-06-02T14:17:14.577",
+    "lastModified": "2026-07-22T19:10:00.120",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "CWE\u2011522: Insufficiently Protected Credentials in web services in Progress Sitefinity version from 8.0.5700 to 13.3.7652 allows a remote authenticated attacker to obtain plain-text credentials used connect to Sitefinity Insight service. Successful exploitation requires active integration with Sitefinity Insight, non-default site configuration and valid back-end authorization."
+     },
+     {
+      "lang": "es",
+      "value": "CWE?522: Credenciales Insuficientemente Protegidas en servicios web en la versi\u00f3n de Progress Sitefinity de 8.0.5700 a 13.3.7652 permite a un atacante remoto autenticado obtener credenciales en texto plano utilizadas para conectarse al servicio Sitefinity Insight. La explotaci\u00f3n exitosa requiere integraci\u00f3n activa con Sitefinity Insight, configuraci\u00f3n del sitio no predeterminada y autorizaci\u00f3n de back-end v\u00e1lida."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "Sitefinity",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "8.0.5700",
+          "lessThan": "13.3.7652",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:N",
+        "baseScore": 8.7,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.3,
+       "impactScore": 5.8
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N",
+        "baseScore": 4.9,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 1.2,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-06-02T00:00:00+00:00",
+        "id": "CVE-2026-7313",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "nvd@nist.gov",
+      "type": "Primary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-522"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:sitefinity:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.5700",
+          "versionEndExcluding": "13.3.7652",
+          "matchCriteriaId": "C1F0980B-5272-4FE1-8CEA-273E0F2B30D8"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/Sitefinity-Security-Advisory-for-Addressing-Security-Vulnerabilities-CVE-2026-7312-CVE-2026-7198-CVE-2026-7195-CVE-2026-7201-CVE-2026-7313-May-2026",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-8037",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-06-04T14:16:45.177",
+    "lastModified": "2026-07-22T20:10:00.127",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "OS Command Injection Remote Code Execution Vulnerability in API in Progress ADC Products allows an un-authenticated attacker to execute arbitrary commands on the LoadMaster appliance by exploiting unsanitized input in multiple command endpoints"
+     },
+     {
+      "lang": "es",
+      "value": "Vulnerabilidad de ejecuci\u00f3n remota de c\u00f3digo por inyecci\u00f3n de comandos del sistema operativo en la API en Productos Progress ADC permite a un atacante no autenticado ejecutar comandos arbitrarios en el dispositivo LoadMaster explotando la entrada no saneada en m\u00faltiples puntos finales de comando."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "LoadMaster",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.60.0",
+          "lessThan": "V7.2.63.2",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "V7.2.45.12",
+          "lessThan": "V7.2.54.18",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "ECS Connections Manager",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.60.0",
+          "lessThan": "V7.2.63.2",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "Object Scale Connection Manager",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.60.0",
+          "lessThan": "V7.2.63.2",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       },
+       {
+        "vendor": "Progress Software",
+        "product": "MOVEit WAF",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "V7.2.60.0",
+          "lessThan": "V7.2.63.2",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+        "baseScore": 9.6,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "ADJACENT_NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 6.0
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 9.8,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-06-04T00:00:00+00:00",
+        "id": "CVE-2026-8037",
+        "options": [
+         {
+          "exploitation": "poc"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-77"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:connection_manager_for_objectscale:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "7.2.63.2",
+          "matchCriteriaId": "029CD311-B604-4813-A75B-4D21806279D2"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:ecs_connection_manager:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "7.2.63.2",
+          "matchCriteriaId": "E431D517-8DEE-44FD-AA7B-E5C536574933"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:o:progress:loadmaster:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "7.2.54.18",
+          "matchCriteriaId": "52829479-F76A-464C-93E2-11A4D090AF99"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:o:progress:loadmaster:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "7.2.55.0",
+          "versionEndExcluding": "7.2.63.2",
+          "matchCriteriaId": "B5492541-EE6C-41A7-A826-E4D323EB9CBB"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/LoadMaster-Critical-Security-Bulletin-June-2026-CVE-2026-8037-CVE-2026-33691",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory",
+       "Patch"
+      ]
+     },
+     {
+      "url": "https://labs.watchtowr.com/enterprise-tech-in-shell-out-progress-kemp-loadmaster-uninitialized-heap-to-pre-auth-rce-cve-2026-8037/",
+      "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+      "tags": [
+       "Exploit",
+       "Patch",
+       "Third Party Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-9272",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-02T15:17:11.937",
+    "lastModified": "2026-07-07T16:37:11.803",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "In Progress Flowmon ADS versions prior to 12.5.6 and 13.0.5, a vulnerability exists whereby an adversary who is authenticated as a low-privileged user in the Anomaly Detection System (ADS) may send specially crafted requests that could result in unauthorized access to application data and its modification."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress Software",
+        "product": "Flowmon ADS",
+        "defaultStatus": "affected",
+        "versions": [
+         {
+          "version": "Flowmon ADS 12 versions prior to 12.5.6",
+          "versionType": "custom",
+          "status": "affected"
+         },
+         {
+          "version": "Flowmon ADS 13 versions prior to 13.0.5",
+          "versionType": "custom",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV40": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "4.0",
+        "vectorString": "CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N/E:X/CR:X/IR:X/AR:X/MAV:X/MAC:X/MAT:X/MPR:X/MUI:X/MVC:X/MVI:X/MVA:X/MSC:X/MSI:X/MSA:X/S:X/AU:X/R:X/V:X/RE:X/U:X",
+        "baseScore": 8.7,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "attackRequirements": "NONE",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "vulnConfidentialityImpact": "HIGH",
+        "vulnIntegrityImpact": "HIGH",
+        "vulnAvailabilityImpact": "HIGH",
+        "subConfidentialityImpact": "NONE",
+        "subIntegrityImpact": "NONE",
+        "subAvailabilityImpact": "NONE",
+        "exploitMaturity": "NOT_DEFINED",
+        "confidentialityRequirement": "NOT_DEFINED",
+        "integrityRequirement": "NOT_DEFINED",
+        "availabilityRequirement": "NOT_DEFINED",
+        "modifiedAttackVector": "NOT_DEFINED",
+        "modifiedAttackComplexity": "NOT_DEFINED",
+        "modifiedAttackRequirements": "NOT_DEFINED",
+        "modifiedPrivilegesRequired": "NOT_DEFINED",
+        "modifiedUserInteraction": "NOT_DEFINED",
+        "modifiedVulnConfidentialityImpact": "NOT_DEFINED",
+        "modifiedVulnIntegrityImpact": "NOT_DEFINED",
+        "modifiedVulnAvailabilityImpact": "NOT_DEFINED",
+        "modifiedSubConfidentialityImpact": "NOT_DEFINED",
+        "modifiedSubIntegrityImpact": "NOT_DEFINED",
+        "modifiedSubAvailabilityImpact": "NOT_DEFINED",
+        "Safety": "NOT_DEFINED",
+        "Automatable": "NOT_DEFINED",
+        "Recovery": "NOT_DEFINED",
+        "valueDensity": "NOT_DEFINED",
+        "vulnerabilityResponseEffort": "NOT_DEFINED",
+        "providerUrgency": "NOT_DEFINED"
+       }
+      }
+     ],
+     "cvssMetricV31": [
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
+        "baseScore": 8.1,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 5.2
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-02T00:00:00+00:00",
+        "id": "CVE-2026-9272",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-89"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:flowmon_anomaly_detection_system:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "12.5.0",
+          "versionEndExcluding": "12.5.6",
+          "matchCriteriaId": "60D0F762-0F40-4B9A-A149-497183BB45DB"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:flowmon_anomaly_detection_system:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "13.0.0",
+          "versionEndExcluding": "13.0.5",
+          "matchCriteriaId": "9B087230-F276-4512-8098-77C8587E0C63"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/Flowmon-CVE-2026-9272",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-10698",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-08T15:16:25.040",
+    "lastModified": "2026-07-10T14:33:24.257",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Improper Neutralization of Special Elements in Data Query Logic vulnerability in Progress MOVEit Transfer (Custom Reports modules).\n\nThis issue affects MOVEit Transfer: from 2025.0.0 before 2025.0.8, from 2025.1.0 before 2025.1.4, from 2026.0.0 before 2026.0.1."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "defaultStatus": "unaffected",
+        "modules": [
+         "Custom Reports"
+        ],
+        "versions": [
+         {
+          "version": "2025.0.0",
+          "lessThan": "2025.0.8",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.4",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2026.0.0",
+          "lessThan": "2026.0.1",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 7.2,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.2,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-08T00:00:00+00:00",
+        "id": "CVE-2026-10698",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-943"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionEndIncluding": "2024.1.8",
+          "matchCriteriaId": "70852202-7FC7-408A-8205-3AAA494EE3DD"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.0.0",
+          "versionEndExcluding": "2025.0.8",
+          "matchCriteriaId": "26DA4DA6-DF46-478A-A880-42549D8E6F6C"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.1.0",
+          "versionEndExcluding": "2025.1.4",
+          "matchCriteriaId": "81C2C6E0-529A-4414-9266-15992A9749B5"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:2026.0.0:*:*:*:*:*:*:*",
+          "matchCriteriaId": "5FBC74C0-6E1F-4CEC-B913-A7D0FE6D61B1"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/MOVEit-Transfer-Critical-Security-Bulletin-June-2026",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-10699",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-08T15:16:25.173",
+    "lastModified": "2026-07-10T14:25:58.720",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Missing release of memory after effective lifetime vulnerability in Progress MOVEit Transfer (Custom Reports modules).\n\nThis issue affects MOVEit Transfer: from 2025.0.0 before 2025.0.8, from 2025.1.0 before 2025.1.4, from 2026.0.0 before 2026.0.1."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "defaultStatus": "unaffected",
+        "modules": [
+         "Custom Reports"
+        ],
+        "versions": [
+         {
+          "version": "2025.0.0",
+          "lessThan": "2025.0.8",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.4",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2026.0.0",
+          "lessThan": "2026.0.1",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-08T15:09:02.289312Z",
+        "id": "CVE-2026-10699",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "yes"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-401"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionEndIncluding": "2024.1.8",
+          "matchCriteriaId": "70852202-7FC7-408A-8205-3AAA494EE3DD"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.0.0",
+          "versionEndExcluding": "2025.0.8",
+          "matchCriteriaId": "26DA4DA6-DF46-478A-A880-42549D8E6F6C"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.1.0",
+          "versionEndExcluding": "2025.1.4",
+          "matchCriteriaId": "81C2C6E0-529A-4414-9266-15992A9749B5"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:2026.0.0:*:*:*:*:*:*:*",
+          "matchCriteriaId": "5FBC74C0-6E1F-4CEC-B913-A7D0FE6D61B1"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/MOVEit-Transfer-Critical-Security-Bulletin-June-2026",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-11903",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-08T15:16:25.470",
+    "lastModified": "2026-07-10T14:01:59.527",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Improper neutralization of input during web page generation ('cross-site scripting') vulnerability in Progress MOVEit Transfer (Ad Hoc module).\n\nThis issue affects MOVEit Transfer: from 2026.0.0 before 2026.0.1, from 2025.1.0 before 2025.1.4, from 2025.0.0 before 2025.0.8."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "defaultStatus": "unaffected",
+        "modules": [
+         "Ad Hoc"
+        ],
+        "versions": [
+         {
+          "version": "2026.0.0",
+          "lessThan": "2026.0.1",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.4",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2025.0.0",
+          "lessThan": "2025.0.8",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:H",
+        "baseScore": 8.0,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "REQUIRED",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.1,
+       "impactScore": 5.9
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N",
+        "baseScore": 5.4,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "REQUIRED",
+        "scope": "CHANGED",
+        "confidentialityImpact": "LOW",
+        "integrityImpact": "LOW",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.3,
+       "impactScore": 2.7
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-08T00:00:00+00:00",
+        "id": "CVE-2026-11903",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-79"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionEndIncluding": "2024.1.8",
+          "matchCriteriaId": "70852202-7FC7-408A-8205-3AAA494EE3DD"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.0.0",
+          "versionEndExcluding": "2025.0.8",
+          "matchCriteriaId": "26DA4DA6-DF46-478A-A880-42549D8E6F6C"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.1.0",
+          "versionEndExcluding": "2025.1.4",
+          "matchCriteriaId": "81C2C6E0-529A-4414-9266-15992A9749B5"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:2026.0.0:*:*:*:*:*:*:*",
+          "matchCriteriaId": "5FBC74C0-6E1F-4CEC-B913-A7D0FE6D61B1"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://community.progress.com/s/article/MOVEit-Transfer-Critical-Security-Bulletin-June-2026",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-8649",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-08T20:17:00.557",
+    "lastModified": "2026-07-10T19:34:37.120",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Improper Neutralization of Special Elements in Data Query Logic vulnerability in Progress MOVEit Transfer (Custom Reports modules).\n\nThis issue affects MOVEit Transfer: before 2025.0.7, from 2025.1.0 before 2025.1.3."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "defaultStatus": "unaffected",
+        "modules": [
+         "Custom Reports"
+        ],
+        "versions": [
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.3",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "0",
+          "lessThan": "2025.0.7",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:H",
+        "baseScore": 6.4,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "REQUIRED",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 0.5,
+       "impactScore": 5.9
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 9.8,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-09T13:28:38.467051Z",
+        "id": "CVE-2026-8649",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-943"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.0.7",
+          "matchCriteriaId": "E1F696CA-EE0E-4665-8D8B-BE9F2214E50E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.1.0",
+          "versionEndExcluding": "2025.1.3",
+          "matchCriteriaId": "B84E088D-58A8-436D-86CF-DAFA6EC4023C"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-transfer-release-notes-2026/page/Fixed-Issues-in-2026.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory",
+       "Release Notes"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-8650",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-08T20:17:00.677",
+    "lastModified": "2026-07-09T19:18:57.613",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Relative path traversal vulnerability in Progress MOVEit Transfer (Admin Settings module).\n\nThis issue affects MOVEit Transfer: before 2025.0.7, from 2025.1.0 before 2025.1.3."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "defaultStatus": "unaffected",
+        "modules": [
+         "Admin Settings"
+        ],
+        "versions": [
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.3",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "0",
+          "lessThan": "2025.0.7",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:A/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N",
+        "baseScore": 4.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "ADJACENT_NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 0.9,
+       "impactScore": 3.6
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-09T13:31:47.057844Z",
+        "id": "CVE-2026-8650",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-23"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.0.7",
+          "matchCriteriaId": "E1F696CA-EE0E-4665-8D8B-BE9F2214E50E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.1.1",
+          "versionEndExcluding": "2025.1.3",
+          "matchCriteriaId": "250AB9CF-B7E6-4D73-AB6A-5EB76E85A955"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-transfer-release-notes-2026/page/Fixed-Issues-in-2026.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Release Notes"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-8651",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-08T20:17:00.793",
+    "lastModified": "2026-07-09T19:18:09.793",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Limited authentication bypass by spoofing vulnerability in Progress MOVEit Transfer (HTTPS module).\n\nThis issue affects MOVEit Transfer: before 2025.0.7, from 2025.1.0 before 2025.1.3."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "defaultStatus": "unaffected",
+        "modules": [
+         "HTTPS"
+        ],
+        "versions": [
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.3",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "0",
+          "lessThan": "2025.0.7",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+        "baseScore": 3.7,
+        "baseSeverity": "LOW",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "LOW",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.2,
+       "impactScore": 1.4
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-09T13:32:11.324109Z",
+        "id": "CVE-2026-8651",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-290"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.0.7",
+          "matchCriteriaId": "E1F696CA-EE0E-4665-8D8B-BE9F2214E50E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.1.1",
+          "versionEndExcluding": "2025.1.3",
+          "matchCriteriaId": "250AB9CF-B7E6-4D73-AB6A-5EB76E85A955"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-transfer-release-notes-2026/page/Fixed-Issues-in-2026.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Release Notes"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-8800",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-08T20:17:00.913",
+    "lastModified": "2026-07-09T19:17:34.223",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Incorrect Authorization vulnerability in Progress MOVEit Transfer (Audit User module).\n\nThis issue affects MOVEit Transfer: before 2025.0.7, from 2025.1.0 before 2025.1.3."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "defaultStatus": "unaffected",
+        "modules": [
+         "Users"
+        ],
+        "versions": [
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.3",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "0",
+          "lessThan": "2025.0.7",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:L/I:N/A:N",
+        "baseScore": 2.7,
+        "baseSeverity": "LOW",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "LOW",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 1.2,
+       "impactScore": 1.4
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 8.8,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-09T13:35:12.446076Z",
+        "id": "CVE-2026-8800",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-863"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.0.7",
+          "matchCriteriaId": "E1F696CA-EE0E-4665-8D8B-BE9F2214E50E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.1.1",
+          "versionEndExcluding": "2025.1.3",
+          "matchCriteriaId": "250AB9CF-B7E6-4D73-AB6A-5EB76E85A955"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-transfer-release-notes-2026/page/Fixed-Issues-in-2026.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Release Notes"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-8801",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-08T20:17:01.027",
+    "lastModified": "2026-07-09T19:16:37.730",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Path equivalence: vulnerability in Progress MOVEit Transfer (File Upload modules).\n\nThis issue affects MOVEit Transfer: before 2025.0.8, from 2025.1.0 before 2025.1.4."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "defaultStatus": "unaffected",
+        "modules": [
+         "File Upload"
+        ],
+        "versions": [
+         {
+          "version": "2025.1.0",
+          "lessThan": "2025.1.4",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "0",
+          "lessThan": "2025.0.8",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:N/I:L/A:N",
+        "baseScore": 3.5,
+        "baseSeverity": "LOW",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "REQUIRED",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "LOW",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.1,
+       "impactScore": 1.4
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 9.8,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-09T13:35:50.871832Z",
+        "id": "CVE-2026-8801",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-46"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.0.8",
+          "matchCriteriaId": "F84EE068-FAB6-4D6B-95B7-EEB8F6BB71C5"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2025.1.0",
+          "versionEndExcluding": "2025.1.4",
+          "matchCriteriaId": "81C2C6E0-529A-4414-9266-15992A9749B5"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-transfer-release-notes-2026/page/Fixed-Issues-in-2026.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Release Notes"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-10697",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-23T21:17:01.597",
+    "lastModified": "2026-07-30T15:50:34.517",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Improper Authentication vulnerability in Progress MOVEit Transfer.\n\nThis issue affects MOVEit Transfer: before 2025.1.5, from 2026.0.0 before 2026.0.3."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "0",
+          "lessThan": "2025.1.5",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2026.0.0",
+          "lessThan": "2026.0.3",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:A/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "ADJACENT_NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.6,
+       "impactScore": 5.9
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 9.8,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-24T00:00:00+00:00",
+        "id": "CVE-2026-10697",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-287"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.1.5",
+          "matchCriteriaId": "8FBDFCBD-3362-4EEB-B9EA-D4B0E0048DD0"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2026.0.0",
+          "versionEndExcluding": "2026.0.3",
+          "matchCriteriaId": "81DDADC5-EABB-4073-8FEB-588016BA5852"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-transfer-release-notes-2026/page/Fixed-Issues-in-2026.0.3.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-15966",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-23T21:17:02.860",
+    "lastModified": "2026-07-30T15:50:24.437",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Permissive cross-domain security policy with untrusted domains vulnerability in Progress MOVEit Transfer.\n\nThis issue affects MOVEit Transfer: before 2025.1.5, from 2026.0.0 before 2026.0.3."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "0",
+          "lessThan": "2025.1.5",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2026.0.0",
+          "lessThan": "2026.0.3",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "NONE",
+        "userInteraction": "REQUIRED",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.6,
+       "impactScore": 5.9
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 9.8,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-24T00:00:00+00:00",
+        "id": "CVE-2026-15966",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-942"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.1.5",
+          "matchCriteriaId": "8FBDFCBD-3362-4EEB-B9EA-D4B0E0048DD0"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2026.0.0",
+          "versionEndExcluding": "2026.0.3",
+          "matchCriteriaId": "81DDADC5-EABB-4073-8FEB-588016BA5852"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-transfer-release-notes-2026/page/Fixed-Issues-in-2026.0.3.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-15967",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-23T21:17:02.977",
+    "lastModified": "2026-07-30T15:50:12.613",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Insufficient session expiration vulnerability in Progress MOVEit Transfer.\n\nThis issue affects MOVEit Transfer: before 2025.1.5, from 2026.0.0 before 2026.0.3."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "0",
+          "lessThan": "2025.1.5",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2026.0.0",
+          "lessThan": "2026.0.3",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "NONE",
+        "userInteraction": "REQUIRED",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.6,
+       "impactScore": 5.9
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 9.8,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-24T00:00:00+00:00",
+        "id": "CVE-2026-15967",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-613"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.1.5",
+          "matchCriteriaId": "8FBDFCBD-3362-4EEB-B9EA-D4B0E0048DD0"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2026.0.0",
+          "versionEndExcluding": "2026.0.3",
+          "matchCriteriaId": "81DDADC5-EABB-4073-8FEB-588016BA5852"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-transfer-release-notes-2026/page/Fixed-Issues-in-2026.0.3.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-15968",
+    "sourceIdentifier": "security@progress.com",
+    "published": "2026-07-23T21:17:03.090",
+    "lastModified": "2026-07-30T15:49:28.140",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Improper neutralization of input during web page generation ('cross-site scripting') vulnerability in Progress MOVEit Transfer.\n\nThis issue affects MOVEit Transfer: before 2025.1.5, from 2026.0.0 before 2026.0.3."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@progress.com",
+      "affectedData": [
+       {
+        "vendor": "Progress",
+        "product": "MOVEit Transfer",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "0",
+          "lessThan": "2025.1.5",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "2026.0.0",
+          "lessThan": "2026.0.3",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@progress.com",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H",
+        "baseScore": 7.1,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "LOW",
+        "userInteraction": "REQUIRED",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.2,
+       "impactScore": 5.9
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N",
+        "baseScore": 5.4,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "REQUIRED",
+        "scope": "CHANGED",
+        "confidentialityImpact": "LOW",
+        "integrityImpact": "LOW",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.3,
+       "impactScore": 2.7
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-24T13:32:36.324581Z",
+        "id": "CVE-2026-15968",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@progress.com",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-79"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "2025.1.5",
+          "matchCriteriaId": "8FBDFCBD-3362-4EEB-B9EA-D4B0E0048DD0"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:progress:moveit_transfer:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "2026.0.0",
+          "versionEndExcluding": "2026.0.3",
+          "matchCriteriaId": "81DDADC5-EABB-4073-8FEB-588016BA5852"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://docs.progress.com/bundle/moveit-transfer-release-notes-2026/page/Fixed-Issues-in-2026.0.3.html",
+      "source": "security@progress.com",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

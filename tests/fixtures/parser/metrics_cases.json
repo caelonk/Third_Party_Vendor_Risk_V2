@@ -1,0 +1,87 @@
+{
+  "_comment": "Hand-crafted NVD-shaped records for parser unit tests. Not from a live pull; purpose-built to exercise every branch of the CVSS fallback chain and KEV/absent-field handling deterministically.",
+  "resultsPerPage": 8,
+  "totalResults": 8,
+  "vulnerabilities": [
+    {
+      "cve": {
+        "id": "CVE-T-0031",
+        "published": "2026-05-01T00:00:00.000",
+        "vulnStatus": "Analyzed",
+        "descriptions": [{"lang": "en", "value": "v3.1-only record"}],
+        "metrics": {
+          "cvssMetricV31": [{"cvssData": {"baseScore": 7.5, "baseSeverity": "HIGH"}}]
+        }
+      }
+    },
+    {
+      "cve": {
+        "id": "CVE-T-4031",
+        "published": "2026-05-02T00:00:00.000",
+        "vulnStatus": "Analyzed",
+        "descriptions": [{"lang": "en", "value": "record with both v4.0 and v3.1"}],
+        "metrics": {
+          "cvssMetricV40": [{"cvssData": {"baseScore": 9.1, "baseSeverity": "CRITICAL"}}],
+          "cvssMetricV31": [{"cvssData": {"baseScore": 7.5, "baseSeverity": "HIGH"}}]
+        }
+      }
+    },
+    {
+      "cve": {
+        "id": "CVE-T-0020",
+        "published": "2026-05-03T00:00:00.000",
+        "vulnStatus": "Analyzed",
+        "descriptions": [{"lang": "en", "value": "v2-only record; severity at metric level"}],
+        "metrics": {
+          "cvssMetricV2": [{"baseSeverity": "MEDIUM", "cvssData": {"baseScore": 6.8}}]
+        }
+      }
+    },
+    {
+      "cve": {
+        "id": "CVE-T-EMPTYMETRIC",
+        "published": "2026-05-04T00:00:00.000",
+        "vulnStatus": "Awaiting Analysis",
+        "descriptions": [{"lang": "en", "value": "metrics present but empty"}],
+        "metrics": {}
+      }
+    },
+    {
+      "cve": {
+        "id": "CVE-T-NOMETRIC",
+        "published": "2026-05-05T00:00:00.000",
+        "vulnStatus": "Awaiting Analysis",
+        "descriptions": [{"lang": "en", "value": "no metrics key at all"}]
+      }
+    },
+    {
+      "cve": {
+        "id": "CVE-T-KEV",
+        "published": "2026-05-06T00:00:00.000",
+        "vulnStatus": "Analyzed",
+        "cisaExploitAdd": "2023-05-01",
+        "cisaActionDue": "2023-05-22",
+        "descriptions": [{"lang": "en", "value": "known exploited vulnerability"}],
+        "metrics": {
+          "cvssMetricV31": [{"cvssData": {"baseScore": 9.8, "baseSeverity": "CRITICAL"}}]
+        }
+      }
+    },
+    {
+      "cve": {
+        "id": "CVE-T-NOKEV",
+        "published": "2026-05-07T00:00:00.000",
+        "vulnStatus": "Analyzed",
+        "descriptions": [{"lang": "en", "value": "not a KEV"}],
+        "metrics": {
+          "cvssMetricV31": [{"cvssData": {"baseScore": 5.3, "baseSeverity": "MEDIUM"}}]
+        }
+      }
+    },
+    {
+      "cve": {
+        "id": "CVE-T-SPARSE"
+      }
+    }
+  ]
+}

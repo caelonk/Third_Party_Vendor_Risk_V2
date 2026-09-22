@@ -1,0 +1,3806 @@
+{
+ "resultsPerPage": 26,
+ "startIndex": 0,
+ "totalResults": 26,
+ "format": "NVD_CVE",
+ "version": "2.0",
+ "timestamp": "2026-08-02T00:31:11.523",
+ "vulnerabilities": [
+  {
+   "cve": {
+    "id": "CVE-2026-33460",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-04-08T17:21:18.930",
+    "lastModified": "2026-07-24T23:10:00.563",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Incorrect Authorization (CWE-863) in Kibana can lead to cross-space information disclosure via Privilege Abuse (CAPEC-122). A user with Fleet agent management privileges in one Kibana space can retrieve Fleet Server policy details from other spaces through an internal enrollment endpoint. The endpoint bypasses space-scoped access controls by using an unscoped internal client, returning operational identifiers, policy names, management state, and infrastructure linkage details from spaces the user is not authorized to access."
+     },
+     {
+      "lang": "es",
+      "value": "Autorizaci\u00f3n incorrecta (CWE-863) en Kibana puede conducir a la revelaci\u00f3n de informaci\u00f3n entre espacios a trav\u00e9s de Abuso de Privilegios (CAPEC-122). Un usuario con privilegios de gesti\u00f3n de agentes de Fleet en un espacio de Kibana puede recuperar detalles de la pol\u00edtica del servidor de Fleet de otros espacios a trav\u00e9s de un endpoint de inscripci\u00f3n interno. El endpoint omite los controles de acceso con \u00e1mbito de espacio al usar un cliente interno sin \u00e1mbito, devolviendo identificadores operativos, nombres de pol\u00edticas, estado de gesti\u00f3n y detalles de vinculaci\u00f3n de infraestructura de espacios a los que el usuario no est\u00e1 autorizado a acceder."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.3.0",
+          "lessThanOrEqual": "9.3.2",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.2.7",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.13",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
+        "baseScore": 4.3,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "LOW",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 1.4
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-09T14:26:12.477761Z",
+        "id": "CVE-2026-33460",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-863"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.14",
+          "matchCriteriaId": "CF93FCD4-2955-45FD-B96D-925121A156F7"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.2.8",
+          "matchCriteriaId": "301F60F3-1479-432C-875A-76797F9A16D8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.3.0",
+          "versionEndExcluding": "9.3.3",
+          "matchCriteriaId": "5EE7B9F3-E587-498B-822D-785CB848F767"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-19-14-9-2-8-9-3-3-security-update-esa-2026-25/385813",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-33461",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-04-08T17:21:19.153",
+    "lastModified": "2026-07-24T23:10:00.563",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Incorrect Authorization (CWE-863) in Kibana can lead to information disclosure via Privilege Abuse (CAPEC-122). A user with limited Fleet privileges can exploit an internal API endpoint to retrieve sensitive configuration data, including private keys and authentication tokens, that should only be accessible to users with higher-level settings privileges. The endpoint composes its response by fetching full configuration objects and returning them directly, bypassing the authorization checks enforced by the dedicated settings APIs."
+     },
+     {
+      "lang": "es",
+      "value": "Autorizaci\u00f3n Incorrecta (CWE-863) en Kibana puede llevar a la revelaci\u00f3n de informaci\u00f3n a trav\u00e9s del Abuso de Privilegios (CAPEC-122). Un usuario con privilegios limitados de Fleet puede explotar un endpoint de API interno para recuperar datos de configuraci\u00f3n sensibles, incluyendo claves privadas y tokens de autenticaci\u00f3n, que solo deber\u00edan ser accesibles para usuarios con privilegios de configuraci\u00f3n de nivel superior. El endpoint compone su respuesta al obtener objetos de configuraci\u00f3n completos y devolverlos directamente, omitiendo las comprobaciones de autorizaci\u00f3n impuestas por las APIs de configuraci\u00f3n dedicadas."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.3.0",
+          "lessThanOrEqual": "9.3.2",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.2.7",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.13",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+        "baseScore": 7.7,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 3.1,
+       "impactScore": 4.0
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-09T14:27:06.734741Z",
+        "id": "CVE-2026-33461",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-863"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.14",
+          "matchCriteriaId": "CF93FCD4-2955-45FD-B96D-925121A156F7"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.2.8",
+          "matchCriteriaId": "301F60F3-1479-432C-875A-76797F9A16D8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.3.0",
+          "versionEndExcluding": "9.3.3",
+          "matchCriteriaId": "5EE7B9F3-E587-498B-822D-785CB848F767"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-19-14-9-2-8-9-3-3-security-update-esa-2026-24/385812",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-4498",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-04-08T17:21:24.300",
+    "lastModified": "2026-07-25T10:10:00.167",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Execution with Unnecessary Privileges (CWE-250) in Kibana\u2019s Fleet plugin debug route handlers can lead reading index data beyond their direct Elasticsearch RBAC scope via Privilege Abuse (CAPEC-122). This requires an authenticated Kibana user with Fleet sub-feature privileges (such as agents, agent policies, and settings management)."
+     },
+     {
+      "lang": "es",
+      "value": "La Ejecuci\u00f3n con Privilegios Innecesarios (CWE-250) en los manejadores de rutas de depuraci\u00f3n del plugin Fleet de Kibana puede llevar a la lectura de datos de \u00edndices m\u00e1s all\u00e1 de su alcance directo de RBAC de Elasticsearch a trav\u00e9s de Abuso de Privilegios (CAPEC-122). Esto requiere un usuario autenticado de Kibana con privilegios de subcaracter\u00edsticas de Fleet (como agentes, pol\u00edticas de agentes y gesti\u00f3n de configuraciones)."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.13",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+        "baseScore": 7.7,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 3.1,
+       "impactScore": 4.0
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-09T14:27:31.273591Z",
+        "id": "CVE-2026-4498",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-250"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.14",
+          "matchCriteriaId": "CF93FCD4-2955-45FD-B96D-925121A156F7"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.2.8",
+          "matchCriteriaId": "301F60F3-1479-432C-875A-76797F9A16D8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.3.0",
+          "versionEndExcluding": "9.3.3",
+          "matchCriteriaId": "5EE7B9F3-E587-498B-822D-785CB848F767"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-19-14-9-2-8-9-3-3-security-update-esa-2026-21/385811",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-33458",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-04-08T18:26:00.267",
+    "lastModified": "2026-07-24T23:10:00.563",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Server-Side Request Forgery (CWE-918) in Kibana One Workflow can lead to information disclosure. An authenticated user with workflow creation and execution privileges can bypass host allowlist restrictions in the Workflows Execution Engine, potentially exposing sensitive internal endpoints and data."
+     },
+     {
+      "lang": "es",
+      "value": "La falsificaci\u00f3n de petici\u00f3n del lado del servidor (CWE-918) en Kibana One Workflow puede conducir a la revelaci\u00f3n de informaci\u00f3n. Un usuario autenticado con privilegios de creaci\u00f3n y ejecuci\u00f3n de flujos de trabajo puede eludir las restricciones de la lista de permitidos de hosts en el Motor de Ejecuci\u00f3n de Flujos de Trabajo, exponiendo potencialmente puntos finales y datos internos sensibles."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.3.0",
+          "lessThanOrEqual": "9.3.2",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:N/A:N",
+        "baseScore": 6.3,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 1.8,
+       "impactScore": 4.0
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+        "baseScore": 7.7,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 3.1,
+       "impactScore": 4.0
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-08T19:13:38.274501Z",
+        "id": "CVE-2026-33458",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-918"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.3.0",
+          "versionEndExcluding": "9.3.3",
+          "matchCriteriaId": "5EE7B9F3-E587-498B-822D-785CB848F767"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-9-3-3-security-update-esa-2026-28/385815",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-33459",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-04-08T18:26:00.407",
+    "lastModified": "2026-07-24T23:10:00.563",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Uncontrolled Resource Consumption (CWE-400) in Kibana can lead to denial of service via Excessive Allocation (CAPEC-130). An authenticated user with access to the automatic import feature can submit specially crafted requests with excessively large input values. When multiple such requests are sent concurrently, the backend services become unstable, resulting in service disruption and deployment unavailability for all users."
+     },
+     {
+      "lang": "es",
+      "value": "Consumo de Recursos No Controlado (CWE-400) en Kibana puede conducir a denegaci\u00f3n de servicio a trav\u00e9s de Asignaci\u00f3n Excesiva (CAPEC-130). Un usuario autenticado con acceso a la funci\u00f3n de importaci\u00f3n autom\u00e1tica puede enviar solicitudes especialmente dise\u00f1adas con valores de entrada excesivamente grandes. Cuando se env\u00edan m\u00faltiples solicitudes de este tipo concurrentemente, los servicios de backend se vuelven inestables, lo que resulta en interrupci\u00f3n del servicio e indisponibilidad del despliegue para todos los usuarios."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.3.0",
+          "lessThanOrEqual": "9.3.2",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.15.0",
+          "lessThanOrEqual": "8.19.13",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.2.7",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-09T14:24:36.474697Z",
+        "id": "CVE-2026-33459",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-400"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.15.0",
+          "versionEndExcluding": "8.19.14",
+          "matchCriteriaId": "35267655-DDDF-4A74-A438-4CF77E83D509"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.2.8",
+          "matchCriteriaId": "301F60F3-1479-432C-875A-76797F9A16D8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.3.0",
+          "versionEndExcluding": "9.3.3",
+          "matchCriteriaId": "5EE7B9F3-E587-498B-822D-785CB848F767"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-19-14-9-2-8-9-3-3-security-update-esa-2026-26/385814",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-33466",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-04-08T18:26:00.557",
+    "lastModified": "2026-07-24T23:10:00.563",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Improper Limitation of a Pathname to a Restricted Directory (CWE-22) in Logstash can lead to arbitrary file write and potentially remote code execution via Relative Path Traversal (CAPEC-139). The archive extraction utilities used by Logstash do not properly validate file paths within compressed archives. An attacker who can serve a specially crafted archive to Logstash through a compromised or attacker-controlled update endpoint can write arbitrary files to the host filesystem with the privileges of the Logstash process. In certain configurations where automatic pipeline reloading is enabled, this can be escalated to remote code execution."
+     },
+     {
+      "lang": "es",
+      "value": "La Limitaci\u00f3n Inadecuada de un Nombre de Ruta a un Directorio Restringido (CWE-22) en Logstash puede conducir a la escritura arbitraria de archivos y potencialmente a la ejecuci\u00f3n remota de c\u00f3digo a trav\u00e9s de Salto de Ruta Relativo (CAPEC-139). Las utilidades de extracci\u00f3n de archivos utilizadas por Logstash no validan correctamente las rutas de archivo dentro de archivos comprimidos. Un atacante que puede entregar un archivo especialmente dise\u00f1ado a Logstash a trav\u00e9s de un punto final de actualizaci\u00f3n comprometido o controlado por el atacante puede escribir archivos arbitrarios en el sistema de archivos del host con los privilegios del proceso de Logstash. En ciertas configuraciones donde la recarga autom\u00e1tica de pipelines est\u00e1 habilitada, esto puede escalarse a ejecuci\u00f3n remota de c\u00f3digo."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Logstash",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.13",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 8.1,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.2,
+       "impactScore": 5.9
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 9.8,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 5.9
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-09T00:00:00+00:00",
+        "id": "CVE-2026-33466",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-22"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:logstash:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.14",
+          "matchCriteriaId": "55DBE8FA-7310-4495-974D-98C32189B038"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:logstash:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.2.8",
+          "matchCriteriaId": "00CAA64C-2749-427D-B403-5A42B6ABBB1F"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:logstash:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.3.0",
+          "versionEndExcluding": "9.3.3",
+          "matchCriteriaId": "55ADA858-5D32-4C8A-865B-BD386A9615B7"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/logstash-8-19-14-9-2-8-9-3-3-security-update-esa-2026-29/385816",
+      "source": "security@elastic.co",
+      "tags": [
+       "Mitigation",
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-33467",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-04-28T22:16:48.823",
+    "lastModified": "2026-07-24T23:10:00.563",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Improper Verification of Cryptographic Signature (CWE-347) in Elastic Package Registry could allow an attacker positioned to intercept network traffic, or to otherwise influence the contents served to a self-hosted registry, to substitute a tampered package without the integrity check failing closed."
+     },
+     {
+      "lang": "es",
+      "value": "Verificaci\u00f3n Incorrecta de Firma Criptogr\u00e1fica (CWE-347) en Elastic Package Registry podr\u00eda permitir a un atacante posicionado para interceptar el tr\u00e1fico de red, o para influir de otro modo en el contenido servido a un registro autoalojado, sustituir un paquete manipulado sin que la verificaci\u00f3n de integridad falle cerr\u00e1ndose."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Elastic Package Registry",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "0.1.0",
+          "lessThanOrEqual": "1.37.0",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N",
+        "baseScore": 5.9,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.2,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-04-29T14:54:54.461695Z",
+        "id": "CVE-2026-33467",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-347"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:elastic_package_registry:*:*:*:*:*:*:*:*",
+          "versionEndExcluding": "1.38.0",
+          "matchCriteriaId": "DCA1EBA8-B5AF-4AC8-A740-8E13E702B0ED"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/elastic-package-registry-1-38-0-security-update-esa-2026-27/386081",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-33462",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-05-28T20:16:22.773",
+    "lastModified": "2026-06-17T10:37:32.390",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "A path traversal vulnerability was identified in Kibana's dashboard management functionality. An authenticated user with limited permissions could create a dashboard with a specially crafted identifier. When an administrator subsequently attempts to delete this dashboard through the Kibana interface, the deletion request is redirected to an unintended internal endpoint, potentially resulting in the unauthorized deletion of user accounts or other resources. Exploitation requires an administrator to perform a delete action on the maliciously crafted dashboard object."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.3.4",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.15",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:N/I:L/A:L",
+        "baseScore": 4.6,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "REQUIRED",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "LOW",
+        "availabilityImpact": "LOW"
+       },
+       "exploitabilityScore": 2.1,
+       "impactScore": 2.5
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:U/C:N/I:H/A:H",
+        "baseScore": 7.3,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "REQUIRED",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.1,
+       "impactScore": 5.2
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-29T14:55:36.765123Z",
+        "id": "CVE-2026-33462",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-22"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.16",
+          "matchCriteriaId": "43EDC5B3-131D-489E-8447-05C5C599E6A7"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.3.5",
+          "matchCriteriaId": "E9B40710-912A-4157-9F25-89CE26C098A9"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-19-16-and-9-3-5-security-update-esa-2026-30/386545",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-33463",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-05-28T20:16:22.917",
+    "lastModified": "2026-06-17T10:37:32.507",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Operation on a Resource after Expiration or Termination (CWE-672) in Kibana can lead to unauthorized information disclosure. A logic error in how expiration timestamps were validated allowed a time-bounded access token to remain usable beyond its intended validity window, enabling an unauthenticated actor in possession of the token to retrieve the associated content after expiration."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.15",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.3.4",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+        "baseScore": 5.3,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "LOW",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 1.4
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-29T15:44:23.051928Z",
+        "id": "CVE-2026-33463",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "yes"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-672"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.16",
+          "matchCriteriaId": "43EDC5B3-131D-489E-8447-05C5C599E6A7"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.3.5",
+          "matchCriteriaId": "E9B40710-912A-4157-9F25-89CE26C098A9"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/8-19-16-9-3-5-security-update-esa-2026-33/386551",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-33464",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-05-28T20:16:23.043",
+    "lastModified": "2026-06-17T10:37:32.620",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Uncontrolled Resource Consumption (CWE-400) in Kibana can lead to a denial of service via Excessive Allocation (CAPEC-130). An authenticated user holding a low-privileged role can submit a specially crafted, oversized payload to an internal Kibana API, causing the Kibana process to exhaust available resources and become unresponsive to all users until the service recovers or is restarted."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.4.0",
+          "lessThanOrEqual": "9.4.0",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.3.4",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.15",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-29T14:55:07.578374Z",
+        "id": "CVE-2026-33464",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-400"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.16",
+          "matchCriteriaId": "43EDC5B3-131D-489E-8447-05C5C599E6A7"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.3.5",
+          "matchCriteriaId": "E9B40710-912A-4157-9F25-89CE26C098A9"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:9.4.0:*:*:*:*:*:*:*",
+          "matchCriteriaId": "66E32573-8928-42AC-8CE5-68F444910F38"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-19-16-9-3-5-9-4-1-security-update-esa-2026-32/386548",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-42401",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-05-28T20:16:23.620",
+    "lastModified": "2026-06-17T10:47:47.403",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Improper Neutralization of Input During Web Page Generation (CWE-79) in Kibana can lead to stored HTML injection. A user with write access to an Elasticsearch index could persist crafted markup which, when subsequently rendered through an affected Kibana view by another user, was not sufficiently sanitized. Successful exploitation could result in unauthorized UI manipulation and outbound network requests issued from the viewing user's browser session."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.3.4",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.15",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:N/I:L/A:N",
+        "baseScore": 4.1,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "REQUIRED",
+        "scope": "CHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "LOW",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.3,
+       "impactScore": 1.4
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:R/S:C/C:L/I:L/A:N",
+        "baseScore": 5.4,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "REQUIRED",
+        "scope": "CHANGED",
+        "confidentialityImpact": "LOW",
+        "integrityImpact": "LOW",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 2.3,
+       "impactScore": 2.7
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-29T16:27:57.417044Z",
+        "id": "CVE-2026-42401",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-79"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.16",
+          "matchCriteriaId": "43EDC5B3-131D-489E-8447-05C5C599E6A7"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.3.5",
+          "matchCriteriaId": "E9B40710-912A-4157-9F25-89CE26C098A9"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-19-16-9-3-5-security-update-esa-2026-34/386552",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-42398",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-05-28T21:16:30.180",
+    "lastModified": "2026-06-17T10:47:47.083",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Server-Side Request Forgery (CWE-918) in Kibana allows authenticated users with connector management privileges to bypass the operator-configured connection allowlist. By configuring a Webhook connector with a crafted target, an attacker can cause Kibana to issue outbound requests to destinations that the egress restriction controls were intended to block."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.3.0",
+          "lessThanOrEqual": "9.3.1",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.2.7",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+        "baseScore": 7.7,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 3.1,
+       "impactScore": 4.0
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-29T16:21:39.285039Z",
+        "id": "CVE-2026-42398",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-918"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.2.8",
+          "matchCriteriaId": "301F60F3-1479-432C-875A-76797F9A16D8"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.3.0",
+          "versionEndExcluding": "9.3.2",
+          "matchCriteriaId": "C0BF565A-EF1A-4A9F-A234-BDE468EDD3E6"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-9-2-8-and-9-3-2-security-update-esa-2026-37/386557",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-42399",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-05-28T21:16:30.323",
+    "lastModified": "2026-06-17T10:47:47.197",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Uncontrolled Resource Consumption (CWE-400) in Kibana can lead to denial of service via Excessive Allocation (CAPEC-130). An authenticated low-privileged user can cause Kibana to consume exponentially increasing amounts of memory by submitting a specially crafted Timelion visualization expression containing deeply chained function calls. The resulting data structure grows without bound, exhausting available memory and causing the Kibana service to crash and become unavailable to all users."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.15",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.3.4",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-29T16:22:15.509891Z",
+        "id": "CVE-2026-42399",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-400"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.16",
+          "matchCriteriaId": "43EDC5B3-131D-489E-8447-05C5C599E6A7"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.3.5",
+          "matchCriteriaId": "E9B40710-912A-4157-9F25-89CE26C098A9"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-19-16-and-9-3-5-security-update-esa-2026-36/386556",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-42400",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-05-28T21:16:30.497",
+    "lastModified": "2026-06-17T10:47:47.300",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Uncontrolled Resource Consumption (CWE-400) in Kibana can lead to denial of service via Excessive Allocation (CAPEC-130). An authenticated user can send a specially crafted compressed request payload that is processed prior to authorization checks, causing excessive memory and CPU resource consumption that can result in a Kibana instance becoming unresponsive or crashing."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.4.0",
+          "lessThanOrEqual": "9.4.1",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.3.4",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.15",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-29T16:22:25.220885Z",
+        "id": "CVE-2026-42400",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-400"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.16",
+          "matchCriteriaId": "43EDC5B3-131D-489E-8447-05C5C599E6A7"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.3.5",
+          "matchCriteriaId": "E9B40710-912A-4157-9F25-89CE26C098A9"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.4.0",
+          "versionEndExcluding": "9.4.2",
+          "matchCriteriaId": "81FF6553-FE7A-475D-9D50-5D0FC66FE375"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-19-16-9-3-5-9-4-2-security-update-esa-2026-35/386554",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-49093",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-05-28T21:16:34.350",
+    "lastModified": "2026-07-21T10:10:00.103",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Server-Side Request Forgery (CWE-918) in Kibana can allow an authenticated user with connector management privileges to bypass the operator-configured connector allowlist, causing the Kibana server to issue outbound requests to destinations the egress controls were intended to block."
+     },
+     {
+      "lang": "es",
+      "value": "Falsificaci\u00f3n de petici\u00f3n del lado del servidor (CWE-918) en Kibana puede permitir a un usuario autenticado con privilegios de gesti\u00f3n de conectores eludir la lista de permitidos de conectores configurada por el operador, lo que provoca que el servidor de Kibana emita peticiones salientes a destinos que los controles de egreso estaban destinados a bloquear."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.3.0",
+          "lessThanOrEqual": "9.3.2",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:N/A:N",
+        "baseScore": 6.3,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 1.8,
+       "impactScore": 4.0
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:N/A:N",
+        "baseScore": 7.7,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 3.1,
+       "impactScore": 4.0
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-29T16:20:57.811267Z",
+        "id": "CVE-2026-49093",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-918"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.3.0",
+          "versionEndExcluding": "9.3.3",
+          "matchCriteriaId": "5EE7B9F3-E587-498B-822D-785CB848F767"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-9-3-3-security-update-esa-2026-40/386562",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-49094",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-05-28T21:16:34.503",
+    "lastModified": "2026-07-21T10:10:00.103",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Uncontrolled Resource Consumption (CWE-400) in Kibana can lead to denial of service via Excessive Allocation (CAPEC-130). An authenticated user with viewer-level access can submit a request containing an oversized input value to an analytics collections management endpoint. Kibana will consume excessive CPU and memory resources while processing the request. This results in Kibana becoming unavailable to all users until the service is manually recovered."
+     },
+     {
+      "lang": "es",
+      "value": "Consumo de Recursos No Controlado (CWE-400) en Kibana puede llevar a denegaci\u00f3n de servicio a trav\u00e9s de Asignaci\u00f3n Excesiva (CAPEC-130). Un usuario autenticado con acceso de nivel de visor puede enviar una solicitud que contiene un valor de entrada sobredimensionado a un endpoint de gesti\u00f3n de colecciones de an\u00e1lisis. Kibana consumir\u00e1 recursos excesivos de CPU y memoria mientras procesa la solicitud. Esto resulta en que Kibana quede no disponible para todos los usuarios hasta que el servicio sea recuperado manualmente."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.15",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-29T16:21:11.371589Z",
+        "id": "CVE-2026-49094",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-400"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.16",
+          "matchCriteriaId": "43EDC5B3-131D-489E-8447-05C5C599E6A7"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-19-16-security-update-esa-2026-39/386561/1",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-49095",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-05-28T21:16:34.660",
+    "lastModified": "2026-07-21T10:10:00.103",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Improper Input Validation (CWE-20) in the Kibana Fleet agent policy management feature can lead to privilege escalation. An authenticated user with Fleet management privileges can manipulate agent policy configuration by injecting values into a configuration override mechanism that is not adequately validated. An attacker can cause Elastic Agents to be issued API keys with elevated Elasticsearch privileges, potentially granting unauthorized read and write access to sensitive Elasticsearch security indices beyond what is intended for the Fleet management role."
+     },
+     {
+      "lang": "es",
+      "value": "La Validaci\u00f3n de Entrada Inadecuada (CWE-20) en la caracter\u00edstica de gesti\u00f3n de pol\u00edticas de agentes de Kibana Fleet puede conducir a una escalada de privilegios. Un usuario autenticado con privilegios de gesti\u00f3n de Fleet puede manipular la configuraci\u00f3n de pol\u00edticas de agentes inyectando valores en un mecanismo de anulaci\u00f3n de configuraci\u00f3n que no est\u00e1 adecuadamente validado. Un atacante puede hacer que se emitan claves API a los Elastic Agents con privilegios elevados de Elasticsearch, otorgando potencialmente acceso de lectura y escritura no autorizado a \u00edndices de seguridad sensibles de Elasticsearch m\u00e1s all\u00e1 de lo previsto para el rol de gesti\u00f3n de Fleet."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.3.4",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.4.0",
+          "lessThanOrEqual": "9.4.1",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.15",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:N",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 1.2,
+       "impactScore": 5.2
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-05-29T00:00:00+00:00",
+        "id": "CVE-2026-49095",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-20"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.16",
+          "matchCriteriaId": "43EDC5B3-131D-489E-8447-05C5C599E6A7"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.3.5",
+          "matchCriteriaId": "E9B40710-912A-4157-9F25-89CE26C098A9"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.4.0",
+          "versionEndExcluding": "9.4.2",
+          "matchCriteriaId": "81FF6553-FE7A-475D-9D50-5D0FC66FE375"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-fleet-8-19-16-9-3-5-and-9-4-2-security-update-esa-2026-38/386559",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-49087",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-07-01T17:16:35.687",
+    "lastModified": "2026-07-02T17:53:01.593",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Allocation of Resources Without Limits or Throttling (CWE-770) in Kibana can lead to a denial of service via Excessive Allocation (CAPEC-130). An authenticated user can submit a specially crafted bulk deletion request that causes excessive resource consumption, which may render Kibana unavailable."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.3.3",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.14",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-01T17:19:30.350365Z",
+        "id": "CVE-2026-49087",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-770"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.15",
+          "matchCriteriaId": "01A3787E-B5E5-4F46-9288-8D295B0456AB"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.3.4",
+          "matchCriteriaId": "BABABAB9-024E-4E79-A78A-8902DEB6F845"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-19-15-9-3-4-security-update-esa-2026-49",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-49088",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-07-01T17:16:35.807",
+    "lastModified": "2026-07-02T17:52:31.750",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Insertion of Sensitive Information into Log File (CWE-532) in Kibana can lead to information disclosure. When the optional application performance monitoring (APM) instrumentation is enabled, sensitive request header values could be recorded in application logs, where they may be accessible to operators with log access."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.18.8",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.1.0",
+          "lessThanOrEqual": "9.1.5",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.0.7",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.19.0",
+          "lessThanOrEqual": "8.19.5",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N",
+        "baseScore": 4.4,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 0.7,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-01T17:19:40.665767Z",
+        "id": "CVE-2026-49088",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-532"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.18.9",
+          "matchCriteriaId": "C5F75DB5-0F27-44B3-9C94-8541677346E1"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.19.0",
+          "versionEndExcluding": "8.19.6",
+          "matchCriteriaId": "C99F0C5B-1E48-40FB-AF72-59D86CEC45B3"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.0.8",
+          "matchCriteriaId": "A5D3776F-14E6-48FF-9D0B-67A772CD2D98"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.1.0",
+          "versionEndExcluding": "9.1.6",
+          "matchCriteriaId": "3D738E5D-7D73-493B-A13F-BBDF4655BC88"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-18-9-8-19-6-9-0-8-9-1-6-security-update-esa-2026-50",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory",
+       "Mitigation"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-56148",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-07-01T17:16:36.840",
+    "lastModified": "2026-07-02T17:38:29.920",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Uncontrolled Recursion (CWE-674) in Elasticsearch can lead to a denial of service via Excessive Allocation (CAPEC-130). An authenticated user can submit a specially crafted query that causes excessive resource consumption while the request is processed, which may render the affected node unavailable."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Elasticsearch",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.4.0",
+          "lessThanOrEqual": "9.4.2",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.3.5",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.16",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-01T17:18:52.494881Z",
+        "id": "CVE-2026-56148",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-674"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:elasticsearch:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.17",
+          "matchCriteriaId": "1418D3D7-31ED-45BF-BD7E-22E3081F118F"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:elasticsearch:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.3.6",
+          "matchCriteriaId": "56D2B290-835D-4343-8E77-F478C97ED202"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:elasticsearch:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.4.0",
+          "versionEndExcluding": "9.4.3",
+          "matchCriteriaId": "3BEEF187-66DE-4DBF-8C7D-B5A49BED2CA6"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/elasticsearch-8-19-17-9-3-6-9-4-3-security-update-esa-2026-42",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-56149",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-07-01T17:16:36.957",
+    "lastModified": "2026-07-02T17:35:59.397",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Allocation of Resources Without Limits or Throttling (CWE-770) in Elasticsearch can lead to a denial of service via Excessive Allocation (CAPEC-130). A user with elevated privileges can submit a specially crafted machine learning request that causes excessive memory consumption, which may render the affected node unavailable."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Elasticsearch",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.4.0",
+          "lessThanOrEqual": "9.4.2",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.3.5",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.16",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 4.9,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "HIGH",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.2,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-01T17:18:43.883917Z",
+        "id": "CVE-2026-56149",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-770"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:elasticsearch:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.17",
+          "matchCriteriaId": "1418D3D7-31ED-45BF-BD7E-22E3081F118F"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:elasticsearch:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.3.6",
+          "matchCriteriaId": "56D2B290-835D-4343-8E77-F478C97ED202"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:elasticsearch:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.4.0",
+          "versionEndExcluding": "9.4.3",
+          "matchCriteriaId": "3BEEF187-66DE-4DBF-8C7D-B5A49BED2CA6"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/elasticsearch-8-19-17-9-3-6-9-4-3-security-update-esa-2026-43",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-56150",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-07-01T17:16:37.060",
+    "lastModified": "2026-07-06T18:51:50.527",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Allocation of Resources Without Limits or Throttling (CWE-770) in Fleet Server can lead to a denial of service via Excessive Allocation (CAPEC-130). An attacker can submit a specially crafted request to an upload endpoint that causes excessive memory consumption, which may render Fleet Server unavailable."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Fleet Server",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.2.4",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.10",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 3.6
+      },
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 7.5,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "NONE",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-01T17:16:33.748948Z",
+        "id": "CVE-2026-56150",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-770"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:fleet_server:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.11",
+          "matchCriteriaId": "2062CCB4-89BC-456B-A469-43C8F349E97A"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:fleet_server:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.2.5",
+          "matchCriteriaId": "F1EDFFCE-61D3-48C5-9B63-4D676FA0A4BA"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/fleet-server-8-19-11-9-2-5-9-3-0-security-update-esa-2026-44",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-56151",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-07-01T17:16:37.167",
+    "lastModified": "2026-07-02T16:09:39.207",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Improper Input Validation (CWE-20) in Kibana can lead to a denial of service via Input Data Manipulation (CAPEC-153). An authenticated user can submit a specially crafted Fleet policy input that is not correctly validated, which can render Fleet agent, server, and policy management functionality unavailable."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.3.5",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.19.16",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.4.0",
+          "lessThanOrEqual": "9.4.2",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-01T17:19:03.394968Z",
+        "id": "CVE-2026-56151",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-20"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.19.17",
+          "matchCriteriaId": "F6988FF1-B650-4AE7-9C9B-C3533634FEC4"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.3.6",
+          "matchCriteriaId": "ECDB67E0-0BAC-4158-A3A9-D38EB1CEAC8A"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.4.0",
+          "versionEndExcluding": "9.4.3",
+          "matchCriteriaId": "A54D142F-22A7-4324-933D-02DCDBF32A4E"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-8-19-17-9-3-6-9-4-3-security-update-esa-2026-45",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-56152",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-07-01T17:16:37.273",
+    "lastModified": "2026-07-06T18:05:39.700",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Incorrect Authorization (CWE-863) in Elastic Defend can lead to unauthorized information disclosure via Accessing Functionality Not Properly Constrained by ACLs (CAPEC-1). Under certain conditions, a low-privileged authenticated user can access response action data that they are not authorized to view."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Elastic Defend",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "9.3.0",
+          "lessThanOrEqual": "9.3.1",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "8.6.0",
+          "lessThanOrEqual": "8.19.12",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "9.0.0",
+          "lessThanOrEqual": "9.2.6",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:N/A:N",
+        "baseScore": 5.3,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "NONE"
+       },
+       "exploitabilityScore": 1.6,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-01T17:19:23.798243Z",
+        "id": "CVE-2026-56152",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-863"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:endpoint_security:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.6.0",
+          "versionEndExcluding": "8.19.13",
+          "matchCriteriaId": "69DB116A-E4A7-41CD-87F2-6B69B9066AC9"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:endpoint_security:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.0.0",
+          "versionEndExcluding": "9.2.7",
+          "matchCriteriaId": "51B3663A-2505-4C34-91CD-2BEE8FD547DF"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:endpoint_security:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "9.3.0",
+          "versionEndExcluding": "9.3.2",
+          "matchCriteriaId": "75125EE8-0AB6-4F43-AC15-AB04925F4684"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/elastic-defend-8-19-13-9-2-7-9-3-2-security-update-esa-2026-46",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-49090",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-07-01T18:16:33.540",
+    "lastModified": "2026-07-02T14:43:04.937",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Uncontrolled Resource Consumption (CWE-400) in Elasticsearch can lead to a denial of service via Excessive Allocation (CAPEC-130). An authenticated user can submit a specially crafted bulk request that causes sustained high CPU consumption, which can render the affected node unable to process requests."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Elasticsearch",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.14.3",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "7.0.0",
+          "lessThanOrEqual": "7.17.23",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H",
+        "baseScore": 6.5,
+        "baseSeverity": "MEDIUM",
+        "attackVector": "NETWORK",
+        "attackComplexity": "LOW",
+        "privilegesRequired": "LOW",
+        "userInteraction": "NONE",
+        "scope": "UNCHANGED",
+        "confidentialityImpact": "NONE",
+        "integrityImpact": "NONE",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 2.8,
+       "impactScore": 3.6
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-01T17:56:23.912486Z",
+        "id": "CVE-2026-49090",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "partial"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-400"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:elasticsearch:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "7.0.0",
+          "versionEndExcluding": "7.17.24",
+          "matchCriteriaId": "3E719DF2-6A28-43F9-A8C6-4882684C5AC1"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:elasticsearch:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.15.0",
+          "matchCriteriaId": "A1A70215-D9F0-4CD0-B255-B0FF78B03881"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/elasticsearch-7-17-24-8-15-0-security-update-esa-2026-52",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2026-49091",
+    "sourceIdentifier": "security@elastic.co",
+    "published": "2026-07-01T18:16:34.040",
+    "lastModified": "2026-07-02T18:15:39.927",
+    "vulnStatus": "Analyzed",
+    "cveTags": [],
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Improper Output Neutralization for Logs (CWE-117) in Kibana can lead to log injection via Log Injection-Tampering-Forging (CAPEC-93). An attacker can supply specially crafted input that is written to log files without proper neutralization. When the log files are subsequently viewed in a terminal that interprets control sequences, the injected content may alter the displayed log data."
+     }
+    ],
+    "affected": [
+     {
+      "source": "security@elastic.co",
+      "affectedData": [
+       {
+        "vendor": "Elastic",
+        "product": "Kibana",
+        "defaultStatus": "unaffected",
+        "versions": [
+         {
+          "version": "8.0.0",
+          "lessThanOrEqual": "8.11.0",
+          "versionType": "semver",
+          "status": "affected"
+         },
+         {
+          "version": "7.0.0",
+          "lessThanOrEqual": "7.17.14",
+          "versionType": "semver",
+          "status": "affected"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "security@elastic.co",
+       "type": "Secondary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:H",
+        "baseScore": 8.0,
+        "baseSeverity": "HIGH",
+        "attackVector": "NETWORK",
+        "attackComplexity": "HIGH",
+        "privilegesRequired": "LOW",
+        "userInteraction": "REQUIRED",
+        "scope": "CHANGED",
+        "confidentialityImpact": "HIGH",
+        "integrityImpact": "HIGH",
+        "availabilityImpact": "HIGH"
+       },
+       "exploitabilityScore": 1.3,
+       "impactScore": 6.0
+      }
+     ],
+     "ssvcV203": [
+      {
+       "source": "134c704f-9b21-4f2e-91b3-4a467353bcc0",
+       "ssvcData": {
+        "timestamp": "2026-07-01T00:00:00+00:00",
+        "id": "CVE-2026-49091",
+        "options": [
+         {
+          "exploitation": "none"
+         },
+         {
+          "automatable": "no"
+         },
+         {
+          "technicalImpact": "total"
+         }
+        ],
+        "role": "CISA Coordinator",
+        "version": "2.0.3"
+       }
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "security@elastic.co",
+      "type": "Secondary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-116"
+       }
+      ]
+     }
+    ],
+    "configurations": [
+     {
+      "nodes": [
+       {
+        "operator": "OR",
+        "negate": false,
+        "cpeMatch": [
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "7.0.0",
+          "versionEndExcluding": "7.17.15",
+          "matchCriteriaId": "A25080F6-A136-4D8F-BA71-B48402A1BC7E"
+         },
+         {
+          "vulnerable": true,
+          "criteria": "cpe:2.3:a:elastic:kibana:*:*:*:*:*:*:*:*",
+          "versionStartIncluding": "8.0.0",
+          "versionEndExcluding": "8.11.1",
+          "matchCriteriaId": "EDC4443D-DC1A-41CB-A1BC-817A15246F81"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://discuss.elastic.co/t/kibana-7-17-15-8-11-1-security-update-esa-2026-53",
+      "source": "security@elastic.co",
+      "tags": [
+       "Vendor Advisory",
+       "Mitigation"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

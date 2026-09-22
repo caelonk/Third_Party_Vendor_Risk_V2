@@ -1,0 +1,28 @@
+# Vendor -> CPE vendor-prefix map (spec section 4).
+# Flat list of `- vendor: <name>` / `cpe: [<prefixes>]`. Parsed by a ~15-line
+# hand-rolled reader in src/pipeline.py (no PyYAML dependency) — the cpe list is
+# read with stdlib json.loads.
+- vendor: Microsoft
+  cpe: ["cpe:2.3:a:microsoft"]
+- vendor: Oracle
+  cpe: ["cpe:2.3:a:oracle"]
+- vendor: Atlassian
+  cpe: ["cpe:2.3:a:atlassian"]
+- vendor: Cisco
+  cpe: ["cpe:2.3:a:cisco"]
+- vendor: VMware
+  cpe: ["cpe:2.3:a:vmware"]
+- vendor: Adobe
+  cpe: ["cpe:2.3:a:adobe"]
+- vendor: Fortinet
+  cpe: ["cpe:2.3:a:fortinet"]
+- vendor: Citrix
+  cpe: ["cpe:2.3:a:citrix"]
+- vendor: Progress Software
+  cpe: ["cpe:2.3:a:progress"]
+- vendor: GitLab
+  cpe: ["cpe:2.3:a:gitlab"]
+- vendor: Elastic
+  cpe: ["cpe:2.3:a:elastic"]
+- vendor: Zoom
+  cpe: ["cpe:2.3:a:zoom"]
