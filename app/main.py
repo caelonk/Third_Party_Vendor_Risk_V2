@@ -6,11 +6,29 @@ in later phases.
 """
 from __future__ import annotations
 
-from fastapi import APIRouter, FastAPI
+from fastapi import APIRouter, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
-from .api import health
+from .api import auth, health, invitations, me, orgs
 from .config import get_settings
+from .services.exceptions import (
+    AuthError,
+    ConflictError,
+    DomainError,
+    NotFoundError,
+    PermissionDeniedError,
+    ValidationError,
+)
+
+# Domain error -> HTTP status.
+_ERROR_STATUS = {
+    AuthError: 401,
+    PermissionDeniedError: 403,
+    NotFoundError: 404,
+    ConflictError: 409,
+    ValidationError: 422,
+}
 
 
 def create_app() -> FastAPI:
@@ -30,11 +48,22 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    @app.exception_handler(DomainError)
+    def _handle_domain_error(_request: Request, exc: DomainError) -> JSONResponse:
+        status_code = next(
+            (code for typ, code in _ERROR_STATUS.items() if isinstance(exc, typ)), 400
+        )
+        return JSONResponse(status_code=status_code, content={"detail": str(exc)})
+
     # Ops probes at the root.
     app.include_router(health.router)
 
-    # Versioned API surface (routers added per phase).
+    # Versioned API surface.
     api_v1 = APIRouter(prefix="/api/v1")
+    api_v1.include_router(auth.router)
+    api_v1.include_router(orgs.router)
+    api_v1.include_router(invitations.router)
+    api_v1.include_router(me.router)
     app.include_router(api_v1)
 
     @app.get("/", tags=["ops"])
