@@ -161,3 +161,13 @@ export interface Notification {
   read_at: string | null;
   created_at: string;
 }
+
+export interface Integration {
+  nvd_key_set: boolean;
+  sync_cadence_hours: number;
+}
+
+export interface IntegrationUpdate {
+  nvd_api_key?: string | null;
+  sync_cadence_hours?: number;
+}
