@@ -1,0 +1,21 @@
+.reports {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 760px;
+}
+.reports__actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin: var(--space-3) 0 var(--space-4);
+}
+.reports__actions .btn {
+  text-decoration: none;
+}
+.reports__note {
+  font-size: 0.78rem;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+  margin: 0;
+}

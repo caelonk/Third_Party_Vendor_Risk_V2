@@ -8,8 +8,10 @@ import type { Vendor } from "@/lib/types";
 const schema = z.object({
   name: z.string().trim().min(1, "Required").max(200),
   cpe_prefix: z.string().trim().max(255).optional().or(z.literal("")),
+  // "" must be matched BEFORE coercion — z.coerce.number("") is 0, which would
+  // fabricate a 0.0 contract value for an unset field (honest-data: unset != 0).
   annual_contract_value: z
-    .union([z.coerce.number().min(0), z.literal("")])
+    .union([z.literal(""), z.coerce.number().min(0)])
     .optional(),
   data_sensitivity: z.enum(["", "public", "internal", "confidential", "regulated"]).optional(),
   business_criticality: z.enum(["", "low", "medium", "high"]).optional(),

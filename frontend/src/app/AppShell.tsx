@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Bell, Check, ChevronsUpDown, LayoutDashboard, LogOut, Settings2, Shield } from "lucide-react";
+import {
+  Bell,
+  Check,
+  ChevronsUpDown,
+  FileText,
+  LayoutDashboard,
+  LogOut,
+  Settings2,
+  Shield,
+} from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -107,6 +116,13 @@ export function AppShell() {
             <span>Vendors</span>
           </NavLink>
           <AlertsNav />
+          <NavLink
+            to="/reports"
+            className={({ isActive }) => `navlink${isActive ? " navlink--active" : ""}`}
+          >
+            <FileText />
+            <span>Reports</span>
+          </NavLink>
           <NavLink
             to="/settings"
             className={({ isActive }) => `navlink${isActive ? " navlink--active" : ""}`}
