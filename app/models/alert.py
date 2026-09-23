@@ -63,3 +63,5 @@ class Notification(Base, TimestampMixin):
         notification_status_enum, nullable=False, default=NotificationStatus.pending
     )
     sent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    # In-app read state (separate from dispatch status).
+    read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

@@ -6,6 +6,7 @@ import { Register } from "@/routes/Register";
 import { Dashboard } from "@/routes/Dashboard";
 import { Vendors } from "@/routes/Vendors";
 import { VendorDetail } from "@/routes/VendorDetail";
+import { Alerts } from "@/routes/Alerts";
 import { Settings } from "@/routes/Settings";
 
 function FullPageSpinner() {
@@ -31,6 +32,7 @@ export function App() {
           <Route index element={<Dashboard />} />
           <Route path="vendors" element={<Vendors />} />
           <Route path="vendors/:vendorId" element={<VendorDetail />} />
+          <Route path="alerts" element={<Alerts />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       ) : (

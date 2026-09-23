@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Check, ChevronsUpDown, LayoutDashboard, LogOut, Settings2, Shield } from "lucide-react";
+import { Bell, Check, ChevronsUpDown, LayoutDashboard, LogOut, Settings2, Shield } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ThemeSync } from "@/theme/ThemeSync";
 import { useAuth } from "@/auth/AuthProvider";
 import { useOrg } from "@/org/OrgProvider";
+import { useUnreadCount } from "@/features/alerts";
 import "./app-shell.css";
+import "@/routes/alerts.css";
 
 function initials(name: string | null, email: string) {
   if (name) {
@@ -55,6 +57,21 @@ function OrgSwitcher() {
   );
 }
 
+function AlertsNav() {
+  const { data } = useUnreadCount();
+  const unread = data?.unread ?? 0;
+  return (
+    <NavLink
+      to="/alerts"
+      className={({ isActive }) => `navlink${isActive ? " navlink--active" : ""}`}
+    >
+      <Bell />
+      <span>Alerts</span>
+      {unread > 0 && <span className="navbadge">{unread > 99 ? "99+" : unread}</span>}
+    </NavLink>
+  );
+}
+
 export function AppShell() {
   const { user, logout } = useAuth();
 
@@ -89,6 +106,7 @@ export function AppShell() {
             <Shield />
             <span>Vendors</span>
           </NavLink>
+          <AlertsNav />
           <NavLink
             to="/settings"
             className={({ isActive }) => `navlink${isActive ? " navlink--active" : ""}`}

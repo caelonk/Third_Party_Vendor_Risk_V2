@@ -10,13 +10,34 @@ export class ApiError extends Error {
   }
 }
 
-async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
+// Endpoints that must not trigger a silent refresh-and-retry on 401.
+const NO_REFRESH = ["/auth/login", "/auth/register", "/auth/refresh", "/auth/logout"];
+
+let refreshing: Promise<boolean> | null = null;
+function tryRefresh(): Promise<boolean> {
+  if (!refreshing) {
+    refreshing = fetch(BASE + "/auth/refresh", { method: "POST", credentials: "include" })
+      .then((r) => r.ok)
+      .catch(() => false)
+      .finally(() => {
+        refreshing = null;
+      });
+  }
+  return refreshing;
+}
+
+async function request<T>(method: string, path: string, body?: unknown, retry = false): Promise<T> {
   const res = await fetch(BASE + path, {
     method,
     credentials: "include",
     headers: body !== undefined ? { "Content-Type": "application/json" } : undefined,
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
+
+  // Access token likely expired — refresh once (using the refresh cookie) and retry.
+  if (res.status === 401 && !retry && !NO_REFRESH.some((p) => path.startsWith(p))) {
+    if (await tryRefresh()) return request<T>(method, path, body, true);
+  }
 
   if (res.status === 204) return undefined as T;
 

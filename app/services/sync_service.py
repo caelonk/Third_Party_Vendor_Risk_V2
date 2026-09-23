@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from core import nvd_client, scoring
@@ -16,7 +17,7 @@ from core.sync import FetchFn
 
 from ..config import get_settings
 from ..models import RiskSnapshot, SyncRun, SyncStatus, Vendor
-from . import scoring_service
+from . import alerts_service, scoring_service
 from .exceptions import ValidationError
 from .store import SqlAlchemyVulnStore
 
@@ -68,24 +69,31 @@ def sync_vendor(
             "match_method": "virtual_match",
         }
     ]
+    # The prior snapshot (before this run) is what alerts diff against.
+    prev_snapshot = db.scalar(
+        select(RiskSnapshot)
+        .where(RiskSnapshot.vendor_id == vendor.id)
+        .order_by(RiskSnapshot.captured_at.desc())
+    )
+
     result = core_sync.ingest(store, prepared, fetch=fetch, log=lambda *a, **k: None)
 
     vendor.last_synced_at = now
+    new_snapshot: RiskSnapshot | None = None
     if result.succeeded:
         cves = scoring_service.cves_for_vendor(db, vendor.id)
         assessment = scoring.assess(scoring_service.vendor_to_dict(vendor), cves)
-        db.add(
-            RiskSnapshot(
-                vendor_id=vendor.id,
-                tier=assessment["tier"],
-                threat_band=assessment["threat_band"],
-                exposure_band=assessment["exposure_band"],
-                max_cvss=assessment["max_cvss"],
-                cve_count=assessment["cve_count"],
-                kev_count=assessment["kev_count"],
-                captured_at=now,
-            )
+        new_snapshot = RiskSnapshot(
+            vendor_id=vendor.id,
+            tier=assessment["tier"],
+            threat_band=assessment["threat_band"],
+            exposure_band=assessment["exposure_band"],
+            max_cvss=assessment["max_cvss"],
+            cve_count=assessment["cve_count"],
+            kev_count=assessment["kev_count"],
+            captured_at=now,
         )
+        db.add(new_snapshot)
 
     run.status = SyncStatus(result.status)
     run.completed_at = now
@@ -95,4 +103,8 @@ def sync_vendor(
     run.error_detail = "; ".join(result.errors) or None
     db.commit()
     db.refresh(run)
+
+    # Evaluate alert rules against the tier/KEV delta (opt-in per org).
+    if new_snapshot is not None:
+        alerts_service.evaluate_on_sync(db, org_id, vendor, prev_snapshot, new_snapshot)
     return run

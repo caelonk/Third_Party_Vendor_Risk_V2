@@ -138,3 +138,26 @@ export interface PortfolioTrendPoint {
   kev_vendors: number;
   tier_distribution: Record<string, number>;
 }
+
+export type AlertType = "new_kev" | "tier_change" | "renewal_due";
+export type AlertChannel = "email" | "slack";
+
+export interface AlertRule {
+  id: number;
+  type: AlertType;
+  channel: AlertChannel;
+  config: Record<string, unknown>;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface Notification {
+  id: number;
+  type: AlertType;
+  vendor_id: number | null;
+  title: string;
+  body: string | null;
+  status: string;
+  read_at: string | null;
+  created_at: string;
+}
