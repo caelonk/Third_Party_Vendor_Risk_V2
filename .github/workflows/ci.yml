@@ -77,5 +77,8 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Unit tests (vitest)
+        run: npm test
+
       - name: Type-check + build
         run: npm run build

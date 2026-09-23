@@ -188,7 +188,8 @@
 
 @media (max-width: 780px) {
   .shell {
-    grid-template-columns: 1fr;
+    /* minmax(0, …) so a wide child cannot blow the column past the viewport. */
+    grid-template-columns: minmax(0, 1fr);
   }
   .sidebar {
     position: static;
@@ -211,7 +212,12 @@
     border-top: none;
     padding-top: 0;
     flex-direction: row;
+    flex-wrap: wrap; /* org switcher, theme, and user wrap rather than widen the page */
     align-items: center;
+    min-width: 0;
+  }
+  .userbar {
+    min-width: 0; /* let the email ellipsize */
   }
   .navlink span {
     display: none;
