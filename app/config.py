@@ -42,6 +42,18 @@ class Settings(BaseSettings):
     # NVD system fallback key (per-org keys are stored encrypted per tenant).
     nvd_api_key: str | None = Field(default=None)
 
+    # Scheduled auto-sync (Celery Beat). The dispatcher fires on this cadence and
+    # enqueues one task per due CPE prefix; a vendor is due when its own cadence
+    # (org_integrations.sync_cadence_hours, else this default) has elapsed.
+    beat_dispatch_interval_seconds: int = Field(default=300)   # dispatcher cron
+    default_sync_cadence_hours: int = Field(default=24)        # when no org override
+    # NVD rolling-window ceilings, enforced across workers by a Redis token bucket
+    # keyed per API key (50 req / 30 s with a key, 5 req / 30 s without).
+    nvd_rate_with_key_per_window: int = Field(default=50)
+    nvd_rate_keyless_per_window: int = Field(default=5)
+    nvd_rate_window_seconds: int = Field(default=30)
+    nvd_rate_max_wait_seconds: float = Field(default=120.0)    # give up if starved
+
     # CORS: comma-free list via env as JSON or a single origin string.
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])
 

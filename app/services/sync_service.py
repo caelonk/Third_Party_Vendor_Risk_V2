@@ -6,7 +6,7 @@ live client while tests replay fixtures.
 """
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -17,9 +17,42 @@ from core.sync import FetchFn
 
 from ..config import get_settings
 from ..models import RiskSnapshot, SyncRun, SyncStatus, Vendor
-from . import alerts_service, scoring_service
+from . import alerts_service, integration_service, scoring_service
 from .exceptions import ValidationError
 from .store import SqlAlchemyVulnStore
+
+
+def latest_snapshot(db: Session, vendor_id: int) -> RiskSnapshot | None:
+    """The most recent risk snapshot for a vendor (what alerts diff against)."""
+    return db.scalar(
+        select(RiskSnapshot)
+        .where(RiskSnapshot.vendor_id == vendor_id)
+        .order_by(RiskSnapshot.captured_at.desc())
+    )
+
+
+def build_snapshot(db: Session, vendor: Vendor, *, now: datetime) -> RiskSnapshot:
+    """Assess the vendor against the current cache and append a snapshot row."""
+    cves = scoring_service.cves_for_vendor(db, vendor.id)
+    assessment = scoring.assess(scoring_service.vendor_to_dict(vendor), cves)
+    snapshot = RiskSnapshot(
+        vendor_id=vendor.id,
+        tier=assessment["tier"],
+        threat_band=assessment["threat_band"],
+        exposure_band=assessment["exposure_band"],
+        max_cvss=assessment["max_cvss"],
+        cve_count=assessment["cve_count"],
+        kev_count=assessment["kev_count"],
+        captured_at=now,
+    )
+    db.add(snapshot)
+    return snapshot
+
+
+def schedule_next_sync(db: Session, org_id: int, vendor: Vendor, *, now: datetime) -> None:
+    """Set the vendor's next scheduled auto-sync from the org's cadence."""
+    hours = integration_service.cadence_hours(db, org_id)
+    vendor.next_sync_at = now + timedelta(hours=hours)
 
 
 def build_live_fetch(
@@ -70,30 +103,17 @@ def sync_vendor(
         }
     ]
     # The prior snapshot (before this run) is what alerts diff against.
-    prev_snapshot = db.scalar(
-        select(RiskSnapshot)
-        .where(RiskSnapshot.vendor_id == vendor.id)
-        .order_by(RiskSnapshot.captured_at.desc())
-    )
+    prev_snapshot = latest_snapshot(db, vendor.id)
 
     result = core_sync.ingest(store, prepared, fetch=fetch, log=lambda *a, **k: None)
 
     vendor.last_synced_at = now
+    # Reschedule the next auto-sync whether or not this run succeeded — a failed
+    # manual run should still be retried on the org's cadence, not immediately.
+    schedule_next_sync(db, org_id, vendor, now=now)
     new_snapshot: RiskSnapshot | None = None
     if result.succeeded:
-        cves = scoring_service.cves_for_vendor(db, vendor.id)
-        assessment = scoring.assess(scoring_service.vendor_to_dict(vendor), cves)
-        new_snapshot = RiskSnapshot(
-            vendor_id=vendor.id,
-            tier=assessment["tier"],
-            threat_band=assessment["threat_band"],
-            exposure_band=assessment["exposure_band"],
-            max_cvss=assessment["max_cvss"],
-            cve_count=assessment["cve_count"],
-            kev_count=assessment["kev_count"],
-            captured_at=now,
-        )
-        db.add(new_snapshot)
+        new_snapshot = build_snapshot(db, vendor, now=now)
 
     run.status = SyncStatus(result.status)
     run.completed_at = now

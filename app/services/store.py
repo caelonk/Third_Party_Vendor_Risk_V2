@@ -24,6 +24,11 @@ class SqlAlchemyVulnStore:
         # runs autoflush=False so merge() cannot see pending rows.
         self._seen_vulns: set[str] = set()
         self._linked: set[tuple[int, str]] = set()
+        # Links are buffered and written only after the shared cache is flushed,
+        # so the association FK to `vulnerabilities` is always satisfied. Postgres
+        # enforces this; SQLite (FKs off by default) silently tolerated the old
+        # interleaved order, which hid the violation until the first real run.
+        self._pending_links: list[tuple[int, str]] = []
 
     def _vendor(self, name: str) -> Vendor | None:
         return self.db.scalar(
@@ -67,12 +72,19 @@ class SqlAlchemyVulnStore:
         if key in self._linked:
             return
         self._linked.add(key)
-        # merge() keeps cross-run re-sync idempotent (finds an existing DB row).
-        self.db.merge(VendorVulnerability(vendor_id=vendor_id, cve_id=cve_id))
+        # Defer the association insert until commit(), after the parent CVE rows
+        # have been flushed — otherwise the FK to `vulnerabilities` can fail.
+        self._pending_links.append(key)
 
     def vendor_is_mapped(self, vendor_name: str) -> bool | None:
         v = self._vendor(vendor_name)
         return None if v is None else v.is_mapped
 
     def commit(self) -> None:
+        # 1. Flush the merged CVE cache rows (parents) so their PKs exist.
+        self.db.flush()
+        # 2. Now insert the vendor<->CVE links; merge() stays re-sync idempotent.
+        for vendor_id, cve_id in self._pending_links:
+            self.db.merge(VendorVulnerability(vendor_id=vendor_id, cve_id=cve_id))
+        self._pending_links.clear()
         self.db.commit()

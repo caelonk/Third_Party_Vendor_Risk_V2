@@ -29,3 +29,12 @@ celery_app.conf.update(
     timezone="UTC",
     enable_utc=True,
 )
+
+# Beat: a single dispatcher on a cron. It selects due vendors, dedupes them to
+# CPE prefixes, and fans out one incremental ``sync_prefix`` task per prefix.
+celery_app.conf.beat_schedule = {
+    "dispatch-due-syncs": {
+        "task": "app.workers.tasks.dispatch_due_syncs",
+        "schedule": float(settings.beat_dispatch_interval_seconds),
+    }
+}

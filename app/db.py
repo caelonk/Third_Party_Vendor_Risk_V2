@@ -10,6 +10,7 @@ The engine is created lazily so importing this module never requires the DBAPI
 from __future__ import annotations
 
 from collections.abc import Iterator
+from contextlib import contextmanager
 from functools import lru_cache
 
 from sqlalchemy import Engine, create_engine
@@ -33,6 +34,16 @@ def _get_sessionmaker() -> sessionmaker[Session]:
 
 def get_session() -> Iterator[Session]:
     """FastAPI dependency: yield a session and always close it."""
+    session = _get_sessionmaker()()
+    try:
+        yield session
+    finally:
+        session.close()
+
+
+@contextmanager
+def session_scope() -> Iterator[Session]:
+    """A session for background workers and scripts (not request-scoped)."""
     session = _get_sessionmaker()()
     try:
         yield session
