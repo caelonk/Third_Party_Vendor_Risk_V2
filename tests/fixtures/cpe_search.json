@@ -1,0 +1,57 @@
+{
+  "resultsPerPage": 6,
+  "startIndex": 0,
+  "totalResults": 6,
+  "format": "NVD_CPE",
+  "version": "2.0",
+  "products": [
+    {
+      "cpe": {
+        "deprecated": false,
+        "cpeName": "cpe:2.3:o:fortinet:fortios:4.3.10:*:*:*:*:*:*:*",
+        "cpeNameId": "77D49F7B-E2E2-454F-8F68-1EB67E14128E",
+        "titles": [{ "title": "Fortinet FortiOS 4.3.10", "lang": "en" }]
+      }
+    },
+    {
+      "cpe": {
+        "deprecated": false,
+        "cpeName": "cpe:2.3:o:fortinet:fortios:7.0.1:*:*:*:*:*:*:*",
+        "cpeNameId": "06C3C0A3-0B77-4799-BDCF-6DD752A17E82",
+        "titles": [{ "title": "Fortinet FortiOS 7.0.1", "lang": "en" }]
+      }
+    },
+    {
+      "cpe": {
+        "deprecated": true,
+        "cpeName": "cpe:2.3:o:fortinet:fortios:4.3.0:*:*:*:*:*:*:*",
+        "cpeNameId": "AF597D7E-B6F9-424F-B7DA-BE1577F10C8D",
+        "titles": [{ "title": "Fortinet FortiOS 4.3.0", "lang": "en" }]
+      }
+    },
+    {
+      "cpe": {
+        "deprecated": false,
+        "cpeName": "cpe:2.3:a:fortinet:fortimanager:6.4.0:*:*:*:*:*:*:*",
+        "cpeNameId": "11111111-0000-0000-0000-000000000001",
+        "titles": [{ "title": "Fortinet FortiManager 6.4.0", "lang": "en" }]
+      }
+    },
+    {
+      "cpe": {
+        "deprecated": false,
+        "cpeName": "cpe:2.3:a:fortinet:forti_manager_cloud:1.0:*:*:*:*:*:*:*",
+        "cpeNameId": "11111111-0000-0000-0000-000000000002",
+        "titles": [{ "title": "Fortinet FortiManager Cloud 1.0", "lang": "en" }]
+      }
+    },
+    {
+      "cpe": {
+        "deprecated": false,
+        "cpeName": "cpe:2.3:a:fortinet",
+        "cpeNameId": "22222222-0000-0000-0000-000000000003",
+        "titles": []
+      }
+    }
+  ]
+}

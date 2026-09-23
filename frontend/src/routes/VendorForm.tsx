@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { CpeSearch } from "@/components/CpeSearch";
 import type { VendorInput } from "@/features/vendors";
 import type { Vendor } from "@/lib/types";
 
@@ -46,6 +47,7 @@ export function VendorForm({
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<Form>({
     resolver: zodResolver(schema),
@@ -69,15 +71,22 @@ export function VendorForm({
       </div>
       <div className="field">
         <label className="field__label">
-          CPE prefix <span className="subtle">(for syncing CVEs)</span>
+          Product mapping <span className="subtle">(for syncing CVEs)</span>
         </label>
+        <CpeSearch
+          onSelect={(prefix) =>
+            setValue("cpe_prefix", prefix, { shouldValidate: true, shouldDirty: true })
+          }
+        />
         <input
           className="input mono"
-          placeholder="cpe:2.3:a:fortinet"
+          placeholder="cpe:2.3:a:fortinet:fortios"
+          style={{ marginTop: "var(--space-2)" }}
           {...register("cpe_prefix")}
         />
         <span className="field__hint">
-          NVD vendor prefix. A vendor can be added now and mapped later.
+          Search NVD to auto-fill the CPE prefix, or type one directly. A vendor can be added now
+          and mapped later.
         </span>
       </div>
       <div className="row" style={{ gap: "var(--space-3)", alignItems: "flex-start" }}>

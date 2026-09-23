@@ -83,3 +83,81 @@ def parse_response(payload: dict) -> list[dict]:
     """Parse a whole NVD response into normalized records (skips id-less rows)."""
     records = [parse_cve(cve) for cve in iter_cve_objects(payload)]
     return [r for r in records if r["cve_id"]]
+
+
+# --------------------------------------------------------------------------- #
+# CPE dictionary (name-to-CPE onboarding)                                      #
+# --------------------------------------------------------------------------- #
+def _en_title(titles: list | None) -> str | None:
+    titles = titles or []
+    english = [t for t in titles if t.get("lang") == "en"]
+    chosen = english[0] if english else (titles[0] if titles else None)
+    return chosen.get("title") if chosen else None
+
+
+def _humanize(vendor: str, product: str) -> str:
+    """A readable label from CPE tokens: 'forti_manager_cloud' -> 'Forti Manager Cloud'."""
+    def clean(token: str) -> str:
+        return token.replace("\\", "").replace("_", " ").strip()
+
+    return f"{clean(vendor)} {clean(product)}".title()
+
+
+def parse_cpe_products(payload: dict) -> list[dict]:
+    """Flatten an NVD CPE-search response into per-CPE records.
+
+    Each ``cpeName`` is ``cpe:2.3:<part>:<vendor>:<product>:<version>:...``. The
+    derived ``prefix`` keeps ``part:vendor:product`` — the exact form used as an
+    NVD ``virtualMatchString`` for CVE sync — so a picked product scopes cleanly
+    across all its versions. Rows without a full product-level name are skipped.
+    """
+    out: list[dict] = []
+    for item in payload.get("products") or []:
+        cpe = item.get("cpe") if isinstance(item, dict) else None
+        if not cpe:
+            continue
+        name = cpe.get("cpeName")
+        if not name:
+            continue
+        components = name.split(":")
+        if len(components) < 5 or not components[4]:
+            continue  # need at least cpe:2.3:part:vendor:product
+        out.append(
+            {
+                "cpe_name": name,
+                "prefix": ":".join(components[:5]),
+                "part": components[2],
+                "vendor": components[3],
+                "product": components[4],
+                "deprecated": bool(cpe.get("deprecated")),
+                "title": _en_title(cpe.get("titles")),
+            }
+        )
+    return out
+
+
+def group_cpe_products(products: list[dict]) -> list[dict]:
+    """Collapse version rows into distinct ``part:vendor:product`` candidates.
+
+    A keyword search returns one row per product *version*; onboarding wants the
+    distinct products. ``version_count`` and ``active`` (any non-deprecated
+    version) summarize the group. Ordered most-versions-first (a proxy for the
+    most established product), then by prefix for stability.
+    """
+    groups: dict[str, dict] = {}
+    for p in products:
+        g = groups.get(p["prefix"])
+        if g is None:
+            groups[p["prefix"]] = {
+                "prefix": p["prefix"],
+                "part": p["part"],
+                "vendor": p["vendor"],
+                "product": p["product"],
+                "label": _humanize(p["vendor"], p["product"]),
+                "version_count": 1,
+                "active": not p["deprecated"],
+            }
+        else:
+            g["version_count"] += 1
+            g["active"] = g["active"] or not p["deprecated"]
+    return sorted(groups.values(), key=lambda g: (-g["version_count"], g["prefix"]))

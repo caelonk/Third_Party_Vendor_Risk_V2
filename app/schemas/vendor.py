@@ -28,6 +28,18 @@ class VendorUpdate(BaseModel):
     contract_renewal_date: date | None = None
 
 
+class CpeCandidate(BaseModel):
+    """A distinct CPE product suggested for name-to-CPE onboarding."""
+
+    prefix: str
+    label: str
+    part: str
+    vendor: str
+    product: str
+    version_count: int
+    active: bool
+
+
 class VendorAssessment(BaseModel):
     tier: str
     threat_band: str | None

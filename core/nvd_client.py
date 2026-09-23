@@ -22,7 +22,12 @@ from datetime import UTC, datetime, timedelta
 import requests
 
 BASE_URL = "https://services.nvd.nist.gov/rest/json/cves/2.0"
+CPE_URL = "https://services.nvd.nist.gov/rest/json/cpes/2.0"
 RETRY_STATUS = {403, 429, 503}
+
+# CPE keyword search: one page of this size surfaces the distinct products for a
+# name without paginating a product's every version.
+CPE_RESULTS_PER_PAGE = 500
 
 # NVD API ceilings (not demo caps): 2000 results/page, 120-day date ranges.
 MAX_RESULTS_PER_PAGE = 2000
@@ -109,7 +114,7 @@ def build_params(
     raise ValueError(f"unknown query_type: {query_type!r}")
 
 
-def _get(session, params, config: NVDConfig, *, log, sleeper) -> dict:
+def _get(session, params, config: NVDConfig, *, url: str = BASE_URL, log, sleeper) -> dict:
     """One GET, paced and retried. Returns parsed JSON or raises VendorFetchError."""
     sleeper(config.pacing)
     last_error = None
@@ -118,7 +123,7 @@ def _get(session, params, config: NVDConfig, *, log, sleeper) -> dict:
             log(f"      retryable failure ({last_error}); backing off {backoff}s")
             sleeper(backoff)
         try:
-            resp = session.get(BASE_URL, params=params, timeout=60)
+            resp = session.get(url, params=params, timeout=60)
         except requests.RequestException as exc:
             last_error = f"network error: {exc}"
             continue
@@ -176,3 +181,24 @@ def fetch_query(
     merged["startIndex"] = 0
     merged["resultsPerPage"] = len(merged.get("vulnerabilities") or [])
     return merged
+
+
+def search_cpes(
+    keyword: str,
+    *,
+    config: NVDConfig | None = None,
+    session=None,
+    results_per_page: int = CPE_RESULTS_PER_PAGE,
+    log=print,
+    sleeper=time.sleep,
+) -> dict:
+    """Search the NVD CPE dictionary by keyword (product/vendor name).
+
+    Returns the raw NVD CPE-search payload (``products`` list). One page only —
+    enough to surface the distinct products for a name; :func:`core.parser`
+    collapses the version rows. Raises :class:`VendorFetchError` on failure.
+    """
+    config = config or NVDConfig()
+    session = session or make_session(config)
+    params = {"keywordSearch": keyword, "resultsPerPage": results_per_page, "startIndex": 0}
+    return _get(session, params, config, url=CPE_URL, log=log, sleeper=sleeper)

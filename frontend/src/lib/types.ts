@@ -167,6 +167,16 @@ export interface Integration {
   sync_cadence_hours: number;
 }
 
+export interface CpeCandidate {
+  prefix: string;
+  label: string;
+  part: string;
+  vendor: string;
+  product: string;
+  version_count: number;
+  active: boolean;
+}
+
 export interface IntegrationUpdate {
   nvd_api_key?: string | null;
   sync_cadence_hours?: number;
