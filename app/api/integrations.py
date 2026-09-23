@@ -14,7 +14,7 @@ from ..db import get_session
 from ..deps import OrgContext, get_org_context, require_role
 from ..models import Role
 from ..schemas.integration import IntegrationOut, IntegrationUpdate
-from ..services import integration_service
+from ..services import audit_service, integration_service
 
 router = APIRouter(prefix="/orgs/{org_id}/integration", tags=["integration"])
 
@@ -43,7 +43,12 @@ def update_integration(
     ctx: OrgContext = Depends(require_role(Role.admin)),
     db: Session = Depends(get_session),
 ) -> IntegrationOut:
-    integ = integration_service.apply_patch(
-        db, ctx.organization.id, body.model_dump(exclude_unset=True)
+    patch = body.model_dump(exclude_unset=True)
+    integ = integration_service.apply_patch(db, ctx.organization.id, patch)
+    # Record that fields changed — never the NVD key value itself.
+    audit_service.record(
+        db, org_id=ctx.organization.id, actor_user_id=ctx.membership.user_id,
+        action="integration.updated", target_type="integration", target_id=ctx.organization.id,
+        extra={"fields": sorted(patch.keys())},
     )
     return _out(integ, default_cadence=get_settings().default_sync_cadence_hours)

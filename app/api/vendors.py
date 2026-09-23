@@ -16,7 +16,7 @@ from ..schemas.vendor import (
     VendorOut,
     VendorUpdate,
 )
-from ..services import scoring_service, sync_service, vendor_service
+from ..services import audit_service, scoring_service, sync_service, vendor_service
 
 router = APIRouter(prefix="/orgs/{org_id}/vendors", tags=["vendors"])
 
@@ -55,6 +55,11 @@ def create_vendor(
     db: Session = Depends(get_session),
 ) -> VendorOut:
     vendor = vendor_service.create_vendor(db, ctx.organization.id, body.model_dump())
+    audit_service.record(
+        db, org_id=ctx.organization.id, actor_user_id=ctx.membership.user_id,
+        action="vendor.created", target_type="vendor", target_id=vendor.id,
+        extra={"name": vendor.name},
+    )
     return _vendor_out(db, vendor)
 
 
@@ -78,6 +83,11 @@ def update_vendor(
     vendor = vendor_service.update_vendor(
         db, ctx.organization.id, vendor_id, body.model_dump(exclude_unset=True)
     )
+    audit_service.record(
+        db, org_id=ctx.organization.id, actor_user_id=ctx.membership.user_id,
+        action="vendor.updated", target_type="vendor", target_id=vendor.id,
+        extra={"fields": sorted(body.model_dump(exclude_unset=True).keys())},
+    )
     return _vendor_out(db, vendor)
 
 
@@ -87,7 +97,14 @@ def delete_vendor(
     ctx: OrgContext = Depends(require_role(Role.member)),
     db: Session = Depends(get_session),
 ) -> None:
+    vendor = vendor_service.get_vendor(db, ctx.organization.id, vendor_id)
+    name = vendor.name
     vendor_service.delete_vendor(db, ctx.organization.id, vendor_id)
+    audit_service.record(
+        db, org_id=ctx.organization.id, actor_user_id=ctx.membership.user_id,
+        action="vendor.deleted", target_type="vendor", target_id=vendor_id,
+        extra={"name": name},
+    )
 
 
 @router.post("/{vendor_id}/sync", response_model=SyncRunOut)
@@ -99,4 +116,9 @@ def sync_vendor(
 ) -> SyncRunOut:
     vendor = vendor_service.get_vendor(db, ctx.organization.id, vendor_id)
     run = sync_service.sync_vendor(db, ctx.organization.id, vendor, fetch=fetch)
+    audit_service.record(
+        db, org_id=ctx.organization.id, actor_user_id=ctx.membership.user_id,
+        action="vendor.synced", target_type="vendor", target_id=vendor.id,
+        extra={"status": run.status.value, "cves_upserted": run.cves_upserted},
+    )
     return SyncRunOut.model_validate(run)

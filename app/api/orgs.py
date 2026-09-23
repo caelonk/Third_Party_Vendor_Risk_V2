@@ -16,7 +16,7 @@ from ..schemas.org import (
     OrgWithRole,
     RoleUpdate,
 )
-from ..services import org_service
+from ..services import audit_service, org_service
 
 router = APIRouter(prefix="/orgs", tags=["orgs"])
 
@@ -84,6 +84,11 @@ def set_member_role(
     m = org_service.set_member_role(db, ctx.organization.id, user_id=user_id, role=body.role)
     user = db.get(User, user_id)
     assert user is not None  # set_member_role raises NotFoundError if absent
+    audit_service.record(
+        db, org_id=ctx.organization.id, actor_user_id=ctx.membership.user_id,
+        action="member.role_changed", target_type="user", target_id=user_id,
+        extra={"email": user.email, "role": m.role.value},
+    )
     return MemberOut(user_id=user.id, email=user.email, name=user.name, role=m.role)
 
 
@@ -93,7 +98,13 @@ def remove_member(
     ctx: OrgContext = Depends(require_role(Role.admin)),
     db: Session = Depends(get_session),
 ) -> None:
+    removed = db.get(User, user_id)
     org_service.remove_member(db, ctx.organization.id, user_id=user_id)
+    audit_service.record(
+        db, org_id=ctx.organization.id, actor_user_id=ctx.membership.user_id,
+        action="member.removed", target_type="user", target_id=user_id,
+        extra={"email": removed.email} if removed else None,
+    )
 
 
 # --------------------------------------------------------------------------- #
@@ -110,6 +121,11 @@ def create_invitation(
     invite = org_service.create_invitation(
         db, ctx.organization.id, email=body.email, role=body.role,
         invited_by=ctx.membership.user_id,
+    )
+    audit_service.record(
+        db, org_id=ctx.organization.id, actor_user_id=ctx.membership.user_id,
+        action="member.invited", target_type="invitation", target_id=invite.id,
+        extra={"email": body.email, "role": body.role.value},
     )
     return InviteOut.model_validate(invite)
 

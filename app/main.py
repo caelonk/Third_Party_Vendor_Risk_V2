@@ -12,6 +12,7 @@ from fastapi.responses import JSONResponse
 
 from .api import (
     alerts,
+    audit,
     auth,
     cpe,
     dashboard,
@@ -78,6 +79,7 @@ def create_app() -> FastAPI:
     api_v1.include_router(vendors.router)
     api_v1.include_router(cpe.router)
     api_v1.include_router(exports.router)
+    api_v1.include_router(audit.router)
     api_v1.include_router(integrations.router)
     api_v1.include_router(dashboard.router)
     api_v1.include_router(trends.router)

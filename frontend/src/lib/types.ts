@@ -177,6 +177,17 @@ export interface CpeCandidate {
   active: boolean;
 }
 
+export interface AuditEntry {
+  id: number;
+  action: string;
+  target_type: string | null;
+  target_id: string | null;
+  actor_email: string | null;
+  actor_name: string | null;
+  extra: Record<string, unknown> | null;
+  created_at: string;
+}
+
 export interface IntegrationUpdate {
   nvd_api_key?: string | null;
   sync_cadence_hours?: number;
