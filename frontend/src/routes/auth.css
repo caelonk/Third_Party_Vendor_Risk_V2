@@ -87,11 +87,27 @@
   text-align: center;
 }
 
+/* Compact brand header, shown only when the full brand panel is hidden. */
+.auth__mobilebrand {
+  display: none;
+}
+.auth__mobilebrand p {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  margin-top: var(--space-3);
+}
+
 @media (max-width: 860px) {
   .auth {
     grid-template-columns: 1fr;
   }
   .auth__brand {
     display: none;
+  }
+  .auth__mobilebrand {
+    display: block;
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid var(--border);
   }
 }

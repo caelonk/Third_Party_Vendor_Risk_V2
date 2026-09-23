@@ -43,6 +43,10 @@ export function AuthLayout({
 
       <main className="auth__form-wrap">
         <div className="auth__form">
+          <div className="auth__mobilebrand">
+            <Wordmark size={26} />
+            <p>Honest risk scoring for the vendors you depend on.</p>
+          </div>
           <h2>{title}</h2>
           <p className="subtle">{subtitle}</p>
           {children}
