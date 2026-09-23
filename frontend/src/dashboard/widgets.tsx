@@ -1,4 +1,5 @@
 import { Fragment, type CSSProperties } from "react";
+import { CveTrend } from "./CveTrend";
 import { TierBadge } from "@/components/TierBadge";
 import { fmtCvss, fmtDate } from "@/lib/format";
 import { useHeatmap, useSummary, useTopRisk, useWatchlist } from "@/features/dashboard";
@@ -214,5 +215,5 @@ export const WIDGET_COMPONENTS: Record<
   watchlist: Watchlist,
   top_risk: TopRisk,
   kev_exposure: KevExposure,
-  data_health: KevExposure, // reserved; not offered in the catalog
+  cve_trend: CveTrend,
 };

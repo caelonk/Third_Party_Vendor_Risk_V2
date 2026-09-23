@@ -74,7 +74,7 @@ export type WidgetType =
   | "watchlist"
   | "top_risk"
   | "kev_exposure"
-  | "data_health";
+  | "cve_trend";
 
 export interface Widget {
   type: WidgetType;
@@ -122,4 +122,19 @@ export interface TopRiskItem {
   max_cvss: number | null;
   cve_count: number;
   kev_count: number;
+}
+
+export interface VendorTrendPoint {
+  captured_at: string;
+  tier: Tier;
+  max_cvss: number | null;
+  cve_count: number;
+  kev_count: number;
+}
+
+export interface PortfolioTrendPoint {
+  date: string;
+  total_cves: number;
+  kev_vendors: number;
+  tier_distribution: Record<string, number>;
 }

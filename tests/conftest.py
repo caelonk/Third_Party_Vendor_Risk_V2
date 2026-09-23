@@ -20,11 +20,16 @@ API = "/api/v1"
 class ApiHarness:
     """Spawns TestClients against one shared in-memory DB."""
 
-    def __init__(self, app):
+    def __init__(self, app, session_factory):
         self.app = app
+        self._session_factory = session_factory
 
     def client(self) -> TestClient:
         return TestClient(self.app)
+
+    def db(self):
+        """A session on the same in-memory DB, for arranging test data directly."""
+        return self._session_factory()
 
     def register(
         self,
@@ -70,7 +75,7 @@ def api(monkeypatch):
     app = create_app()
     app.dependency_overrides[get_session] = _override_session
     try:
-        yield ApiHarness(app)
+        yield ApiHarness(app, TestingSession)
     finally:
         app.dependency_overrides.clear()
         engine.dispose()

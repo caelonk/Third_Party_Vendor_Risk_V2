@@ -3,6 +3,7 @@ import { ArrowLeft, Pencil, RefreshCw, Trash2 } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Modal } from "@/components/Modal";
 import { TierBadge } from "@/components/TierBadge";
+import { VendorTrendChart } from "@/components/VendorTrendChart";
 import { ApiError } from "@/lib/api";
 import { fmtCvss, fmtDate, fmtMoney, fmtRelative } from "@/lib/format";
 import { useOrg } from "@/org/OrgProvider";
@@ -151,6 +152,15 @@ export function VendorDetail() {
               <Stat label="Renewal">{fmtDate(vendor.contract_renewal_date)}</Stat>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="card" style={{ marginTop: "var(--space-5)" }}>
+        <div className="card__header">
+          <span className="card__title">Risk trend</span>
+        </div>
+        <div className="card__body">
+          <VendorTrendChart vendorId={id} />
         </div>
       </div>
 

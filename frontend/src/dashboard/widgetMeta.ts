@@ -1,4 +1,4 @@
-import { Activity, Flame, Grid3x3, ListChecks, TrendingUp } from "lucide-react";
+import { Activity, Flame, Grid3x3, LineChart, ListChecks, TrendingUp } from "lucide-react";
 import type { WidgetType } from "@/lib/types";
 
 export interface CatalogEntry {
@@ -39,6 +39,12 @@ export const CATALOG: CatalogEntry[] = [
     title: "KEV exposure",
     description: "Vendors with known-exploited CVEs.",
     icon: Flame,
+  },
+  {
+    type: "cve_trend",
+    title: "CVE trend",
+    description: "Total tracked CVEs over time.",
+    icon: LineChart,
   },
 ];
 
