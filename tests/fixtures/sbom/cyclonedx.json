@@ -1,0 +1,99 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-01T12:00:00Z",
+    "tools": { "components": [{ "type": "application", "name": "cyclonedx-maven-plugin", "version": "2.7.9" }] },
+    "component": {
+      "type": "application",
+      "bom-ref": "acme-portal",
+      "name": "acme-portal",
+      "version": "4.2.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1",
+      "group": "org.apache.logging.log4j",
+      "name": "log4j-core",
+      "version": "2.14.1",
+      "purl": "pkg:maven/org.apache.logging.log4j/log4j-core@2.14.1",
+      "cpe": "cpe:2.3:a:apache:log4j:2.14.1:*:*:*:*:*:*:*",
+      "supplier": { "name": "The Apache Software Foundation" }
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:maven/org.apache.logging.log4j/log4j-api@2.14.1",
+      "group": "org.apache.logging.log4j",
+      "name": "log4j-api",
+      "version": "2.14.1",
+      "purl": "pkg:maven/org.apache.logging.log4j/log4j-api@2.14.1",
+      "cpe": "cpe:2.3:a:apache:log4j:2.14.1:*:*:*:*:*:*:*"
+    },
+    {
+      "type": "library",
+      "bom-ref": "openssl",
+      "name": "openssl",
+      "version": "3.0.7",
+      "cpe": "cpe:/a:openssl:openssl:3.0.7"
+    },
+    {
+      "type": "framework",
+      "bom-ref": "pkg:maven/org.springframework/spring-core@5.3.18",
+      "group": "org.springframework",
+      "name": "spring-core",
+      "version": "5.3.18",
+      "cpe": "cpe:2.3:a:vmware:spring_framework:5.3.18:*:*:*:*:*:*:*",
+      "components": [
+        {
+          "type": "library",
+          "bom-ref": "pkg:maven/org.springframework/spring-jcl@5.3.18",
+          "group": "org.springframework",
+          "name": "spring-jcl",
+          "version": "5.3.18",
+          "purl": "pkg:maven/org.springframework/spring-jcl@5.3.18"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40angular/core@16.2.0",
+      "group": "@angular",
+      "name": "core",
+      "version": "16.2.0",
+      "purl": "pkg:npm/%40angular/core@16.2.0"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/lodash@4.17.20",
+      "name": "lodash",
+      "version": "4.17.20",
+      "purl": "pkg:npm/lodash@4.17.20",
+      "publisher": "OpenJS Foundation"
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/lodash@4.17.21",
+      "name": "lodash",
+      "version": "4.17.21",
+      "purl": "pkg:npm/lodash@4.17.21"
+    },
+    { "type": "file", "bom-ref": "license-file", "name": "LICENSE.txt" },
+    {
+      "type": "library",
+      "bom-ref": "weird",
+      "name": "weird-lib",
+      "version": "0.1.0",
+      "cpe": "cpe:2.3:a:*:*:*:*:*:*:*:*:*:*"
+    },
+    {
+      "type": "application",
+      "bom-ref": "acme-portal",
+      "name": "acme-portal",
+      "version": "4.2.0"
+    }
+  ]
+}

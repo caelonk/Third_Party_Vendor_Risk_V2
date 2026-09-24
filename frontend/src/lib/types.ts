@@ -177,6 +177,31 @@ export interface CpeCandidate {
   active: boolean;
 }
 
+export type SbomCandidateStatus = "new" | "exists" | "duplicate";
+
+export interface SbomCandidate {
+  name: string;
+  cpe_prefix: string | null;
+  versions: string[];
+  component_count: number;
+  supplier: string | null;
+  status: SbomCandidateStatus;
+}
+
+export interface SbomPreview {
+  format: "cyclonedx" | "spdx";
+  spec_version: string | null;
+  subject: string | null;
+  component_count: number;
+  candidates: SbomCandidate[];
+}
+
+export interface SbomImportResult {
+  created: number;
+  names: string[];
+  skipped: { name: string; reason: "exists" | "invalid_cpe" | "empty_name" }[];
+}
+
 export interface AuditEntry {
   id: number;
   action: string;

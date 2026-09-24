@@ -22,6 +22,7 @@ from .api import (
     invitations,
     me,
     orgs,
+    sbom,
     trends,
     vendors,
 )
@@ -78,6 +79,7 @@ def create_app() -> FastAPI:
     api_v1.include_router(orgs.router)
     api_v1.include_router(vendors.router)
     api_v1.include_router(cpe.router)
+    api_v1.include_router(sbom.router)
     api_v1.include_router(exports.router)
     api_v1.include_router(audit.router)
     api_v1.include_router(integrations.router)

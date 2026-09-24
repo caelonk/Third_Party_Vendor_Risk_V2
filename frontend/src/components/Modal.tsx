@@ -8,11 +8,13 @@ export function Modal({
   onClose,
   title,
   children,
+  size = "md",
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
+  size?: "md" | "lg";
 }) {
   useEffect(() => {
     if (!open) return;
@@ -33,7 +35,7 @@ export function Modal({
           onClick={onClose}
         >
           <motion.div
-            className="modal card"
+            className={size === "lg" ? "modal modal--lg card" : "modal card"}
             role="dialog"
             aria-modal="true"
             aria-label={title}

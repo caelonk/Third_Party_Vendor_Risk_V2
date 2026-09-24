@@ -185,6 +185,13 @@
   margin-top: var(--space-2);
   font-size: var(--text-sm);
 }
+.page-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  flex-shrink: 0; /* the title text wraps first; the buttons stay on one line */
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
 
 @media (max-width: 780px) {
   .shell {
@@ -224,5 +231,9 @@
   }
   .main__inner {
     padding: var(--space-5) var(--space-4) var(--space-7);
+  }
+  .page-header {
+    flex-wrap: wrap; /* actions drop below the title rather than squeezing it */
+    align-items: flex-start;
   }
 }

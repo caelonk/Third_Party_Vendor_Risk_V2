@@ -15,3 +15,6 @@
   max-height: calc(100vh - 2rem);
   overflow: auto;
 }
+.modal--lg {
+  max-width: 860px;
+}

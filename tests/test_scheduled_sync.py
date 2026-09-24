@@ -73,7 +73,7 @@ def _mk_vendor(db, oid, name, *, prefix=PREFIX, mapped=True, next_sync_at=None):
 # --------------------------------------------------------------------------- #
 # Due selection + prefix dedup                                                #
 # --------------------------------------------------------------------------- #
-def test_select_due_excludes_unmapped_unprefixed_and_future(api):
+def test_select_due_excludes_unprefixed_and_future(api):
     client, _ = api.register("due@acme.io")
     oid = _org_id(client)
     now = datetime(2026, 1, 1)  # naive: SQLite drops tzinfo; prod (Postgres) is tz-aware
@@ -81,11 +81,23 @@ def test_select_due_excludes_unmapped_unprefixed_and_future(api):
         due_never = _mk_vendor(db, oid, "DueNever", next_sync_at=None)
         due_past = _mk_vendor(db, oid, "DuePast", next_sync_at=now - timedelta(hours=1))
         _future = _mk_vendor(db, oid, "Future", next_sync_at=now + timedelta(hours=1))
-        _unmapped = _mk_vendor(db, oid, "Unmapped", mapped=False)
         _noprefix = _mk_vendor(db, oid, "NoPrefix", prefix=None)
 
         due_ids = {v.id for v in sched.select_due_vendors(db, now)}
         assert due_ids == {due_never, due_past}
+
+
+def test_never_synced_vendor_with_a_prefix_is_due(api):
+    """A vendor added with a CPE prefix (form or SBOM import) is not yet mapped —
+    it must still be picked up by scheduled sync, not wait for a manual click.
+    Likewise a vendor whose first fetch failed must be retried."""
+    client, _ = api.register("due2@acme.io")
+    oid = _org_id(client)
+    now = datetime(2026, 1, 1)
+    with api.db() as db:
+        fresh = _mk_vendor(db, oid, "Fresh Import", mapped=False)  # has PREFIX, never synced
+        due_ids = {v.id for v in sched.select_due_vendors(db, now)}
+        assert fresh in due_ids
 
 
 def test_plan_dedupes_shared_prefix_and_groups_by_org(api):

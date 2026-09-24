@@ -67,11 +67,17 @@ class PrefixResult:
 # Due selection + prefix dedup (pure DB queries — unit-tested on SQLite)       #
 # --------------------------------------------------------------------------- #
 def select_due_vendors(db: Session, now: datetime) -> list[Vendor]:
-    """Mapped vendors whose scheduled sync is due (or never scheduled)."""
+    """Vendors with a CPE prefix whose scheduled sync is due (or never scheduled).
+
+    Deliberately NOT filtered on ``is_mapped``: that flag only turns true after a
+    first successful sync, so requiring it would strand every newly added vendor
+    (form or SBOM import) until someone clicked Sync, and would never retry a
+    vendor whose first fetch failed. ``is_mapped`` stays an honest "has been
+    assessed" signal — it is never set early.
+    """
     stmt = (
         select(Vendor)
         .where(
-            Vendor.is_mapped.is_(True),
             Vendor.cpe_prefix.is_not(None),
             or_(Vendor.next_sync_at.is_(None), Vendor.next_sync_at <= now),
         )

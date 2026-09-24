@@ -1,0 +1,124 @@
+.sbom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Step 1: file drop zone. */
+.sbom__drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  text-align: center;
+  transition: border-color 0.12s, background 0.12s;
+}
+.sbom__drop--over {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.sbom__drop p {
+  margin: 0;
+}
+.sbom__drop-icon {
+  color: var(--text-subtle);
+}
+.sbom__hint {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+/* Step 2: review. */
+.sbom__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+.sbom__note {
+  align-items: flex-start;
+}
+.sbom__note svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--text-subtle);
+}
+.sbom__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+.sbom__count {
+  margin-left: auto;
+  font-size: var(--text-xs);
+}
+.sbom__table-wrap {
+  max-height: 46vh;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.sbom__table-wrap thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface);
+}
+.sbom__table-wrap input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.sbom__table-wrap input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+}
+.sbom__name {
+  font-weight: 500;
+  cursor: pointer;
+}
+.sbom__supplier {
+  font-size: 0.72rem;
+}
+.sbom__cpe {
+  font-size: 0.75rem;
+  overflow-wrap: break-word; /* last resort only; <wbr> after colons is preferred */
+}
+.sbom__row--off td {
+  color: var(--text-subtle);
+}
+.sbom__row--off .sbom__name {
+  cursor: default;
+}
+.sbom__status {
+  white-space: nowrap;
+}
+.sbom__status--new {
+  background: var(--accent-soft);
+  border-color: var(--accent-border);
+  color: var(--text);
+}
+
+/* Step 3 + shared footer. */
+.sbom__outcome {
+  margin: 0;
+  padding-left: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+.sbom__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}

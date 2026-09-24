@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { Plus, RefreshCw, SearchX, ShieldAlert } from "lucide-react";
+import { FileJson, Plus, RefreshCw, SearchX, ShieldAlert } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Modal } from "@/components/Modal";
+import { SbomImport } from "@/components/SbomImport";
 import { TierBadge } from "@/components/TierBadge";
 import { ApiError } from "@/lib/api";
 import { fmtCvss, fmtRelative } from "@/lib/format";
@@ -34,6 +35,7 @@ export function Vendors() {
   const sync = useSyncVendor();
 
   const [adding, setAdding] = useState(false);
+  const [importing, setImporting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
   // Filter/sort state lives in the URL: shareable, and survives refresh + back.
@@ -67,9 +69,14 @@ export function Vendors() {
           <p>Third-party software you depend on, and its published-vulnerability exposure.</p>
         </div>
         {canWrite && (
-          <button className="btn btn--primary" onClick={() => setAdding(true)}>
-            <Plus /> Add vendor
-          </button>
+          <div className="page-header__actions">
+            <button className="btn btn--secondary" onClick={() => setImporting(true)}>
+              <FileJson /> Import SBOM
+            </button>
+            <button className="btn btn--primary" onClick={() => setAdding(true)}>
+              <Plus /> Add vendor
+            </button>
+          </div>
         )}
       </div>
 
@@ -88,9 +95,14 @@ export function Vendors() {
               </p>
             </div>
             {canWrite && (
-              <button className="btn btn--secondary" onClick={() => setAdding(true)}>
-                <Plus /> Add your first vendor
-              </button>
+              <div className="page-header__actions" style={{ justifyContent: "center" }}>
+                <button className="btn btn--secondary" onClick={() => setAdding(true)}>
+                  <Plus /> Add your first vendor
+                </button>
+                <button className="btn btn--secondary" onClick={() => setImporting(true)}>
+                  <FileJson /> Import an SBOM
+                </button>
+              </div>
             )}
           </div>
         ) : (
@@ -187,6 +199,10 @@ export function Vendors() {
 
       <Modal open={adding} onClose={() => setAdding(false)} title="Add vendor">
         <VendorForm submitting={create.isPending} error={formError} onSubmit={submit} />
+      </Modal>
+
+      <Modal open={importing} onClose={() => setImporting(false)} title="Import from SBOM" size="lg">
+        <SbomImport onDone={() => setImporting(false)} />
       </Modal>
     </>
   );

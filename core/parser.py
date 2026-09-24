@@ -95,12 +95,18 @@ def _en_title(titles: list | None) -> str | None:
     return chosen.get("title") if chosen else None
 
 
-def _humanize(vendor: str, product: str) -> str:
-    """A readable label from CPE tokens: 'forti_manager_cloud' -> 'Forti Manager Cloud'."""
+def humanize_product(vendor: str, product: str) -> str:
+    """A readable label from CPE tokens: 'forti_manager_cloud' -> 'Forti Manager Cloud'.
+
+    Capitalizes only each word's first letter (``str.title`` would turn 'log4j'
+    into 'Log4J'), and collapses vendor == product ('openssl:openssl' -> 'Openssl').
+    """
     def clean(token: str) -> str:
         return token.replace("\\", "").replace("_", " ").strip()
 
-    return f"{clean(vendor)} {clean(product)}".title()
+    v, p = clean(vendor), clean(product)
+    text = p if v.casefold() == p.casefold() else f"{v} {p}"
+    return " ".join(w[:1].upper() + w[1:] for w in text.split())
 
 
 def parse_cpe_products(payload: dict) -> list[dict]:
@@ -153,7 +159,7 @@ def group_cpe_products(products: list[dict]) -> list[dict]:
                 "part": p["part"],
                 "vendor": p["vendor"],
                 "product": p["product"],
-                "label": _humanize(p["vendor"], p["product"]),
+                "label": humanize_product(p["vendor"], p["product"]),
                 "version_count": 1,
                 "active": not p["deprecated"],
             }
