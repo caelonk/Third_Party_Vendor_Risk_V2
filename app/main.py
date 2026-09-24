@@ -6,6 +6,9 @@ in later phases.
 """
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -27,6 +30,12 @@ from .api import (
     vendors,
 )
 from .config import get_settings
+from .observability import (
+    REQUEST_ID_HEADER,
+    RequestContextMiddleware,
+    configure_logging,
+    init_sentry,
+)
 from .services.exceptions import (
     AuthError,
     ConflictError,
@@ -46,13 +55,23 @@ _ERROR_STATUS = {
 }
 
 
+@asynccontextmanager
+async def _lifespan(_app: FastAPI) -> AsyncIterator[None]:
+    # Configure logging when the server starts (uvicorn/gunicorn), not at import
+    # or app construction — so tests keep pytest's own log capture untouched.
+    configure_logging(get_settings())
+    yield
+
+
 def create_app() -> FastAPI:
     settings = get_settings()
+    init_sentry(settings, component="api")  # no-op unless SENTRY_DSN is set
     app = FastAPI(
         title="Vendor Risk Platform",
         version="0.1.0",
         docs_url="/api/docs",
         openapi_url="/api/openapi.json",
+        lifespan=_lifespan,
     )
 
     app.add_middleware(
@@ -61,7 +80,11 @@ def create_app() -> FastAPI:
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+        expose_headers=[REQUEST_ID_HEADER],  # the SPA can quote it in error reports
     )
+    # Added last = outermost: every response (even CORS preflights and errors)
+    # carries a request id, and the access line covers the whole stack.
+    app.add_middleware(RequestContextMiddleware)
 
     @app.exception_handler(DomainError)
     def _handle_domain_error(_request: Request, exc: DomainError) -> JSONResponse:

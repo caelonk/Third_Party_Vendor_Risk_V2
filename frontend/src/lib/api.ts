@@ -3,9 +3,11 @@ const BASE = "/api/v1";
 
 export class ApiError extends Error {
   status: number;
-  constructor(status: number, message: string) {
+  requestId?: string;
+  constructor(status: number, message: string, requestId?: string) {
     super(message);
     this.status = status;
+    this.requestId = requestId;
     this.name = "ApiError";
   }
 }
@@ -68,7 +70,17 @@ async function request<T>(method: string, path: string, body?: unknown, retry = 
     } else if (typeof payload === "string" && payload) {
       detail = payload;
     }
-    throw new ApiError(res.status, detail);
+    const requestId = res.headers.get("X-Request-ID") ?? undefined;
+    if (res.status >= 500) {
+      // Keep a deliberate message (e.g. a 503 explaining what's unavailable), but
+      // replace generic faults and proxy HTML pages; always append the reference,
+      // which maps straight to the server's log lines.
+      const hasDetail = !!payload && typeof payload === "object" && "detail" in payload;
+      const generic = !hasDetail || detail === "Internal server error";
+      const base = generic ? "Something went wrong on our side." : detail;
+      detail = requestId ? `${base} Reference: ${requestId}` : generic ? `${base} Please try again.` : base;
+    }
+    throw new ApiError(res.status, detail, requestId);
   }
   return payload as T;
 }

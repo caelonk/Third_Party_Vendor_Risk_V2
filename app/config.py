@@ -64,9 +64,21 @@ class Settings(BaseSettings):
     smtp_password: str | None = Field(default=None)
     smtp_from: str | None = Field(default=None)
 
+    # Observability. LOG_FORMAT "auto" = JSON in production, readable text elsewhere.
+    log_level: str = Field(default="INFO")
+    log_format: str = Field(default="auto")  # auto | json | text
+    sentry_dsn: str | None = Field(default=None)  # unset -> Sentry fully disabled
+    sentry_traces_sample_rate: float = Field(default=0.0)
+    app_release: str | None = Field(default=None)  # e.g. the git SHA, set at deploy
+
     @property
     def is_production(self) -> bool:
         return self.env.lower() in ("production", "prod")
+
+    @property
+    def log_json(self) -> bool:
+        fmt = self.log_format.lower()
+        return fmt == "json" or (fmt == "auto" and self.is_production)
 
 
 @lru_cache
