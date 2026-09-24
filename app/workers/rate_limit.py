@@ -55,13 +55,25 @@ class TokenBucket:
         return min(self.spec.capacity, refilled)
 
     def consume(
-        self, tokens: float, last_ts: float, now: float, amount: float = 1.0
+        self,
+        tokens: float,
+        last_ts: float,
+        now: float,
+        amount: float = 1.0,
+        reserve: float = 0.0,
     ) -> Decision:
-        """Try to take ``amount`` tokens; report the outcome and any wait."""
+        """Try to take ``amount`` tokens; report the outcome and any wait.
+
+        ``reserve`` is a cushion a low-priority caller must leave untouched: it
+        is allowed only when ``available >= amount + reserve``, but consumes just
+        ``amount``. Backfills pass a reserve so incremental syncs and interactive
+        requests always find tokens.
+        """
         available = self.replenish(tokens, last_ts, now)
-        if available >= amount:
+        needed = amount + reserve
+        if available >= needed:
             return Decision(True, available - amount, 0.0)
-        deficit = amount - available
+        deficit = needed - available
         retry = deficit / self.spec.refill_per_sec if self.spec.refill_per_sec > 0 else -1.0
         return Decision(False, available, retry)
 
@@ -77,8 +89,9 @@ def bucket_id(api_key: str | None) -> str:
     return f"nvd:bucket:{digest}"
 
 
-# Atomic refill-then-consume. KEYS[1] = bucket hash key;
-# ARGV = capacity, refill_per_sec, now, amount, ttl_seconds.
+# Atomic refill-then-consume (mirrors TokenBucket.consume, including the reserve).
+# KEYS[1] = bucket hash key; ARGV = capacity, refill_per_sec, now, amount,
+# ttl_seconds, reserve.
 _LUA = """
 local key = KEYS[1]
 local capacity = tonumber(ARGV[1])
@@ -86,6 +99,7 @@ local refill = tonumber(ARGV[2])
 local now = tonumber(ARGV[3])
 local amount = tonumber(ARGV[4])
 local ttl = tonumber(ARGV[5])
+local reserve = tonumber(ARGV[6] or "0")
 local state = redis.call('HMGET', key, 'tokens', 'ts')
 local tokens = tonumber(state[1])
 local ts = tonumber(state[2])
@@ -96,11 +110,11 @@ if now > ts then
 end
 local allowed = 0
 local retry = 0
-if tokens >= amount then
+if tokens >= amount + reserve then
   tokens = tokens - amount
   allowed = 1
 else
-  if refill > 0 then retry = (amount - tokens) / refill else retry = -1 end
+  if refill > 0 then retry = (amount + reserve - tokens) / refill else retry = -1 end
 end
 redis.call('HMSET', key, 'tokens', tokens, 'ts', ts)
 redis.call('EXPIRE', key, ttl)
@@ -129,13 +143,18 @@ class RedisRateLimiter:
         self._ttl = ttl_seconds
         self._script = redis_client.register_script(_LUA)
 
-    def acquire(self, spec: BucketSpec, bucket: str, amount: float = 1.0) -> None:
-        """Consume one token from ``bucket``, waiting (across workers) if needed."""
+    def acquire(
+        self, spec: BucketSpec, bucket: str, amount: float = 1.0, reserve: float = 0.0
+    ) -> None:
+        """Consume ``amount`` from ``bucket``, waiting (across workers) if needed.
+
+        With a ``reserve``, wait until the bucket holds more than that cushion
+        (see :meth:`TokenBucket.consume`)."""
         waited = 0.0
         while True:
             allowed, _tokens, retry = self._script(
                 keys=[bucket],
-                args=[spec.capacity, spec.refill_per_sec, self._now(), amount, self._ttl],
+                args=[spec.capacity, spec.refill_per_sec, self._now(), amount, self._ttl, reserve],
             )
             if int(allowed) == 1:
                 return

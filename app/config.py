@@ -52,7 +52,12 @@ class Settings(BaseSettings):
     nvd_rate_with_key_per_window: int = Field(default=50)
     nvd_rate_keyless_per_window: int = Field(default=5)
     nvd_rate_window_seconds: int = Field(default=30)
-    nvd_rate_max_wait_seconds: float = Field(default=120.0)    # give up if starved
+    nvd_rate_max_wait_seconds: float = Field(default=120.0)    # workers: give up if starved
+    # Interactive calls (Sync button, CPE search) wait less, then answer 503.
+    nvd_interactive_max_wait_seconds: float = Field(default=20.0)
+    # Backfills (a product's first, expensive pull) must leave this share of the
+    # bucket untouched, so incremental syncs and interactive calls always have room.
+    nvd_backfill_reserve_fraction: float = Field(default=0.3)
 
     # CORS: comma-free list via env as JSON or a single origin string.
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])

@@ -28,3 +28,7 @@ class PermissionDeniedError(DomainError):
 
 class ValidationError(DomainError):
     """A business-rule validation failure (HTTP 422)."""
+
+
+class UnavailableError(DomainError):
+    """An upstream dependency (e.g. NVD) is busy or down; try again (HTTP 503)."""

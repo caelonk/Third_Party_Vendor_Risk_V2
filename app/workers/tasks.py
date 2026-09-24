@@ -3,8 +3,13 @@
 * ``ping`` — health check, keeps the worker wiring exercisable.
 * ``dispatch_due_syncs`` — Beat fires this on a cron; it selects due vendors,
   dedupes them to CPE prefixes, and fans out one ``sync_prefix`` task per prefix.
-* ``sync_prefix`` — incrementally syncs one prefix from NVD (rate-limited across
-  workers by a Redis token bucket) and finalizes each of its due vendors.
+* ``sync_prefix`` — syncs one prefix from NVD (rate-limited across every process
+  by a per-key Redis token bucket) and finalizes each of its due vendors.
+
+Queues: ``sync`` carries incremental syncs; ``backfill`` carries a prefix's
+first (expensive) pull and is served by its own worker, so a large import can
+never occupy the slots that keep existing vendors current. Backfills also draw
+NVD tokens with a reserve (see app.services.nvd_limits).
 
 The real work lives in :mod:`app.services.scheduled_sync_service`; these tasks
 are the thin Celery/Redis/session shell around it.
@@ -18,9 +23,15 @@ from ..db import session_scope
 from ..services import scheduled_sync_service as sched
 from ..services.scheduled_sync_service import PrefixWork
 from .celery_app import celery_app
-from .rate_limit import RedisRateLimiter
 
 log = logging.getLogger(__name__)
+
+QUEUE_SYNC = "sync"
+QUEUE_BACKFILL = "backfill"
+
+
+def queue_for(backfill: bool) -> str:
+    return QUEUE_BACKFILL if backfill else QUEUE_SYNC
 
 
 @celery_app.task(name="app.workers.tasks.ping")
@@ -34,15 +45,22 @@ def dispatch_due_syncs() -> dict:
     from datetime import UTC, datetime
 
     now = datetime.now(UTC)
-    dispatched = 0
+    counts = {QUEUE_SYNC: 0, QUEUE_BACKFILL: 0}
     with session_scope() as db:
         for work in sched.plan_due_work(db, now):
             # JSON transport: send org groups as [org_id, [vendor_ids]] pairs.
             groups = [[org_id, ids] for org_id, ids in work.vendors_by_org.items()]
-            sync_prefix.delay(work.prefix, groups)
-            dispatched += 1
-    log.info("dispatch_due_syncs: enqueued %d prefix task(s)", dispatched)
-    return {"prefixes_dispatched": dispatched}
+            queue = queue_for(work.backfill)
+            sync_prefix.apply_async(
+                args=[work.prefix, groups], kwargs={"backfill": work.backfill}, queue=queue
+            )
+            counts[queue] += 1
+    log.info(
+        "dispatch_due_syncs: enqueued %d incremental + %d backfill prefix task(s)",
+        counts[QUEUE_SYNC], counts[QUEUE_BACKFILL],
+        extra={"sync_tasks": counts[QUEUE_SYNC], "backfill_tasks": counts[QUEUE_BACKFILL]},
+    )
+    return {"prefixes_dispatched": sum(counts.values()), **counts}
 
 
 @celery_app.task(
@@ -51,7 +69,7 @@ def dispatch_due_syncs() -> dict:
     max_retries=3,
     default_retry_delay=60,
 )
-def sync_prefix(self, prefix: str, groups: list) -> dict:
+def sync_prefix(self, prefix: str, groups: list, backfill: bool = False) -> dict:
     """Sync one CPE prefix and its due vendors (across orgs sharing the prefix).
 
     A per-prefix Redis lock makes same-prefix runs mutually exclusive across
@@ -73,16 +91,17 @@ def sync_prefix(self, prefix: str, groups: list) -> dict:
     work = PrefixWork(
         prefix=prefix,
         vendors_by_org={int(org_id): list(ids) for org_id, ids in groups},
+        backfill=backfill,
     )
-    limiter = RedisRateLimiter(client, max_wait=settings.nvd_rate_max_wait_seconds)
-    fetch_prefix = sched.build_live_fetch_prefix(limiter)
+    fetch_prefix = sched.build_live_fetch_prefix(backfill=backfill)
 
     try:
         with session_scope() as db:
             result = sched.sync_prefix(db, work, fetch_prefix=fetch_prefix)
     except Exception as exc:  # transient NVD/Redis/DB failure — let Celery retry
         log.warning("sync_prefix(%s) failed: %s; retrying", prefix, exc)
-        raise self.retry(exc=exc) from exc
+        # Pin the queue: a retried backfill must not come back via the sync queue.
+        raise self.retry(exc=exc, queue=queue_for(backfill)) from exc
     finally:
         try:
             lock.release()
@@ -90,8 +109,8 @@ def sync_prefix(self, prefix: str, groups: list) -> dict:
             pass
 
     log.info(
-        "sync_prefix(%s): fetched=%s synced=%d failed=%d",
-        prefix, result.fetched, result.vendors_synced, result.vendors_failed,
+        "sync_prefix(%s): fetched=%s synced=%d failed=%d backfill=%s",
+        prefix, result.fetched, result.vendors_synced, result.vendors_failed, backfill,
     )
     return {
         "prefix": result.prefix,

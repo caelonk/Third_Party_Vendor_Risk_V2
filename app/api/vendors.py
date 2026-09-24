@@ -1,7 +1,7 @@
 """Org-scoped vendor CRUD + on-demand sync."""
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Path, status
 from sqlalchemy.orm import Session
 
 from core.sync import FetchFn
@@ -21,6 +21,15 @@ from ..services import audit_service, scoring_service, sync_service, vendor_serv
 router = APIRouter(prefix="/orgs/{org_id}/vendors", tags=["vendors"])
 
 _ASSESSMENT_KEYS = ("tier", "threat_band", "exposure_band", "max_cvss", "cve_count", "kev_count")
+
+
+def get_vendor_fetcher(
+    org_id: int = Path(...),
+    db: Session = Depends(get_session),
+) -> FetchFn:
+    """Live NVD fetcher for the Sync button: the org's key, shared rate limit.
+    Overridden in tests to replay saved fixtures."""
+    return sync_service.live_fetch_for_org(db, org_id)
 
 
 def _vendor_out(db: Session, vendor: Vendor, assessment: dict | None = None) -> VendorOut:
@@ -114,7 +123,7 @@ def sync_vendor(
     vendor_id: int,
     ctx: OrgContext = Depends(require_role(Role.member)),
     db: Session = Depends(get_session),
-    fetch: FetchFn = Depends(sync_service.get_vendor_fetcher),
+    fetch: FetchFn = Depends(get_vendor_fetcher),
 ) -> SyncRunOut:
     vendor = vendor_service.get_vendor(db, ctx.organization.id, vendor_id)
     run = sync_service.sync_vendor(db, ctx.organization.id, vendor, fetch=fetch)

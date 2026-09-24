@@ -55,6 +55,9 @@ def api(monkeypatch):
     monkeypatch.setenv("COOKIE_SECURE", "false")  # allow cookies over http testserver
     monkeypatch.setenv("APP_ENCRYPTION_KEY", Fernet.generate_key().decode())
     monkeypatch.setenv("JWT_SECRET", "test-secret-" + "x" * 40)
+    # Never touch a real Redis (the Docker stack publishes one on localhost):
+    # port 1 refuses instantly, so NVD throttles degrade to local pacing.
+    monkeypatch.setenv("REDIS_URL", "redis://127.0.0.1:1/0")
     get_settings.cache_clear()
 
     engine = create_engine(

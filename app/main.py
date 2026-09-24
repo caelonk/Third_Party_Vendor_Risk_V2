@@ -42,6 +42,7 @@ from .services.exceptions import (
     DomainError,
     NotFoundError,
     PermissionDeniedError,
+    UnavailableError,
     ValidationError,
 )
 
@@ -52,6 +53,7 @@ _ERROR_STATUS = {
     NotFoundError: 404,
     ConflictError: 409,
     ValidationError: 422,
+    UnavailableError: 503,
 }
 
 

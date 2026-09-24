@@ -12,10 +12,12 @@ from collections.abc import Callable
 from sqlalchemy.orm import Session
 
 from core import nvd_client, parser
-from core.nvd_client import NVDConfig
+from core.nvd_client import NVDConfig, VendorFetchError
 
 from ..config import get_settings
 from . import integration_service
+from .exceptions import UnavailableError
+from .nvd_limits import NvdThrottle, RateLimitBusy
 
 # keyword -> raw NVD CPE-search payload.
 FetchCpesFn = Callable[[str], dict]
@@ -26,14 +28,28 @@ MIN_KEYWORD = 2
 MAX_CANDIDATES = 25
 
 
-def build_live_cpe_fetch(db: Session, org_id: int) -> FetchCpesFn:
-    """A fetch(keyword) that queries NVD live using the org key (else system key)."""
+def build_live_cpe_fetch(
+    db: Session,
+    org_id: int,
+    *,
+    throttle_factory: Callable[..., NvdThrottle] = NvdThrottle,
+) -> FetchCpesFn:
+    """A fetch(keyword) that queries NVD live using the org key (else system key),
+    through the shared per-key bucket. A starved bucket or an NVD failure is a 503
+    the user can act on ("try again"), not a 500."""
     api_key = integration_service.resolve_nvd_api_key(db, org_id) or get_settings().nvd_api_key
     config = NVDConfig(api_key=api_key)
     session = nvd_client.make_session(config)
+    throttle = throttle_factory(api_key, max_wait=get_settings().nvd_interactive_max_wait_seconds)
 
     def fetch(keyword: str) -> dict:
-        return nvd_client.search_cpes(keyword, config=config, session=session, log=_noop)
+        try:
+            throttle.wait()
+            return nvd_client.search_cpes(keyword, config=config, session=session, log=_noop)
+        except RateLimitBusy as exc:
+            raise UnavailableError("NVD is busy right now (rate limit). Try again in a moment.") from exc
+        except VendorFetchError as exc:
+            raise UnavailableError("NVD search is unavailable right now. Try again in a moment.") from exc
 
     return fetch
 

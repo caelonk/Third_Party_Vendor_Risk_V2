@@ -76,9 +76,14 @@ on the same origin (so the httpOnly auth cookies just work). The stack:
 |------------|------|
 | `migrate`  | One-shot `alembic upgrade head`; everything else waits for it to succeed. |
 | `api`      | FastAPI under gunicorn + uvicorn workers (also on `127.0.0.1:8000` for the Vite dev server; `/healthz`, `/readyz`, `/api/docs`). |
-| `worker`, `beat` | Celery worker and the scheduled-sync dispatcher (same image). |
+| `worker`, `beat` | Celery worker (incremental syncs) and the scheduled-sync dispatcher (same image). |
+| `worker-backfill` | A product's first, expensive NVD pull, on its own queue — so a big import never delays routine syncs. |
 | `frontend` | nginx: SPA, `/api` proxy, security headers + CSP, long-cached hashed assets. |
 | `flower`   | Optional queue dashboard: `FLOWER_BASIC_AUTH=user:pass docker compose --profile ops up -d flower` → <http://localhost:5555>. |
+
+Every NVD call (worker syncs, the Sync button, CPE search) draws from one Redis
+token bucket per API key, so NVD's rate limit holds across all processes;
+backfills must leave a 30% cushion (`NVD_BACKFILL_RESERVE_FRACTION`).
 
 All published ports bind to `127.0.0.1`. Logs are JSON (one object per line);
 every response carries an `X-Request-ID` that also appears on the matching nginx

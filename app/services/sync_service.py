@@ -6,6 +6,7 @@ live client while tests replay fixtures.
 """
 from __future__ import annotations
 
+from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import select
@@ -19,6 +20,7 @@ from ..config import get_settings
 from ..models import RiskSnapshot, SyncRun, SyncStatus, Vendor
 from . import alerts_service, integration_service, scoring_service
 from .exceptions import ValidationError
+from .nvd_limits import NvdThrottle, RateLimitBusy
 from .store import SqlAlchemyVulnStore
 
 
@@ -56,14 +58,27 @@ def schedule_next_sync(db: Session, org_id: int, vendor: Vendor, *, now: datetim
 
 
 def build_live_fetch(
-    *, config: nvd_client.NVDConfig | None = None, now: datetime | None = None
+    *,
+    api_key: str | None,
+    now: datetime | None = None,
+    throttle_factory: Callable[..., NvdThrottle] = NvdThrottle,
 ) -> FetchFn:
-    """A fetch(vendor, query_type) that pulls live from NVD using the system key."""
-    config = config or nvd_client.NVDConfig(api_key=get_settings().nvd_api_key)
+    """A fetch(vendor, query_type) for an interactive (Sync button) pull.
+
+    Draws from the same per-key NVD bucket as the workers, with a short wait
+    cap; a starved bucket becomes a VendorFetchError, so the run is recorded as
+    failed and prior good data is kept (never a hung request or a 500).
+    """
+    config = nvd_client.NVDConfig(api_key=api_key)
     session = nvd_client.make_session(config)
     now = now or datetime.now(UTC)
+    throttle = throttle_factory(api_key, max_wait=get_settings().nvd_interactive_max_wait_seconds)
 
     def fetch(vendor: dict, query_type: str) -> dict:
+        try:
+            throttle.wait()
+        except RateLimitBusy as exc:
+            raise nvd_client.VendorFetchError(f"NVD rate limit busy, try again shortly ({exc})") from exc
         return nvd_client.fetch_query(
             vendor["cpe_prefix"], query_type, config=config, session=session, now=now,
             log=lambda *a, **k: None,
@@ -72,9 +87,10 @@ def build_live_fetch(
     return fetch
 
 
-def get_vendor_fetcher() -> FetchFn:
-    """FastAPI dependency (overridden in tests to replay fixtures)."""
-    return build_live_fetch()
+def live_fetch_for_org(db: Session, org_id: int) -> FetchFn:
+    """Interactive fetch using the org's own NVD key, else the system key."""
+    api_key = integration_service.resolve_nvd_api_key(db, org_id) or get_settings().nvd_api_key
+    return build_live_fetch(api_key=api_key)
 
 
 def sync_vendor(

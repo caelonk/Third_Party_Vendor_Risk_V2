@@ -34,8 +34,8 @@ from core.nvd_client import QUERY_TYPES, NVDConfig, VendorFetchError
 
 from ..config import get_settings
 from ..models import CpeSyncState, SyncRun, SyncStatus, Vendor
-from ..workers.rate_limit import BucketSpec, bucket_id
 from . import alerts_service, integration_service, sync_service
+from .nvd_limits import NvdThrottle
 from .store import SqlAlchemyVulnStore
 
 # A port that fetches one CPE prefix from NVD and returns one payload per query
@@ -48,10 +48,16 @@ _noop = lambda *a, **k: None  # noqa: E731 — silence core.sync's logging
 
 @dataclass
 class PrefixWork:
-    """One CPE prefix's due vendors, grouped by org (the fetch is shared)."""
+    """One CPE prefix's due vendors, grouped by org (the fetch is shared).
+
+    ``backfill`` marks a prefix with no sync watermark yet: its first pull is the
+    expensive path (full publication window + all KEV), so it runs on its own
+    queue and draws from the NVD budget with a reserve.
+    """
 
     prefix: str
     vendors_by_org: dict[int, list[int]] = field(default_factory=dict)
+    backfill: bool = False
 
 
 @dataclass
@@ -87,12 +93,24 @@ def select_due_vendors(db: Session, now: datetime) -> list[Vendor]:
 
 
 def plan_due_work(db: Session, now: datetime) -> list[PrefixWork]:
-    """Group the due vendors by CPE prefix so each prefix is fetched once."""
+    """Group the due vendors by CPE prefix so each prefix is fetched once, and
+    mark which prefixes are backfills (never synced -> no watermark)."""
     by_prefix: dict[str, PrefixWork] = {}
     for v in select_due_vendors(db, now):
         assert v.cpe_prefix is not None  # guaranteed by the query filter
         work = by_prefix.setdefault(v.cpe_prefix, PrefixWork(prefix=v.cpe_prefix))
         work.vendors_by_org.setdefault(v.org_id, []).append(v.id)
+    if by_prefix:
+        synced = set(
+            db.scalars(
+                select(CpeSyncState.cpe_prefix).where(
+                    CpeSyncState.cpe_prefix.in_(list(by_prefix)),
+                    CpeSyncState.last_mod_watermark.is_not(None),
+                )
+            )
+        )
+        for prefix, work in by_prefix.items():
+            work.backfill = prefix not in synced
     return list(by_prefix.values())
 
 
@@ -124,27 +142,23 @@ def _resolve_api_key(db: Session, work: PrefixWork) -> str | None:
 # --------------------------------------------------------------------------- #
 # Default (live) fetch port — rate-limited NVD calls                          #
 # --------------------------------------------------------------------------- #
-def _spec_for(api_key: str | None) -> BucketSpec:
-    s = get_settings()
-    per_window = (
-        s.nvd_rate_with_key_per_window if api_key else s.nvd_rate_keyless_per_window
-    )
-    return BucketSpec.from_window(per_window, s.nvd_rate_window_seconds)
-
-
-def build_live_fetch_prefix(limiter=None, *, now: datetime | None = None) -> FetchPrefixFn:
-    """A fetch_prefix that pulls live from NVD, one paced/rate-limited call per query."""
+def build_live_fetch_prefix(
+    *,
+    backfill: bool = False,
+    now: datetime | None = None,
+    throttle_factory: Callable[..., NvdThrottle] = NvdThrottle,
+) -> FetchPrefixFn:
+    """A fetch_prefix that pulls live from NVD through the shared per-key bucket
+    (with the backfill reserve when ``backfill``)."""
     now = now or datetime.now(UTC)
 
     def fetch_prefix(prefix: str, *, last_mod_start: datetime | None, api_key: str | None):
         config = NVDConfig(api_key=api_key)
         session = nvd_client.make_session(config)
-        spec = _spec_for(api_key)
-        bucket = bucket_id(api_key)
+        throttle = throttle_factory(api_key, backfill=backfill)
         out: dict[str, dict] = {}
         for qt in QUERY_TYPES:
-            if limiter is not None:
-                limiter.acquire(spec, bucket)
+            throttle.wait()
             out[qt] = nvd_client.fetch_query(
                 prefix,
                 qt,
@@ -287,10 +301,17 @@ def run_due_syncs(
     db: Session,
     *,
     fetch_prefix: FetchPrefixFn | None = None,
-    limiter=None,
     now: datetime | None = None,
 ) -> list[PrefixResult]:
-    """Sync every due prefix inline. Beat's dispatcher fans these out per prefix."""
+    """Sync every due prefix inline (scripts/tests). In production Beat's
+    dispatcher fans these out per prefix onto the sync/backfill queues."""
     now = now or datetime.now(UTC)
-    fetch_prefix = fetch_prefix or build_live_fetch_prefix(limiter, now=now)
-    return [sync_prefix(db, work, fetch_prefix=fetch_prefix, now=now) for work in plan_due_work(db, now)]
+    return [
+        sync_prefix(
+            db,
+            work,
+            fetch_prefix=fetch_prefix or build_live_fetch_prefix(backfill=work.backfill, now=now),
+            now=now,
+        )
+        for work in plan_due_work(db, now)
+    ]

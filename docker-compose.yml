@@ -73,9 +73,26 @@ services:
       redis:
         condition: service_healthy
 
+  # Incremental syncs + the dispatcher/misc tasks ("celery" default queue).
   worker:
     <<: *backend
-    command: celery -A app.workers.celery_app.celery_app worker --loglevel=info --concurrency=${WORKER_CONCURRENCY:-4}
+    command: >
+      celery -A app.workers.celery_app.celery_app worker --loglevel=info
+      -Q celery,sync --hostname=sync@%h --concurrency=${WORKER_CONCURRENCY:-4}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+  # A product's first (expensive) pull. Its own worker, so a large import can
+  # never occupy the slots that keep existing vendors current; it also draws NVD
+  # tokens with a reserve (app.services.nvd_limits).
+  worker-backfill:
+    <<: *backend
+    command: >
+      celery -A app.workers.celery_app.celery_app worker --loglevel=info
+      -Q backfill --hostname=backfill@%h --concurrency=${BACKFILL_CONCURRENCY:-1}
     depends_on:
       migrate:
         condition: service_completed_successfully

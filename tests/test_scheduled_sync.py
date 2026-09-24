@@ -267,3 +267,63 @@ def test_resolve_prefers_org_key_then_falls_back(api):
 
 if __name__ == "__main__":  # pragma: no cover
     raise SystemExit(pytest.main([__file__, "-v"]))
+
+
+# --------------------------------------------------------------------------- #
+# Backfill vs incremental routing                                             #
+# --------------------------------------------------------------------------- #
+def test_never_synced_prefix_is_a_backfill_then_becomes_incremental(api):
+    client, _ = api.register("bf@acme.io")
+    oid = _org_id(client)
+    t1 = datetime(2026, 1, 1)
+    with api.db() as db:
+        _mk_vendor(db, oid, "Acme")
+        work = sched.plan_due_work(db, t1)[0]
+        assert work.backfill is True  # no watermark yet: first, expensive pull
+        sched.sync_prefix(db, work, fetch_prefix=FakeFetch(_payloads(_cve("CVE-1"))), now=t1)
+
+        again = sched.plan_due_work(db, t1 + timedelta(days=2))[0]
+        assert again.backfill is False  # watermark set: cheap incremental pull
+
+
+def test_a_failed_backfill_stays_a_backfill(api):
+    client, _ = api.register("bf2@acme.io")
+    oid = _org_id(client)
+    t1 = datetime(2026, 1, 1)
+    with api.db() as db:
+        _mk_vendor(db, oid, "Acme")
+        work = sched.plan_due_work(db, t1)[0]
+        sched.sync_prefix(db, work, fetch_prefix=FakeFetch(error=VendorFetchError("x")), now=t1)
+        assert sched.plan_due_work(db, t1 + timedelta(days=2))[0].backfill is True
+
+
+def test_dispatcher_routes_backfills_and_incrementals_to_separate_queues(api, monkeypatch):
+    from contextlib import contextmanager
+
+    from app.workers import tasks
+
+    client, _ = api.register("route@acme.io")
+    oid = _org_id(client)
+    with api.db() as db:
+        _mk_vendor(db, oid, "Old", prefix="cpe:2.3:a:old:old")
+        _mk_vendor(db, oid, "New", prefix="cpe:2.3:a:new:new")
+        db.add(CpeSyncState(cpe_prefix="cpe:2.3:a:old:old", last_mod_watermark=datetime(2025, 1, 1)))
+        db.commit()
+
+    @contextmanager
+    def test_session():
+        with api.db() as db:
+            yield db
+
+    sent = []
+    monkeypatch.setattr(tasks, "session_scope", test_session)
+    monkeypatch.setattr(
+        tasks.sync_prefix, "apply_async",
+        lambda args, kwargs, queue: sent.append((args[0], kwargs["backfill"], queue)),
+    )
+    result = tasks.dispatch_due_syncs.run()
+    assert sorted(sent) == [
+        ("cpe:2.3:a:new:new", True, "backfill"),
+        ("cpe:2.3:a:old:old", False, "sync"),
+    ]
+    assert result == {"prefixes_dispatched": 2, "sync": 1, "backfill": 1}

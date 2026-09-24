@@ -1,5 +1,5 @@
 """Vendor CRUD, RBAC, cross-org isolation, and offline on-demand sync."""
-from app.services import sync_service
+from app.api import vendors as vendors_api
 from seed.pipeline import FIXTURES_DIR, _offline_fetch
 
 API = "/api/v1"
@@ -11,7 +11,7 @@ def _personal_org(client) -> dict:
 
 def _use_offline_sync(api):
     """Point the sync endpoint at the saved NVD fixtures instead of the network."""
-    api.app.dependency_overrides[sync_service.get_vendor_fetcher] = lambda: _offline_fetch(
+    api.app.dependency_overrides[vendors_api.get_vendor_fetcher] = lambda: _offline_fetch(
         FIXTURES_DIR
     )
 
