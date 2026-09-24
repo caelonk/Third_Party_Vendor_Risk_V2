@@ -17,6 +17,18 @@ export interface AuthProvider {
   dev_stand_in: boolean;
 }
 
+export interface LinkedIdentity {
+  provider: string;
+  email: string | null;
+  linked_at: string;
+  last_login_at: string | null;
+}
+
+export interface SignInMethods {
+  has_password: boolean;
+  identities: LinkedIdentity[];
+}
+
 export interface Org {
   id: number;
   name: string;

@@ -1,17 +1,78 @@
+/* ------------------------------------------------------------------------ *
+ * "Sign in with Google" button, per Google's branding guidelines. These     *
+ * colors are Google's, not the app palette — the one sanctioned exception:  *
+ *   light: fill #FFFFFF, 1px inside stroke #747775, text #1F1F1F            *
+ *   dark:  fill #131314, 1px inside stroke #8E918F, text #E3E3E3            *
+ *   Google Sans Medium 14/20; 40px tall; 12px padding, logo 20px, 10px gap. *
+ * ------------------------------------------------------------------------ */
+.gsi-btn {
+  --gsi-fill: #ffffff;
+  --gsi-stroke: #747775;
+  --gsi-text: #1f1f1f;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--gsi-stroke);
+  border-radius: 4px;
+  background: var(--gsi-fill);
+  color: var(--gsi-text);
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.25px;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: box-shadow 0.218s;
+}
+:root[data-theme="dark"] .gsi-btn {
+  --gsi-fill: #131314;
+  --gsi-stroke: #8e918f;
+  --gsi-text: #e3e3e3;
+}
+/* Material state layer: a tint of the text color, over the fill, under content. */
+.gsi-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gsi-text);
+  opacity: 0;
+  transition: opacity 0.218s;
+}
+.gsi-btn:hover {
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+}
+.gsi-btn:hover::before {
+  opacity: 0.08;
+}
+.gsi-btn:active::before,
+.gsi-btn:focus-visible::before {
+  opacity: 0.12;
+}
+.gsi-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.gsi-btn > * {
+  position: relative; /* above the state layer */
+}
+.gsi-logo {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Surroundings (app palette) */
 .sso {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
   margin-bottom: var(--space-4);
-}
-.sso__btn {
-  text-decoration: none;
-  gap: var(--space-3);
-}
-.sso__mark {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
 }
 .sso__note {
   margin: 0;

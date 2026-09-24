@@ -60,3 +60,84 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Sign-in & security */
+.security {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.security__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.security__section + .security__section {
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+}
+.security__heading {
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+.security__hint {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+.security__account {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.security__account-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.security__account-name {
+  font-weight: 500;
+  font-size: var(--text-sm);
+}
+.security__account-meta {
+  font-size: var(--text-xs);
+  overflow-wrap: anywhere;
+}
+.security__locked-note {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+.security__locked-note svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.security__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 420px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+/* Google-created accounts: visible but greyed out until Google is unlinked. */
+.security__fields:disabled {
+  opacity: 0.5;
+}
+.security__fields:disabled .input {
+  cursor: not-allowed;
+  background: var(--surface-2);
+}
+.security__modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}

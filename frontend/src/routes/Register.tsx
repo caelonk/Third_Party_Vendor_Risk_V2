@@ -49,7 +49,7 @@ export function Register() {
         </>
       }
     >
-      <GoogleSignIn />
+      <GoogleSignIn mode="signup" />
       <form className="auth__fields" onSubmit={handleSubmit(onSubmit)} noValidate>
         {error && <div className="banner banner--error">{error}</div>}
         <div className="field">

@@ -13,6 +13,7 @@ import {
   useSetMemberRole,
 } from "@/features/members";
 import { useIntegration, useUpdateIntegration } from "@/features/integration";
+import { SecurityCard } from "./SecurityCard";
 import type { Role } from "@/lib/types";
 import "./settings.css";
 
@@ -184,7 +185,7 @@ export function Settings() {
       <div className="page-header">
         <div>
           <h1>Settings</h1>
-          <p>Manage your appearance, organization, and team.</p>
+          <p>Manage your appearance, sign-in, organization, and team.</p>
         </div>
       </div>
 
@@ -203,6 +204,8 @@ export function Settings() {
             <ThemeToggle />
           </div>
         </section>
+
+        <SecurityCard />
 
         <section className="card">
           <div className="card__header">

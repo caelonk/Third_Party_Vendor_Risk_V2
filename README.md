@@ -112,6 +112,14 @@ refused when `ENV=production`. To switch to real Google:
 3. Put `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `.env`, then
    `docker compose up -d api`.
 
+The button follows Google's branding guidelines (their light/dark button colors,
+Google Sans Medium, and the official "G" from Google's pre-approved assets in
+`frontend/src/assets/google/`) — the one deliberate exception to the app's
+restrained palette. An account created through Google has no password; in
+**Settings → Sign-in & security** its password form stays greyed out until the
+user unlinks Google, after which they create one (the API enforces that order).
+Accounts with a password change it by confirming the current one.
+
 All published ports bind to `127.0.0.1`. Logs are JSON (one object per line);
 every response carries an `X-Request-ID` that also appears on the matching nginx
 and API log lines. Set `SENTRY_DSN` to enable error reporting.
