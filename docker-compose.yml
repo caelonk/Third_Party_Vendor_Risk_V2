@@ -1,6 +1,7 @@
-# Full stack: postgres, redis, a one-shot migrate job, the API (gunicorn +
-# uvicorn workers), Celery worker + beat, and nginx serving the SPA and proxying
-# /api on the same origin. Open http://localhost:8080.
+# Full stack: postgres, redis, MinIO (S3-compatible export storage), a one-shot
+# migrate job, the API (gunicorn + uvicorn workers), Celery worker + beat, and
+# nginx serving the SPA and proxying /api on the same origin.
+# Open http://localhost:8080.
 #
 #   docker compose up --build -d
 #   FLOWER_BASIC_AUTH=admin:change-me docker compose --profile ops up -d flower
@@ -12,6 +13,18 @@ x-backend-env: &backend-env
   DATABASE_URL: postgresql+psycopg://vendor_risk:vendor_risk@postgres:5432/vendor_risk
   REDIS_URL: redis://redis:6379/0
   LOG_FORMAT: ${LOG_FORMAT:-json}
+  # Exports: workers write to MinIO over the compose network; download links are
+  # signed for the address a browser uses (a signature covers the Host header).
+  EXPORT_STORAGE: s3
+  EXPORT_RUN_INLINE: "false"
+  S3_ENDPOINT_URL: http://minio:9000
+  S3_PUBLIC_ENDPOINT_URL: ${S3_PUBLIC_ENDPOINT_URL:-http://localhost:9000}
+  S3_BUCKET: ${S3_BUCKET:-vendor-risk-exports}
+  S3_CREATE_BUCKET: "true"
+  # Dev only: the app uses MinIO's root account. In production, point S3_* at a
+  # managed store with a key scoped to this one bucket.
+  S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-vendorrisk}
+  S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:-vendorrisk-dev-only}
 
 x-backend: &backend
   build: .
@@ -46,6 +59,27 @@ services:
       timeout: 3s
       retries: 10
 
+  # S3-compatible object storage for exports: a local stand-in for AWS S3 / R2.
+  # MinIO no longer publishes community images; this is the last one released,
+  # pinned. It serves local development only.
+  minio:
+    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-vendorrisk}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-vendorrisk-dev-only}
+    volumes:
+      - minio-data:/data
+    ports:
+      - "127.0.0.1:9000:9000"  # S3 API: signed download links point here
+      - "127.0.0.1:9001:9001"  # web console
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   # Runs migrations once per deploy; api/worker/beat start only after it succeeds,
   # so scaling the API never races concurrent `alembic upgrade`s.
   migrate:
@@ -73,7 +107,7 @@ services:
       redis:
         condition: service_healthy
 
-  # Incremental syncs + the dispatcher/misc tasks ("celery" default queue).
+  # Incremental syncs, export rendering, and the dispatcher ("celery" default queue).
   worker:
     <<: *backend
     command: >
@@ -84,6 +118,8 @@ services:
         condition: service_completed_successfully
       redis:
         condition: service_healthy
+      minio:
+        condition: service_healthy  # renders exports into it
 
   # A product's first (expensive) pull. Its own worker, so a large import can
   # never occupy the slots that keep existing vendors current; it also draws NVD
@@ -136,3 +172,4 @@ services:
 
 volumes:
   pgdata:
+  minio-data:

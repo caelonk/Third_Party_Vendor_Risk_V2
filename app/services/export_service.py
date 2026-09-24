@@ -7,20 +7,35 @@ CVSS (never 0.0) and keeps its "Not Assessed" tier (never "Low").
 WeasyPrint (HTML->PDF) needs GTK/Pango system libraries that exist in the Docker
 image but not on a bare dev box or CI, so it is imported lazily inside
 :func:`portfolio_pdf` only; the CSV and the HTML body are pure and portable.
+
+Exports run as background jobs (:func:`create_job` -> worker :func:`run_job`):
+the rendered file goes to object storage, and a download is a short-lived signed
+URL issued per request (:func:`signed_download_url`). :func:`purge` deletes files
+past retention and fails jobs a dead worker left behind.
 """
 from __future__ import annotations
 
 import csv
 import html
 import io
-from datetime import UTC, datetime
+import logging
+import secrets
+from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
+from typing import Any, cast
 
+from sqlalchemy import CursorResult, Select, func, select, update
 from sqlalchemy.orm import Session
 
 from core.constants import SCOPE_DISCLAIMER
 
-from ..models import Organization
+from ..config import get_settings
+from ..models import ExportFormat, ExportJob, ExportStatus, Organization, User
 from . import scoring_service, vendor_service
+from .exceptions import ConflictError, GoneError, NotFoundError, TooManyRequestsError
+from .object_storage import ObjectStorage
+
+log = logging.getLogger(__name__)
 
 # CSV columns: (header, row-key). The first header is "Vendor" (used as an anchor).
 _COLUMNS: list[tuple[str, str]] = [
@@ -215,3 +230,257 @@ def portfolio_pdf(db: Session, org_id: int, org: Organization) -> bytes:
     from weasyprint import HTML  # lazy: needs GTK/Pango (present in the Docker image)
 
     return HTML(string=document).write_pdf()
+
+
+# --------------------------------------------------------------------------- #
+# Background export jobs                                                       #
+# --------------------------------------------------------------------------- #
+CONTENT_TYPES = {
+    ExportFormat.csv: "text/csv; charset=utf-8",
+    ExportFormat.pdf: "application/pdf",
+}
+_ACTIVE = (ExportStatus.queued, ExportStatus.running)
+
+# User-facing failure text (stored on the job). Details go to the logs only.
+PDF_UNAVAILABLE = "PDF rendering is not available on this server."
+RENDER_FAILED = "The export could not be generated. Try again in a moment."
+DISPATCH_FAILED = "Background processing is unavailable right now. Try again shortly."
+TIMED_OUT = "The export did not finish in time. Try again."
+
+
+@dataclass
+class ExportJobView:
+    id: int
+    format: ExportFormat
+    status: ExportStatus
+    filename: str | None
+    size_bytes: int | None
+    error: str | None
+    requested_by: str | None
+    created_at: datetime
+    completed_at: datetime | None
+    expires_at: datetime | None
+
+
+def _now() -> datetime:
+    return datetime.now(UTC)
+
+
+def _aware(dt: datetime) -> datetime:
+    # SQLite (tests) hands datetimes back naive; every stored time is UTC.
+    return dt if dt.tzinfo else dt.replace(tzinfo=UTC)
+
+
+def _is_past_retention(job: ExportJob, now: datetime) -> bool:
+    return job.expires_at is not None and _aware(job.expires_at) <= now
+
+
+def create_job(db: Session, org_id: int, user_id: int | None, fmt: ExportFormat) -> ExportJob:
+    """Queue an export. A soft per-org cap stops one tenant flooding the workers."""
+    active = db.scalar(
+        select(func.count())
+        .select_from(ExportJob)
+        .where(ExportJob.org_id == org_id, ExportJob.status.in_(_ACTIVE))
+    )
+    if (active or 0) >= get_settings().export_max_active_per_org:
+        raise TooManyRequestsError(
+            "Several exports are already being prepared. Wait for them to finish, then try again."
+        )
+    job = ExportJob(
+        org_id=org_id, requested_by_user_id=user_id, format=fmt, status=ExportStatus.queued
+    )
+    db.add(job)
+    db.commit()
+    db.refresh(job)
+    return job
+
+
+def mark_failed(db: Session, job_id: int, message: str) -> None:
+    db.execute(
+        update(ExportJob)
+        .where(ExportJob.id == job_id, ExportJob.status.in_(_ACTIVE))
+        .values(status=ExportStatus.failed, error=message, completed_at=_now())
+        .execution_options(synchronize_session=False)
+    )
+    db.commit()
+
+
+def render(db: Session, org: Organization, fmt: ExportFormat) -> bytes:
+    if fmt is ExportFormat.csv:
+        return portfolio_csv(db, org.id, org).encode("utf-8")
+    return portfolio_pdf(db, org.id, org)
+
+
+def run_job(
+    db: Session, job_id: int, storage: ObjectStorage, *, now: datetime | None = None
+) -> ExportJob | None:
+    """Render one export and store it. Safe to deliver twice.
+
+    The queued -> running transition is a conditional UPDATE, so exactly one
+    delivery claims the job (tasks are acks_late, so redelivery happens). A job
+    that isn't queued any more is returned untouched.
+    """
+    started = now or _now()
+    claimed = cast(
+        CursorResult,
+        db.execute(
+            update(ExportJob)
+            .where(ExportJob.id == job_id, ExportJob.status == ExportStatus.queued)
+            .values(status=ExportStatus.running, started_at=started)
+            .execution_options(synchronize_session=False)
+        ),
+    ).rowcount
+    db.commit()
+    job = db.get(ExportJob, job_id)
+    if job is None or claimed != 1:
+        return job
+
+    org = db.get(Organization, job.org_id)
+    assert org is not None  # FK + cascade: a job never outlives its org
+    content_type = CONTENT_TYPES[job.format]
+    name = filename(org, job.format.value)
+    # A random path segment: keys are never guessable, even though every
+    # download is signed anyway.
+    key = f"exports/{org.id}/{secrets.token_hex(16)}/{name}"
+    try:
+        data = render(db, org, job.format)
+        storage.put(key, data, content_type=content_type)
+    except Exception as exc:
+        db.rollback()
+        if job.format is ExportFormat.pdf and isinstance(exc, ImportError | OSError):
+            # WeasyPrint or its GTK/Pango libraries are missing on this host.
+            log.warning("export %d: PDF rendering unavailable: %s", job_id, exc)
+            message = PDF_UNAVAILABLE
+        else:
+            log.exception("export %d failed", job_id, extra={"export_job_id": job_id})
+            message = RENDER_FAILED
+        mark_failed(db, job_id, message)
+        db.refresh(job)
+        return job
+
+    finished = now or _now()
+    job.status = ExportStatus.succeeded
+    job.filename = name
+    job.content_type = content_type
+    job.object_key = key
+    job.size_bytes = len(data)
+    job.completed_at = finished
+    job.expires_at = finished + timedelta(hours=get_settings().export_retention_hours)
+    db.commit()
+    log.info(
+        "export %d stored (%s, %d bytes)", job_id, job.format.value, len(data),
+        extra={"export_job_id": job_id, "bytes": len(data)},
+    )
+    return job
+
+
+def _view(job: ExportJob, email: str | None, name: str | None, now: datetime) -> ExportJobView:
+    status = job.status
+    # Past retention but not purged yet: report it as expired, never as ready.
+    if status is ExportStatus.succeeded and _is_past_retention(job, now):
+        status = ExportStatus.expired
+    return ExportJobView(
+        id=job.id,
+        format=job.format,
+        status=status,
+        filename=job.filename,
+        size_bytes=job.size_bytes,
+        error=job.error,
+        requested_by=name or email,
+        created_at=job.created_at,
+        completed_at=job.completed_at,
+        expires_at=job.expires_at,
+    )
+
+
+def _job_query(org_id: int) -> Select[Any]:
+    return (
+        select(ExportJob, User.email, User.name)
+        .outerjoin(User, User.id == ExportJob.requested_by_user_id)
+        .where(ExportJob.org_id == org_id)
+        # Jobs change under this session (a worker, or the inline runner, writes
+        # through its own): always read the row, never a cached identity.
+        .execution_options(populate_existing=True)
+    )
+
+
+def list_jobs(db: Session, org_id: int, *, limit: int = 20) -> list[ExportJobView]:
+    now = _now()
+    rows = db.execute(
+        _job_query(org_id).order_by(ExportJob.created_at.desc(), ExportJob.id.desc()).limit(limit)
+    ).all()
+    return [_view(job, email, name, now) for job, email, name in rows]
+
+
+def get_job(db: Session, org_id: int, job_id: int) -> ExportJobView:
+    row = db.execute(_job_query(org_id).where(ExportJob.id == job_id)).first()
+    if row is None:  # includes another org's job: never disclose it exists
+        raise NotFoundError("Export not found")
+    job, email, name = row
+    return _view(job, email, name, _now())
+
+
+def signed_download_url(
+    db: Session, org_id: int, job_id: int, storage: ObjectStorage
+) -> str:
+    """A fresh, short-lived link to the stored file (checked per request)."""
+    job = db.scalar(
+        select(ExportJob).where(ExportJob.id == job_id, ExportJob.org_id == org_id)
+    )
+    if job is None:
+        raise NotFoundError("Export not found")
+    if job.status is ExportStatus.expired or (
+        job.status is ExportStatus.succeeded and _is_past_retention(job, _now())
+    ):
+        raise GoneError("This export has expired. Generate a new one.")
+    if job.status is ExportStatus.failed:
+        raise ConflictError("This export failed. Generate a new one.")
+    if job.status is not ExportStatus.succeeded or not job.object_key:
+        raise ConflictError("This export is still being prepared.")
+    return storage.signed_url(
+        job.object_key,
+        filename=job.filename or f"export.{job.format.value}",
+        content_type=job.content_type or CONTENT_TYPES[job.format],
+        expires_in=get_settings().export_url_ttl_seconds,
+    )
+
+
+def purge(db: Session, storage: ObjectStorage, *, now: datetime | None = None) -> dict[str, int]:
+    """Delete stored files past retention; fail jobs stuck by a dead worker.
+
+    A file whose delete fails stays ``succeeded`` (downloads are already refused
+    past ``expires_at``) and is retried on the next run.
+    """
+    now = now or _now()
+    settings = get_settings()
+
+    expired = 0
+    for job in db.scalars(
+        select(ExportJob).where(
+            ExportJob.status == ExportStatus.succeeded, ExportJob.expires_at <= now
+        )
+    ).all():
+        try:
+            if job.object_key:
+                storage.delete(job.object_key)
+        except Exception:  # noqa: BLE001 — retried next run
+            log.warning("export %d: could not delete %s; will retry", job.id, job.object_key)
+            continue
+        job.status = ExportStatus.expired
+        job.object_key = None
+        expired += 1
+
+    cutoff = now - timedelta(minutes=settings.export_stale_after_minutes)
+    timed_out = cast(
+        CursorResult,
+        db.execute(
+            update(ExportJob)
+            .where(ExportJob.status.in_(_ACTIVE), ExportJob.created_at < cutoff)
+            .values(status=ExportStatus.failed, error=TIMED_OUT, completed_at=now)
+            .execution_options(synchronize_session=False)
+        ),
+    ).rowcount
+    db.commit()
+    if expired or timed_out:
+        log.info("export purge: %d expired, %d timed out", expired, timed_out)
+    return {"expired": expired, "timed_out": timed_out}

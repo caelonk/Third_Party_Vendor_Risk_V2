@@ -80,6 +80,19 @@ class MatchMethod(enum.StrEnum):
     keyword = "keyword"
 
 
+class ExportFormat(enum.StrEnum):
+    csv = "csv"
+    pdf = "pdf"
+
+
+class ExportStatus(enum.StrEnum):
+    queued = "queued"
+    running = "running"
+    succeeded = "succeeded"
+    failed = "failed"
+    expired = "expired"  # retention elapsed; the stored file has been deleted
+
+
 # --------------------------------------------------------------------------- #
 # Shared SQLAlchemy Enum type objects.                                         #
 #                                                                             #
@@ -96,3 +109,5 @@ alert_channel_enum = Enum(AlertChannel, name="alert_channel", native_enum=False)
 notification_status_enum = Enum(NotificationStatus, name="notification_status", native_enum=False)
 sync_status_enum = Enum(SyncStatus, name="sync_status", native_enum=False)
 match_method_enum = Enum(MatchMethod, name="match_method", native_enum=False)
+export_format_enum = Enum(ExportFormat, name="export_format", native_enum=False)
+export_status_enum = Enum(ExportStatus, name="export_status", native_enum=False)

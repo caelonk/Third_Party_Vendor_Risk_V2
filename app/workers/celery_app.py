@@ -10,13 +10,24 @@ tasks; this module is the wiring those attach to.
 from __future__ import annotations
 
 from celery import Celery
-from celery.signals import setup_logging, task_postrun, task_prerun
+from celery.signals import beat_init, celeryd_init, setup_logging, task_postrun, task_prerun
 
 from ..config import get_settings
 from ..observability import configure_logging, init_sentry, task_id_var
 
 settings = get_settings()
-init_sentry(settings, component="worker")  # no-op unless SENTRY_DSN is set
+
+
+# Sentry starts on worker/beat startup rather than at import: the API imports
+# this module too (to enqueue export jobs) and must keep its own "api" setup.
+@celeryd_init.connect
+def _init_sentry_worker(**_kwargs: object) -> None:
+    init_sentry(settings, component="worker")  # no-op unless SENTRY_DSN is set
+
+
+@beat_init.connect
+def _init_sentry_beat(**_kwargs: object) -> None:
+    init_sentry(settings, component="beat")
 
 
 @setup_logging.connect
@@ -52,9 +63,14 @@ celery_app.conf.update(
 
 # Beat: a single dispatcher on a cron. It selects due vendors, dedupes them to
 # CPE prefixes, and fans out one incremental ``sync_prefix`` task per prefix.
+# A second, slower entry deletes exports past retention and fails stuck jobs.
 celery_app.conf.beat_schedule = {
     "dispatch-due-syncs": {
         "task": "app.workers.tasks.dispatch_due_syncs",
         "schedule": float(settings.beat_dispatch_interval_seconds),
-    }
+    },
+    "purge-exports": {
+        "task": "app.workers.tasks.purge_exports",
+        "schedule": float(settings.export_purge_interval_seconds),
+    },
 }

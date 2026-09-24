@@ -31,10 +31,10 @@ These are non-negotiable and carry from the demo into every layer:
 
 ```
 React SPA ──HTTPS(JWT cookie)──▶ FastAPI API ──▶ PostgreSQL (system of record)
-                                     │      └──▶ Redis (broker + rate-limit)
-                                     ▼ enqueue
-                              Celery worker ──▶ NVD 2.0 / SMTP / Slack
-                              Celery Beat (cron dispatcher)
+    │                                │      └──▶ Redis (broker + rate-limit)
+    │ signed download link           ▼ enqueue
+    └──────────▶ Object storage ◀── Celery worker ──▶ NVD 2.0 / SMTP / Slack
+                 (S3 / MinIO)       Celery Beat (cron dispatcher)
 ```
 
 CVE data is public and identical for every tenant, so the `vulnerabilities`
@@ -49,6 +49,7 @@ light `core/` package, so business logic has exactly one home.
 | Background | Celery + Redis + Celery Beat |
 | Auth | JWT (httpOnly cookies), Argon2id, RBAC (owner/admin/member/viewer) |
 | Database | PostgreSQL |
+| Object storage | Any S3-compatible store (MinIO locally) — export files |
 | Frontend | React + TypeScript + Vite *(Phase 1)* |
 
 ## Repository layout
@@ -79,11 +80,20 @@ on the same origin (so the httpOnly auth cookies just work). The stack:
 | `worker`, `beat` | Celery worker (incremental syncs) and the scheduled-sync dispatcher (same image). |
 | `worker-backfill` | A product's first, expensive NVD pull, on its own queue — so a big import never delays routine syncs. |
 | `frontend` | nginx: SPA, `/api` proxy, security headers + CSP, long-cached hashed assets. |
+| `minio`    | S3-compatible storage for exports (<http://localhost:9001> console). A local stand-in: MinIO no longer publishes images, so the last community release is pinned. |
 | `flower`   | Optional queue dashboard: `FLOWER_BASIC_AUTH=user:pass docker compose --profile ops up -d flower` → <http://localhost:5555>. |
 
 Every NVD call (worker syncs, the Sync button, CPE search) draws from one Redis
 token bucket per API key, so NVD's rate limit holds across all processes;
 backfills must leave a 30% cushion (`NVD_BACKFILL_RESERVE_FRACTION`).
+
+**Exports** (CSV data, PDF report) are background jobs: the API queues one, a
+worker renders it into the bucket, and the SPA polls and then follows
+`/exports/{id}/download`, which checks membership and redirects to a signed URL
+valid for 5 minutes. Files are deleted after 7 days by a Beat task, which also
+fails jobs a dead worker left behind. Point `S3_*` at AWS S3, R2, or any
+S3-compatible store in production; `EXPORT_STORAGE=local` (plus
+`EXPORT_RUN_INLINE=true` without Redis) covers development outside Docker.
 
 All published ports bind to `127.0.0.1`. Logs are JSON (one object per line);
 every response carries an `X-Request-ID` that also appears on the matching nginx

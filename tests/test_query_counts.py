@@ -14,11 +14,13 @@ from app.models import (
     AlertChannel,
     AlertRule,
     AlertType,
+    ExportFormat,
+    Organization,
     Vendor,
     VendorVulnerability,
     Vulnerability,
 )
-from app.services import alerts_service
+from app.services import alerts_service, export_service
 
 API = "/api/v1"
 
@@ -63,7 +65,6 @@ def _seed(api, oid: int, start: int, n: int, *, cvss: float = 7.5, kev_every: in
         "/dashboard/heatmap",
         "/dashboard/watchlist",
         "/dashboard/top-risk",
-        "/export/vendors.csv",
     ],
 )
 def test_query_count_is_constant_in_vendor_count(api, path):
@@ -102,3 +103,23 @@ def test_renewal_evaluation_query_count_is_constant(api):
         assert alerts_service.evaluate_renewals(db, oid, reference=ref) == []
 
     assert large["n"] == small["n"]
+
+
+def test_export_render_query_count_is_constant(api):
+    client, _ = api.register("qc3@acme.io")
+    oid = client.get(f"{API}/orgs").json()[0]["id"]
+
+    def render() -> None:
+        with api.db() as db:
+            org = db.get(Organization, oid)
+            export_service.render(db, org, ExportFormat.csv)
+
+    _seed(api, oid, 0, 3)
+    render()  # warm-up
+    with count_queries(api) as small:
+        render()
+    _seed(api, oid, 3, 12)
+    with count_queries(api) as large:
+        render()
+
+    assert large["n"] == small["n"], f"{small['n']} queries at 3 vendors, {large['n']} at 15"

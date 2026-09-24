@@ -5,6 +5,8 @@
   dedupes them to CPE prefixes, and fans out one ``sync_prefix`` task per prefix.
 * ``sync_prefix`` — syncs one prefix from NVD (rate-limited across every process
   by a per-key Redis token bucket) and finalizes each of its due vendors.
+* ``run_export`` — renders one queued portfolio export into object storage.
+* ``purge_exports`` — Beat: deletes exports past retention, fails stuck jobs.
 
 Queues: ``sync`` carries incremental syncs; ``backfill`` carries a prefix's
 first (expensive) pull and is served by its own worker, so a large import can
@@ -20,6 +22,7 @@ import logging
 
 from ..config import get_settings
 from ..db import session_scope
+from ..services import export_service, object_storage
 from ..services import scheduled_sync_service as sched
 from ..services.scheduled_sync_service import PrefixWork
 from .celery_app import celery_app
@@ -119,3 +122,18 @@ def sync_prefix(self, prefix: str, groups: list, backfill: bool = False) -> dict
         "vendors_failed": result.vendors_failed,
         "error": result.error,
     }
+
+
+@celery_app.task(name="app.workers.tasks.run_export")
+def run_export(job_id: int) -> dict:
+    """Render one export. No Celery retry: a failure is recorded on the job, and
+    the user simply requests a new export."""
+    with session_scope() as db:
+        job = export_service.run_job(db, job_id, object_storage.get_storage())
+        return {"job_id": job_id, "status": job.status.value if job else "missing"}
+
+
+@celery_app.task(name="app.workers.tasks.purge_exports")
+def purge_exports() -> dict:
+    with session_scope() as db:
+        return export_service.purge(db, object_storage.get_storage())

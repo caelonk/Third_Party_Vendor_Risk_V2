@@ -1,10 +1,9 @@
-"""Portfolio export: CSV + PDF report. The scope disclaimer must appear verbatim
-in every export (a locked integrity rule), and honest-data rules hold (an
-unscored vendor exports blank, never 0.0)."""
+"""Portfolio export content: CSV + PDF report. The scope disclaimer must appear
+verbatim in every export (a locked integrity rule), and honest-data rules hold (an
+unscored vendor exports blank, never 0.0). The job/storage/download flow is in
+test_export_jobs.py."""
 import csv
 import io
-
-import pytest
 
 from app.models import Organization, Vendor, VendorVulnerability, Vulnerability
 from app.services import export_service
@@ -94,39 +93,3 @@ def test_html_report_contains_disclaimer_and_vendors(api):
     assert SCOPE_DISCLAIMER in html
     assert "Alpha Unmapped" in html and "Beta Scored" in html
     assert "Acme" in html
-
-
-# --------------------------------------------------------------------------- #
-# API endpoints                                                               #
-# --------------------------------------------------------------------------- #
-def test_csv_endpoint_downloads_attachment(api):
-    client, oid = _seed(api)
-    res = client.get(f"{API}/orgs/{oid}/export/vendors.csv")
-    assert res.status_code == 200
-    assert res.headers["content-type"].startswith("text/csv")
-    assert "attachment" in res.headers["content-disposition"]
-    assert ".csv" in res.headers["content-disposition"]
-    assert _disclaimer_cell(list(csv.reader(io.StringIO(res.text)))) == SCOPE_DISCLAIMER
-
-
-def test_export_non_member_gets_404(api):
-    client, oid = _seed(api)
-    outsider, _ = api.register("exp-out@acme.io")
-    assert outsider.get(f"{API}/orgs/{oid}/export/vendors.csv").status_code == 404
-
-
-def _weasyprint_ok() -> bool:
-    try:
-        import weasyprint  # noqa: F401
-        return True
-    except Exception:
-        return False
-
-
-@pytest.mark.skipif(not _weasyprint_ok(), reason="WeasyPrint/GTK not available")
-def test_pdf_endpoint_returns_pdf(api):
-    client, oid = _seed(api)
-    res = client.get(f"{API}/orgs/{oid}/export/portfolio.pdf")
-    assert res.status_code == 200
-    assert res.headers["content-type"] == "application/pdf"
-    assert res.content[:5] == b"%PDF-"

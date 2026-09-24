@@ -59,6 +59,31 @@ class Settings(BaseSettings):
     # bucket untouched, so incremental syncs and interactive calls always have room.
     nvd_backfill_reserve_fraction: float = Field(default=0.3)
 
+    # Exports run on a worker, land in object storage, and download through a
+    # short-lived signed URL. EXPORT_STORAGE "s3" = any S3-compatible store (AWS
+    # S3, MinIO, R2, ...); "local" = a directory the API and worker share (dev
+    # without an object store, and tests).
+    export_storage: str = Field(default="local")  # local | s3
+    export_local_dir: str = Field(default="var/exports")
+    export_url_ttl_seconds: int = Field(default=300)          # signed-link lifetime
+    export_retention_hours: int = Field(default=7 * 24)       # then the file is deleted
+    export_max_active_per_org: int = Field(default=3)         # queued + running
+    export_stale_after_minutes: int = Field(default=30)       # stuck job -> failed
+    export_purge_interval_seconds: int = Field(default=3600)  # Beat cadence
+    # Run the job inside the API request instead of on a worker. Only for local
+    # development without Redis/Celery; never in production.
+    export_run_inline: bool = Field(default=False)
+    s3_bucket: str = Field(default="vendor-risk-exports")
+    s3_region: str = Field(default="us-east-1")
+    s3_endpoint_url: str | None = Field(default=None)  # unset -> AWS S3
+    # The endpoint *browsers* reach, used only to sign download URLs. Differs
+    # from S3_ENDPOINT_URL when workers talk to the store over a private network
+    # (e.g. http://minio:9000 inside Docker vs http://localhost:9000 outside).
+    s3_public_endpoint_url: str | None = Field(default=None)
+    s3_access_key_id: str | None = Field(default=None)       # unset -> default AWS chain
+    s3_secret_access_key: str | None = Field(default=None)
+    s3_create_bucket: bool = Field(default=False)  # dev convenience; IAM rarely allows it
+
     # CORS: comma-free list via env as JSON or a single origin string.
     cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:5173"])
 

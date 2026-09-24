@@ -213,6 +213,22 @@ export interface AuditEntry {
   created_at: string;
 }
 
+export type ExportFormat = "csv" | "pdf";
+export type ExportStatus = "queued" | "running" | "succeeded" | "failed" | "expired";
+
+export interface ExportJob {
+  id: number;
+  format: ExportFormat;
+  status: ExportStatus;
+  filename: string | null;
+  size_bytes: number | null;
+  error: string | null;
+  requested_by: string | null;
+  created_at: string;
+  completed_at: string | null;
+  expires_at: string | null;
+}
+
 export interface IntegrationUpdate {
   nvd_api_key?: string | null;
   sync_cadence_hours?: number;

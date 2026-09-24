@@ -19,6 +19,7 @@ data/
 output/
 *.db
 config/business_context.csv   # synthetic dev data, generated on demand
+var/                          # local export storage (EXPORT_STORAGE=local)
 
 # Secrets / local config
 .env

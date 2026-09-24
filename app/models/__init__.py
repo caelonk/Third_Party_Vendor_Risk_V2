@@ -5,6 +5,8 @@ from .base import (
     AlertChannel,
     AlertType,
     Base,
+    ExportFormat,
+    ExportStatus,
     MatchMethod,
     NotificationStatus,
     Role,
@@ -12,7 +14,7 @@ from .base import (
     Theme,
     TimestampMixin,
 )
-from .ops import AuditLog, SyncRun
+from .ops import AuditLog, ExportJob, SyncRun
 from .org import Invitation, Membership, Organization, OrgIntegration
 from .user import MAX_DASHBOARD_WIDGETS, User, UserPreference
 from .vendor import RiskSnapshot, Vendor, VendorVulnerability
@@ -28,6 +30,8 @@ __all__ = [
     "NotificationStatus",
     "SyncStatus",
     "MatchMethod",
+    "ExportFormat",
+    "ExportStatus",
     "Organization",
     "Membership",
     "Invitation",
@@ -44,4 +48,5 @@ __all__ = [
     "Notification",
     "SyncRun",
     "AuditLog",
+    "ExportJob",
 ]

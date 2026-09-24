@@ -40,8 +40,10 @@ from .services.exceptions import (
     AuthError,
     ConflictError,
     DomainError,
+    GoneError,
     NotFoundError,
     PermissionDeniedError,
+    TooManyRequestsError,
     UnavailableError,
     ValidationError,
 )
@@ -52,7 +54,9 @@ _ERROR_STATUS = {
     PermissionDeniedError: 403,
     NotFoundError: 404,
     ConflictError: 409,
+    GoneError: 410,
     ValidationError: 422,
+    TooManyRequestsError: 429,
     UnavailableError: 503,
 }
 
@@ -106,6 +110,7 @@ def create_app() -> FastAPI:
     api_v1.include_router(cpe.router)
     api_v1.include_router(sbom.router)
     api_v1.include_router(exports.router)
+    api_v1.include_router(exports.files_router)
     api_v1.include_router(audit.router)
     api_v1.include_router(integrations.router)
     api_v1.include_router(dashboard.router)

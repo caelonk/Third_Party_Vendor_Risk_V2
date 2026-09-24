@@ -32,3 +32,11 @@ class ValidationError(DomainError):
 
 class UnavailableError(DomainError):
     """An upstream dependency (e.g. NVD) is busy or down; try again (HTTP 503)."""
+
+
+class GoneError(DomainError):
+    """The resource existed but has been retired, e.g. an expired export (HTTP 410)."""
+
+
+class TooManyRequestsError(DomainError):
+    """A per-org concurrency/rate cap was hit; retry later (HTTP 429)."""
