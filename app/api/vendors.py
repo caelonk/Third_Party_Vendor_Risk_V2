@@ -23,8 +23,8 @@ router = APIRouter(prefix="/orgs/{org_id}/vendors", tags=["vendors"])
 _ASSESSMENT_KEYS = ("tier", "threat_band", "exposure_band", "max_cvss", "cve_count", "kev_count")
 
 
-def _vendor_out(db: Session, vendor: Vendor) -> VendorOut:
-    a = scoring_service.assess_vendor(db, vendor)
+def _vendor_out(db: Session, vendor: Vendor, assessment: dict | None = None) -> VendorOut:
+    a = assessment if assessment is not None else scoring_service.assess_vendor(db, vendor)
     return VendorOut(
         id=vendor.id,
         name=vendor.name,
@@ -45,7 +45,9 @@ def list_vendors(
     ctx: OrgContext = Depends(get_org_context),
     db: Session = Depends(get_session),
 ) -> list[VendorOut]:
-    return [_vendor_out(db, v) for v in vendor_service.list_vendors(db, ctx.organization.id)]
+    vendors = vendor_service.list_vendors(db, ctx.organization.id)
+    assessments = scoring_service.assess_vendors(db, vendors)  # one batched CVE query
+    return [_vendor_out(db, v, assessments[v.id]) for v in vendors]
 
 
 @router.post("", response_model=VendorOut, status_code=status.HTTP_201_CREATED)

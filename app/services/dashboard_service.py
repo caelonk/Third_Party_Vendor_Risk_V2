@@ -18,10 +18,9 @@ from . import scoring_service, vendor_service
 
 
 def _assessments(db: Session, org_id: int) -> list[tuple[Vendor, dict]]:
-    return [
-        (v, scoring_service.assess_vendor(db, v))
-        for v in vendor_service.list_vendors(db, org_id)
-    ]
+    vendors = vendor_service.list_vendors(db, org_id)
+    assessed = scoring_service.assess_vendors(db, vendors)  # one batched CVE query
+    return [(v, assessed[v.id]) for v in vendors]
 
 
 def summary(db: Session, org_id: int) -> dict:

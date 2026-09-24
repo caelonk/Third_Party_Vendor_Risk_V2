@@ -53,8 +53,10 @@ def _cell(value: object) -> str:
 def vendor_rows(db: Session, org_id: int) -> list[dict]:
     """One assessment row per vendor, honest-data preserved."""
     rows: list[dict] = []
-    for v in vendor_service.list_vendors(db, org_id):
-        a = scoring_service.assess_vendor(db, v)
+    vendors = vendor_service.list_vendors(db, org_id)
+    assessed = scoring_service.assess_vendors(db, vendors)  # one batched CVE query
+    for v in vendors:
+        a = assessed[v.id]
         rows.append(
             {
                 "name": v.name,

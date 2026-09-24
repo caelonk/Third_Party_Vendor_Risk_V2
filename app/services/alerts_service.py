@@ -204,16 +204,21 @@ def evaluate_renewals(db: Session, org_id: int, *, reference: date | None = None
     today = reference.isoformat()
     emitted: list[Notification] = []
 
-    # Latest snapshot per vendor gives the current tier; join through vendors.
-    from .scoring_service import assess_vendor  # local import avoids a cycle
+    from .scoring_service import assess_vendors  # local import avoids a cycle
 
-    for vendor in db.scalars(select(Vendor).where(Vendor.org_id == org_id)):
-        if vendor.contract_renewal_date is None:
-            continue
+    # Only vendors renewing inside the window need a tier; assess them in one batch.
+    in_window = [
+        v
+        for v in db.scalars(select(Vendor).where(Vendor.org_id == org_id))
+        if v.contract_renewal_date is not None
+        and 0 <= (v.contract_renewal_date - reference).days <= window
+    ]
+    tiers = {vid: a["tier"] for vid, a in assess_vendors(db, in_window).items()}
+
+    for vendor in in_window:
+        assert vendor.contract_renewal_date is not None  # filtered above
         days = (vendor.contract_renewal_date - reference).days
-        if not (0 <= days <= window):
-            continue
-        tier = assess_vendor(db, vendor)["tier"]
+        tier = tiers[vendor.id]
         if tier not in WATCHLIST_TIERS:
             continue
         n = _emit(
