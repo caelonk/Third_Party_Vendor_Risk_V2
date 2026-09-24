@@ -82,3 +82,23 @@ jobs:
 
       - name: Type-check + build
         run: npm run build
+
+  images:
+    # Build the production images so a broken Dockerfile or nginx config fails
+    # here, not at deploy time.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build backend image (api / worker / beat / migrate / flower)
+        run: docker build -t vendor-risk-backend .
+
+      - name: Build frontend image (SPA + nginx)
+        run: docker build -t vendor-risk-frontend ./frontend
+
+      - name: Validate nginx config
+        # The config proxies to host "api"; map it so nginx can resolve it standalone.
+        run: docker run --rm --add-host api:127.0.0.1 vendor-risk-frontend nginx -t
+
+      - name: Gunicorn config loads
+        run: docker run --rm vendor-risk-backend gunicorn --check-config -c gunicorn.conf.py app.main:app

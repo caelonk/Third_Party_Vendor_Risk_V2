@@ -69,9 +69,20 @@ cp .env.example .env          # then edit secrets (see below)
 docker compose up --build
 ```
 
-The API comes up on <http://localhost:8000> (`/healthz`, `/api/docs`). The `api`
-service runs `alembic upgrade head` on start; `worker` and `beat` share the same
-image.
+Open **<http://localhost:8080>** — nginx serves the built SPA and proxies `/api`
+on the same origin (so the httpOnly auth cookies just work). The stack:
+
+| Service    | Role |
+|------------|------|
+| `migrate`  | One-shot `alembic upgrade head`; everything else waits for it to succeed. |
+| `api`      | FastAPI under gunicorn + uvicorn workers (also on `127.0.0.1:8000` for the Vite dev server; `/healthz`, `/readyz`, `/api/docs`). |
+| `worker`, `beat` | Celery worker and the scheduled-sync dispatcher (same image). |
+| `frontend` | nginx: SPA, `/api` proxy, security headers + CSP, long-cached hashed assets. |
+| `flower`   | Optional queue dashboard: `FLOWER_BASIC_AUTH=user:pass docker compose --profile ops up -d flower` → <http://localhost:5555>. |
+
+All published ports bind to `127.0.0.1`. Logs are JSON (one object per line);
+every response carries an `X-Request-ID` that also appears on the matching nginx
+and API log lines. Set `SENTRY_DSN` to enable error reporting.
 
 **Generate the required secrets** before first run:
 

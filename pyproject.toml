@@ -27,9 +27,14 @@ dependencies = [
     "requests>=2.31",
     "weasyprint>=61",
     "sentry-sdk>=2.0",      # inert unless SENTRY_DSN is set
+    "gunicorn>=23",         # production process manager for the API
+    "uvicorn-worker>=0.3",  # gunicorn worker class (uvicorn.workers is deprecated)
 ]
 
 [project.optional-dependencies]
+ops = [
+    "flower>=2.0",          # Celery queue dashboard (compose profile "ops")
+]
 dev = [
     "pytest>=7.4",
     "httpx>=0.27",          # FastAPI TestClient

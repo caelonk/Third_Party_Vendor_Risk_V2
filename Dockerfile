@@ -27,8 +27,9 @@ COPY app ./app
 COPY seed ./seed
 COPY config ./config
 COPY migrations ./migrations
-COPY alembic.ini ./
-RUN pip install --upgrade pip && pip install .
+COPY alembic.ini gunicorn.conf.py ./
+# [ops] adds Flower; the same image runs api / worker / beat / migrate / flower.
+RUN pip install --upgrade pip && pip install ".[ops]"
 
 # Run as a non-root user.
 RUN useradd --create-home --uid 10001 appuser && chown -R appuser:appuser /app
@@ -36,4 +37,4 @@ USER appuser
 
 EXPOSE 8000
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["gunicorn", "-c", "gunicorn.conf.py", "app.main:app"]

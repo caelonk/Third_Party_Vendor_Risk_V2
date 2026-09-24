@@ -1,3 +1,24 @@
+# Full stack: postgres, redis, a one-shot migrate job, the API (gunicorn +
+# uvicorn workers), Celery worker + beat, and nginx serving the SPA and proxying
+# /api on the same origin. Open http://localhost:8080.
+#
+#   docker compose up --build -d
+#   FLOWER_BASIC_AUTH=admin:change-me docker compose --profile ops up -d flower
+#
+# Published ports bind to 127.0.0.1: Docker otherwise publishes on every
+# interface, bypassing the host firewall.
+
+x-backend-env: &backend-env
+  DATABASE_URL: postgresql+psycopg://vendor_risk:vendor_risk@postgres:5432/vendor_risk
+  REDIS_URL: redis://redis:6379/0
+  LOG_FORMAT: ${LOG_FORMAT:-json}
+
+x-backend: &backend
+  build: .
+  env_file: .env
+  environment: *backend-env
+  restart: unless-stopped
+
 services:
   postgres:
     image: postgres:16-alpine
@@ -8,7 +29,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U vendor_risk"]
       interval: 5s
@@ -18,54 +39,81 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
       retries: 10
 
-  api:
-    build: .
-    # Apply migrations, then serve. Only the api service runs migrations.
-    command: >
-      sh -c "alembic upgrade head &&
-             uvicorn app.main:app --host 0.0.0.0 --port 8000"
-    env_file: .env
-    environment:
-      DATABASE_URL: postgresql+psycopg://vendor_risk:vendor_risk@postgres:5432/vendor_risk
-      REDIS_URL: redis://redis:6379/0
-    ports:
-      - "8000:8000"
+  # Runs migrations once per deploy; api/worker/beat start only after it succeeds,
+  # so scaling the API never races concurrent `alembic upgrade`s.
+  migrate:
+    <<: *backend
+    command: alembic upgrade head
+    restart: "no"
     depends_on:
       postgres:
         condition: service_healthy
+
+  api:
+    <<: *backend
+    # Image CMD: gunicorn -c gunicorn.conf.py app.main:app
+    ports:
+      - "127.0.0.1:8000:8000"  # direct access for the Vite dev server; nginx is the front door
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/readyz', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 15s
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
       redis:
         condition: service_healthy
 
   worker:
-    build: .
-    command: celery -A app.workers.celery_app.celery_app worker --loglevel=info
-    env_file: .env
-    environment:
-      DATABASE_URL: postgresql+psycopg://vendor_risk:vendor_risk@postgres:5432/vendor_risk
-      REDIS_URL: redis://redis:6379/0
+    <<: *backend
+    command: celery -A app.workers.celery_app.celery_app worker --loglevel=info --concurrency=${WORKER_CONCURRENCY:-4}
     depends_on:
-      postgres:
-        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
       redis:
         condition: service_healthy
 
   beat:
-    build: .
+    <<: *backend
     command: celery -A app.workers.celery_app.celery_app beat --loglevel=info
-    env_file: .env
-    environment:
-      DATABASE_URL: postgresql+psycopg://vendor_risk:vendor_risk@postgres:5432/vendor_risk
-      REDIS_URL: redis://redis:6379/0
     depends_on:
-      postgres:
+      migrate:
+        condition: service_completed_successfully
+      redis:
         condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      api:
+        condition: service_healthy
+
+  # Queue dashboard. Opt-in (profile "ops") and refuses to start without auth.
+  flower:
+    <<: *backend
+    profiles: ["ops"]
+    restart: on-failure:3  # bounded: a missing password must not crash-loop forever
+    environment:
+      <<: *backend-env
+      FLOWER_BASIC_AUTH: ${FLOWER_BASIC_AUTH:-}
+    command: >
+      sh -c 'test -n "$$FLOWER_BASIC_AUTH" || { echo "Set FLOWER_BASIC_AUTH=user:password to run Flower." >&2; exit 1; };
+             exec celery -A app.workers.celery_app.celery_app flower --port=5555 --basic-auth="$$FLOWER_BASIC_AUTH"'
+    ports:
+      - "127.0.0.1:5555:5555"
+    depends_on:
       redis:
         condition: service_healthy
 
