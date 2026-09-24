@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { z } from "zod";
 import { ApiError } from "@/lib/api";
 import { useAuth } from "@/auth/AuthProvider";
+import { GoogleSignIn } from "@/components/GoogleSignIn";
 import { AuthLayout } from "./AuthLayout";
 
 const schema = z.object({
@@ -48,6 +49,7 @@ export function Register() {
         </>
       }
     >
+      <GoogleSignIn />
       <form className="auth__fields" onSubmit={handleSubmit(onSubmit)} noValidate>
         {error && <div className="banner banner--error">{error}</div>}
         <div className="field">

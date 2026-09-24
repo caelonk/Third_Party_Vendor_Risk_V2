@@ -35,6 +35,22 @@ class Settings(BaseSettings):
     cookie_secure: bool = Field(default=True)
     cookie_domain: str | None = Field(default=None)
 
+    # Public origin browsers use to reach the app. OAuth redirect URIs are built
+    # from it (never from the request's Host header) and must match the ones
+    # registered with the identity provider.
+    app_base_url: str = Field(default="http://localhost:8080")
+    # Sign in with Google (OIDC, authorization code + PKCE). Both unset -> the
+    # "Continue with Google" button is hidden.
+    google_client_id: str | None = Field(default=None)
+    google_client_secret: str | None = Field(default=None)
+    google_discovery_url: str = Field(
+        default="https://accounts.google.com/.well-known/openid-configuration"
+    )
+    # Built-in stand-in for Google (development/tests): the same protocol, but
+    # the "login" is a form that accepts any email. Ignored in production and
+    # whenever real Google credentials are set.
+    oidc_dev_provider: bool = Field(default=False)
+
     # Secret encryption (envelope key for org integration secrets). A urlsafe
     # base64 32-byte Fernet key; generate one per environment.
     app_encryption_key: str | None = Field(default=None)

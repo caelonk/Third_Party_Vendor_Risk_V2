@@ -13,6 +13,7 @@ from app.config import get_settings
 from app.db import get_session
 from app.main import create_app
 from app.models import Base
+from app.services import object_storage, oidc
 
 API = "/api/v1"
 
@@ -58,7 +59,13 @@ def api(monkeypatch):
     # Never touch a real Redis (the Docker stack publishes one on localhost):
     # port 1 refuses instantly, so NVD throttles degrade to local pacing.
     monkeypatch.setenv("REDIS_URL", "redis://127.0.0.1:1/0")
+    # A developer's .env may hold real Google credentials: tests never use them.
+    monkeypatch.setenv("GOOGLE_CLIENT_ID", "")
+    monkeypatch.setenv("GOOGLE_CLIENT_SECRET", "")
+    monkeypatch.setenv("OIDC_DEV_PROVIDER", "false")
     get_settings.cache_clear()
+    oidc.get_provider.cache_clear()
+    object_storage.get_storage.cache_clear()
 
     engine = create_engine(
         "sqlite+pysqlite://",
@@ -92,3 +99,5 @@ def api(monkeypatch):
         app.dependency_overrides.clear()
         engine.dispose()
         get_settings.cache_clear()
+        oidc.get_provider.cache_clear()
+        object_storage.get_storage.cache_clear()

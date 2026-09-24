@@ -10,6 +10,13 @@ export interface User {
   last_login_at: string | null;
 }
 
+export interface AuthProvider {
+  id: string;
+  name: string;
+  /** The built-in development stand-in, not the real provider. */
+  dev_stand_in: boolean;
+}
+
 export interface Org {
   id: number;
   name: string;

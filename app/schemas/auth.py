@@ -19,6 +19,12 @@ class LoginRequest(BaseModel):
     password: str = Field(min_length=1, max_length=128)
 
 
+class AuthProviderOut(BaseModel):
+    id: str
+    name: str
+    dev_stand_in: bool  # the built-in development stand-in, not the real provider
+
+
 class UserOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

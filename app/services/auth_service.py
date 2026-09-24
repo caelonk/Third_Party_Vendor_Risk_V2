@@ -20,12 +20,30 @@ def register(
     name: str | None = None,
     org_name: str | None = None,
 ) -> tuple[User, Organization]:
-    """Create a user, their preferences, and a personal org they own. Commits."""
+    """Create a password account (see :func:`create_account`). Commits."""
+    return create_account(
+        db, email=email, password_hash=hash_password(password), name=name, org_name=org_name
+    )
+
+
+def create_account(
+    db: Session,
+    *,
+    email: str,
+    password_hash: str | None,
+    name: str | None = None,
+    org_name: str | None = None,
+) -> tuple[User, Organization]:
+    """Create a user, their preferences, and a personal org they own. Commits.
+
+    ``password_hash`` is None for accounts that sign in only through an
+    identity provider; such users can't use the password form.
+    """
     email = email.strip().lower()
     if db.scalar(select(User.id).where(User.email == email)) is not None:
         raise ConflictError("Email is already registered")
 
-    user = User(email=email, password_hash=hash_password(password), name=name)
+    user = User(email=email, password_hash=password_hash, name=name)
     db.add(user)
     db.flush()
     db.add(UserPreference(user_id=user.id))

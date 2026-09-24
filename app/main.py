@@ -26,6 +26,7 @@ from .api import (
     me,
     orgs,
     sbom,
+    sso,
     trends,
     vendors,
 )
@@ -105,6 +106,7 @@ def create_app() -> FastAPI:
     # Versioned API surface.
     api_v1 = APIRouter(prefix="/api/v1")
     api_v1.include_router(auth.router)
+    api_v1.include_router(sso.router)
     api_v1.include_router(orgs.router)
     api_v1.include_router(vendors.router)
     api_v1.include_router(cpe.router)

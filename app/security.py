@@ -48,6 +48,14 @@ def _encode(claims: dict[str, Any], ttl_seconds: int) -> str:
     return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
 
 
+def create_token(claims: dict[str, Any], ttl_seconds: int) -> str:
+    """A short-lived signed token for internal handshakes (e.g. the OIDC flow
+    state). Always set a distinct ``type`` so it can't pass as a session token."""
+    if claims.get("type") in ("access", "refresh"):
+        raise ValueError("use create_access_token / create_refresh_token for sessions")
+    return _encode(claims, ttl_seconds)
+
+
 def create_access_token(user_id: int, **extra: Any) -> str:
     settings = get_settings()
     return _encode(

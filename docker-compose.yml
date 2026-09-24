@@ -13,6 +13,12 @@ x-backend-env: &backend-env
   DATABASE_URL: postgresql+psycopg://vendor_risk:vendor_risk@postgres:5432/vendor_risk
   REDIS_URL: redis://redis:6379/0
   LOG_FORMAT: ${LOG_FORMAT:-json}
+  # Where browsers reach the app; OAuth redirect URIs are built from it.
+  APP_BASE_URL: ${APP_BASE_URL:-http://localhost:8080}
+  # "Continue with Google" uses a built-in stand-in until GOOGLE_CLIENT_ID and
+  # GOOGLE_CLIENT_SECRET are set in .env (real credentials always win, and the
+  # stand-in is refused when ENV=production).
+  OIDC_DEV_PROVIDER: ${OIDC_DEV_PROVIDER:-true}
   # Exports: workers write to MinIO over the compose network; download links are
   # signed for the address a browser uses (a signature covers the Host header).
   EXPORT_STORAGE: s3

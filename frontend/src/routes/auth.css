@@ -111,3 +111,8 @@
     border-bottom: 1px solid var(--border);
   }
 }
+
+/* A sign-in error shown above both the Google button and the form. */
+.auth__error {
+  margin-bottom: var(--space-4);
+}

@@ -47,7 +47,7 @@ light `core/` package, so business logic has exactly one home.
 | Backend | FastAPI, SQLAlchemy 2.0 (sync) + psycopg3, Alembic |
 | Domain core | `core/` — scoring, parser, NVD client, sync (only `requests`) |
 | Background | Celery + Redis + Celery Beat |
-| Auth | JWT (httpOnly cookies), Argon2id, RBAC (owner/admin/member/viewer) |
+| Auth | JWT (httpOnly cookies), Argon2id, Google sign-in (OIDC + PKCE), RBAC (owner/admin/member/viewer) |
 | Database | PostgreSQL |
 | Object storage | Any S3-compatible store (MinIO locally) — export files |
 | Frontend | React + TypeScript + Vite *(Phase 1)* |
@@ -94,6 +94,23 @@ valid for 5 minutes. Files are deleted after 7 days by a Beat task, which also
 fails jobs a dead worker left behind. Point `S3_*` at AWS S3, R2, or any
 S3-compatible store in production; `EXPORT_STORAGE=local` (plus
 `EXPORT_RUN_INLINE=true` without Redis) covers development outside Docker.
+
+**Sign in with Google** uses the OIDC authorization-code flow with PKCE, a
+state cookie, and a nonce; the ID token's signature, issuer, audience, expiry
+and nonce are verified before any account is touched. A Google identity is
+matched by its stable subject id; a first sign-in links to an existing account
+only when Google reports the email as verified, and otherwise creates a new
+account with its own organization. Until real credentials are configured,
+Compose enables a built-in **development stand-in** that runs the same protocol
+with a test sign-in page (any email) — it is labeled as such in the UI and
+refused when `ENV=production`. To switch to real Google:
+
+1. Google Cloud Console → APIs & Services → Credentials → *Create OAuth client
+   ID* → Web application.
+2. Authorized redirect URI: `http://localhost:8080/api/v1/auth/google/callback`
+   (in production, `<APP_BASE_URL>/api/v1/auth/google/callback`).
+3. Put `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `.env`, then
+   `docker compose up -d api`.
 
 All published ports bind to `127.0.0.1`. Logs are JSON (one object per line);
 every response carries an `X-Request-ID` that also appears on the matching nginx
