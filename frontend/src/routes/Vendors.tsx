@@ -4,7 +4,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Modal } from "@/components/Modal";
 import { SbomImport } from "@/components/SbomImport";
 import { TierBadge } from "@/components/TierBadge";
-import { ApiError } from "@/lib/api";
 import { fmtCvss, fmtRelative } from "@/lib/format";
 import { useOrg } from "@/org/OrgProvider";
 import {
@@ -36,7 +35,7 @@ export function Vendors() {
 
   const [adding, setAdding] = useState(false);
   const [importing, setImporting] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<unknown>(null);
 
   // Filter/sort state lives in the URL: shareable, and survives refresh + back.
   const [params, setParams] = useSearchParams();
@@ -55,7 +54,7 @@ export function Vendors() {
     setFormError(null);
     create.mutate(input, {
       onSuccess: () => setAdding(false),
-      onError: (e) => setFormError(e instanceof ApiError ? e.message : "Could not add vendor"),
+      onError: (e) => setFormError(e),
     });
   };
 

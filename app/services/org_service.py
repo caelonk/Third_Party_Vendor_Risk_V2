@@ -9,6 +9,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from ..models import Invitation, Membership, Organization, Role, User
+from . import entitlements
 from .exceptions import ConflictError, NotFoundError, PermissionDeniedError, ValidationError
 
 INVITE_TTL_DAYS = 7
@@ -69,6 +70,9 @@ def add_member(db: Session, org_id: int, *, user_id: int, role: Role) -> Members
     )
     if existing is not None:
         raise ConflictError("User is already a member of this organization")
+    org = db.get(Organization, org_id)
+    if org is not None:
+        entitlements.require_member_capacity(db, org, accepting=True)
     membership = Membership(org_id=org_id, user_id=user_id, role=role)
     db.add(membership)
     db.commit()
@@ -134,6 +138,9 @@ def create_invitation(
         )
         if member is not None:
             raise ConflictError("User is already a member of this organization")
+    org = db.get(Organization, org_id)
+    if org is not None:
+        entitlements.require_member_capacity(db, org)
 
     invite = Invitation(
         org_id=org_id,
@@ -180,6 +187,9 @@ def accept_invitation(db: Session, *, token: str, user: User) -> Membership:
         )
     )
     if membership is None:
+        org = db.get(Organization, invite.org_id)
+        if org is not None:
+            entitlements.require_member_capacity(db, org, accepting=True)
         membership = Membership(org_id=invite.org_id, user_id=user.id, role=invite.role)
         db.add(membership)
     invite.accepted_at = datetime.now(UTC)

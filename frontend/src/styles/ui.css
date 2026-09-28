@@ -349,3 +349,11 @@
   border-color: var(--accent-border);
   background: var(--accent-soft);
 }
+
+/* A link inside a banner (e.g. "See plans" after a plan-limit error). */
+.banner__link {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

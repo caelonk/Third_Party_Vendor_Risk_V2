@@ -213,6 +213,7 @@ def test_pdf_without_weasyprint_fails_with_a_clear_message(api, ex, monkeypatch)
 
     monkeypatch.setattr(export_service, "portfolio_pdf", _no_gtk)
     client, oid = _seed(api)
+    api.set_plan(oid, "team")  # PDF reports are a paid feature
     job = _create(client, oid, "pdf").json()
     assert job["status"] == "failed"
     assert job["error"] == export_service.PDF_UNAVAILABLE
@@ -493,6 +494,7 @@ def _weasyprint_ok() -> bool:
 @pytest.mark.skipif(not _weasyprint_ok(), reason="WeasyPrint/GTK not available")
 def test_pdf_export_job_produces_a_pdf(api, ex):
     client, oid = _seed(api)
+    api.set_plan(oid, "team")
     job = _create(client, oid, "pdf").json()
     assert job["status"] == "succeeded"
     file = _download(client, oid, job["id"])[1]

@@ -9,13 +9,14 @@ import {
   Settings2,
   Shield,
 } from "lucide-react";
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ThemeSync } from "@/theme/ThemeSync";
 import { useAuth } from "@/auth/AuthProvider";
 import { useOrg } from "@/org/OrgProvider";
 import { useUnreadCount } from "@/features/alerts";
+import { useBilling } from "@/features/billing";
 import "./app-shell.css";
 import "@/routes/alerts.css";
 
@@ -154,9 +155,29 @@ export function AppShell() {
 
       <div className="main">
         <div className="main__inner">
+          <PastDueBanner />
           <Outlet />
         </div>
       </div>
+    </div>
+  );
+}
+
+/** Owners see a failed renewal payment everywhere, not only in Settings. */
+function PastDueBanner() {
+  const { currentOrg } = useOrg();
+  const isOwner = currentOrg?.role === "owner";
+  const billing = useBilling({ enabled: isOwner });
+  const b = billing.data;
+  if (!isOwner || !b || b.status !== "past_due" || !b.has_subscription) return null;
+  return (
+    <div className="banner banner--error shell__alert" role="alert">
+      <span>
+        The last payment for the {b.plan.name} plan failed.{" "}
+        <Link className="banner__link" to="/settings#billing">
+          Update billing
+        </Link>
+      </span>
     </div>
   );
 }

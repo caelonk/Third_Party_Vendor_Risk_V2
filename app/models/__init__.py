@@ -14,6 +14,7 @@ from .base import (
     Theme,
     TimestampMixin,
 )
+from .billing import BillingEvent, OrgBilling
 from .ops import AuditLog, ExportJob, SyncRun
 from .org import Invitation, Membership, Organization, OrgIntegration
 from .user import MAX_DASHBOARD_WIDGETS, User, UserIdentity, UserPreference
@@ -50,4 +51,6 @@ __all__ = [
     "SyncRun",
     "AuditLog",
     "ExportJob",
+    "OrgBilling",
+    "BillingEvent",
 ]

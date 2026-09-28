@@ -237,3 +237,7 @@
     align-items: flex-start;
   }
 }
+
+.shell__alert {
+  margin-bottom: var(--space-5);
+}

@@ -4,7 +4,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Modal } from "@/components/Modal";
 import { TierBadge } from "@/components/TierBadge";
 import { VendorTrendChart } from "@/components/VendorTrendChart";
-import { ApiError } from "@/lib/api";
 import { fmtCvss, fmtDate, fmtMoney, fmtRelative } from "@/lib/format";
 import { useOrg } from "@/org/OrgProvider";
 import {
@@ -43,7 +42,7 @@ export function VendorDetail() {
 
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<unknown>(null);
 
   if (isLoading) return <div className="empty"><span className="spinner" /></div>;
   if (isError || !vendor)
@@ -61,7 +60,7 @@ export function VendorDetail() {
     setFormError(null);
     update.mutate(input, {
       onSuccess: () => setEditing(false),
-      onError: (e) => setFormError(e instanceof ApiError ? e.message : "Could not save"),
+      onError: (e) => setFormError(e),
     });
   };
 

@@ -51,6 +51,19 @@ class Settings(BaseSettings):
     # whenever real Google credentials are set.
     oidc_dev_provider: bool = Field(default=False)
 
+    # Billing via Stripe, test mode by design: a live key (sk_live_/rk_live_) is
+    # refused unless STRIPE_ALLOW_LIVE is set. Prices are the test-mode price ids
+    # for the Team and Business plans (see services/entitlements for the plans).
+    stripe_secret_key: str | None = Field(default=None)
+    stripe_webhook_secret: str | None = Field(default=None)
+    stripe_price_team: str | None = Field(default=None)
+    stripe_price_business: str | None = Field(default=None)
+    stripe_allow_live: bool = Field(default=False)
+    # Built-in stand-in for Stripe while no key is set (development/tests): its
+    # own checkout and billing-portal pages emit Stripe-shaped, signed webhook
+    # events into the same handler. Ignored in production.
+    billing_dev_provider: bool = Field(default=False)
+
     # Secret encryption (envelope key for org integration secrets). A urlsafe
     # base64 32-byte Fernet key; generate one per environment.
     app_encryption_key: str | None = Field(default=None)

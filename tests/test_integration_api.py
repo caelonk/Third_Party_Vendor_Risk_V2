@@ -12,12 +12,13 @@ def test_defaults_when_unconfigured(api):
     client, _ = api.register("int@acme.io")
     oid = _org_id(client)
     body = client.get(f"{API}/orgs/{oid}/integration").json()
-    assert body == {"nvd_key_set": False, "sync_cadence_hours": 24}
+    assert body == {"nvd_key_set": False, "sync_cadence_hours": 24, "min_sync_hours": 24}
 
 
 def test_set_key_and_cadence_key_is_write_only(api):
     client, _ = api.register("int2@acme.io")
     oid = _org_id(client)
+    api.set_plan(oid, "team")  # 6-hourly sync is a Team feature
     resp = client.put(
         f"{API}/orgs/{oid}/integration",
         json={"nvd_api_key": "secret-key-abc", "sync_cadence_hours": 6},
@@ -45,6 +46,7 @@ def test_clearing_key_with_empty_string(api):
 def test_cadence_only_update_leaves_key(api):
     client, _ = api.register("int4@acme.io")
     oid = _org_id(client)
+    api.set_plan(oid, "team")
     client.put(f"{API}/orgs/{oid}/integration", json={"nvd_api_key": "keep-me"})
     client.put(f"{API}/orgs/{oid}/integration", json={"sync_cadence_hours": 12})
     body = client.get(f"{API}/orgs/{oid}/integration").json()

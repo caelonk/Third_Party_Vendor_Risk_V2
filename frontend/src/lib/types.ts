@@ -29,6 +29,37 @@ export interface SignInMethods {
   identities: LinkedIdentity[];
 }
 
+export interface Plan {
+  id: "free" | "team" | "business";
+  name: string;
+  price_usd_month: number;
+  max_vendors: number | null; // null = unlimited
+  max_members: number | null;
+  min_sync_hours: number;
+  pdf_reports: boolean;
+}
+
+export interface Usage {
+  used: number;
+  limit: number | null; // null = unlimited
+}
+
+export type BillingProviderKind = "stripe_test" | "stripe_live" | "dev_stand_in";
+
+export interface BillingSummary {
+  plan: Plan;
+  status: string | null; // provider status; null = plan assigned without a subscription
+  cancel_at_period_end: boolean;
+  current_period_end: string | null;
+  has_subscription: boolean;
+  has_billing_account: boolean;
+  vendors: Usage;
+  members: Usage; // members + pending invitations
+  members_pending: number;
+  provider: BillingProviderKind | null;
+  plans: Plan[];
+}
+
 export interface Org {
   id: number;
   name: string;
@@ -184,6 +215,8 @@ export interface Notification {
 export interface Integration {
   nvd_key_set: boolean;
   sync_cadence_hours: number;
+  /** The most frequent auto-sync the org's plan allows. */
+  min_sync_hours: number;
 }
 
 export interface CpeCandidate {

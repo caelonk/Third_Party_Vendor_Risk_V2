@@ -12,7 +12,8 @@ from sqlalchemy.orm import Session
 
 from core import sbom
 
-from ..models import Vendor
+from ..models import Organization, Vendor
+from . import entitlements
 from .exceptions import ValidationError
 
 MAX_COMPONENTS = 20_000
@@ -63,7 +64,7 @@ def import_vendors(db: Session, org_id: int, items: list[dict]) -> dict:
         raise ValidationError(f"Import at most {MAX_IMPORT} vendors at a time.")
 
     names, prefixes = _existing(db, org_id)
-    created: list[str] = []
+    new: list[Vendor] = []
     skipped: list[dict] = []
     for item in items:
         name = (item.get("name") or "").strip()[:200]
@@ -77,10 +78,16 @@ def import_vendors(db: Session, org_id: int, items: list[dict]) -> dict:
         elif name.casefold() in names or (prefix and prefix in prefixes):
             skipped.append({"name": name, "reason": "exists"})
         else:
-            db.add(Vendor(org_id=org_id, name=name, cpe_prefix=prefix, is_mapped=False))
-            created.append(name)
+            new.append(Vendor(org_id=org_id, name=name, cpe_prefix=prefix, is_mapped=False))
             names.add(name.casefold())
             if prefix:
                 prefixes.add(prefix)
+
+    # All or nothing against the plan: a partial import would be a surprise.
+    org = db.get(Organization, org_id)
+    if org is not None:
+        entitlements.require_vendor_capacity(db, org, len(new))
+    db.add_all(new)
     db.commit()
+    created = [v.name for v in new]
     return {"created": len(created), "names": created, "skipped": skipped}

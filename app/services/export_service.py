@@ -31,7 +31,7 @@ from core.constants import SCOPE_DISCLAIMER
 
 from ..config import get_settings
 from ..models import ExportFormat, ExportJob, ExportStatus, Organization, User
-from . import scoring_service, vendor_service
+from . import entitlements, scoring_service, vendor_service
 from .exceptions import ConflictError, GoneError, NotFoundError, TooManyRequestsError
 from .object_storage import ObjectStorage
 
@@ -277,6 +277,10 @@ def _is_past_retention(job: ExportJob, now: datetime) -> bool:
 
 def create_job(db: Session, org_id: int, user_id: int | None, fmt: ExportFormat) -> ExportJob:
     """Queue an export. A soft per-org cap stops one tenant flooding the workers."""
+    if fmt is ExportFormat.pdf:
+        org = db.get(Organization, org_id)
+        if org is not None:
+            entitlements.require_pdf_reports(org)
     active = db.scalar(
         select(func.count())
         .select_from(ExportJob)

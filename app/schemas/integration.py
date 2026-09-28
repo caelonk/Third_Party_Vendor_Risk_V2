@@ -11,6 +11,9 @@ from pydantic import BaseModel, Field
 class IntegrationOut(BaseModel):
     nvd_key_set: bool
     sync_cadence_hours: int
+    # The most frequent auto-sync the org's plan allows; a stored cadence below
+    # it (e.g. after a downgrade) is raised to it when syncs are scheduled.
+    min_sync_hours: int
 
 
 class IntegrationUpdate(BaseModel):

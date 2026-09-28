@@ -65,6 +65,7 @@ def _seed(api, oid: int, start: int, n: int, *, cvss: float = 7.5, kev_every: in
         "/dashboard/heatmap",
         "/dashboard/watchlist",
         "/dashboard/top-risk",
+        "/billing",
     ],
 )
 def test_query_count_is_constant_in_vendor_count(api, path):

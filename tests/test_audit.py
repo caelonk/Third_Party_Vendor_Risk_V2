@@ -31,7 +31,7 @@ def test_integration_update_is_audited_without_the_key_value(api):
     oid = _org_id(client)
     client.put(
         f"{API}/orgs/{oid}/integration",
-        json={"nvd_api_key": "super-secret-key", "sync_cadence_hours": 6},
+        json={"nvd_api_key": "super-secret-key", "sync_cadence_hours": 48},
     )
     log = client.get(f"{API}/orgs/{oid}/audit-log").json()
     entry = next(e for e in log if e["action"] == "integration.updated")

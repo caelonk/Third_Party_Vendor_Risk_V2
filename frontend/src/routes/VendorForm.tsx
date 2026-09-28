@@ -4,6 +4,7 @@ import { z } from "zod";
 import { CpeSearch } from "@/components/CpeSearch";
 import type { VendorInput } from "@/features/vendors";
 import type { Vendor } from "@/lib/types";
+import { ErrorBanner } from "@/components/ErrorBanner";
 
 const schema = z.object({
   name: z.string().trim().min(1, "Required").max(200),
@@ -42,7 +43,7 @@ export function VendorForm({
 }: {
   vendor?: Vendor;
   submitting: boolean;
-  error?: string | null;
+  error?: unknown;
   onSubmit: (input: VendorInput) => void;
   submitLabel?: string;
 }) {
@@ -65,7 +66,7 @@ export function VendorForm({
 
   return (
     <form className="auth__fields" onSubmit={handleSubmit((v) => onSubmit(toInput(v)))} noValidate>
-      {error && <div className="banner banner--error">{error}</div>}
+      <ErrorBanner error={error} fallback="Could not save the vendor." />
       <div className="field">
         <label className="field__label">Vendor name</label>
         <input className="input" autoFocus aria-invalid={!!errors.name} {...register("name")} />

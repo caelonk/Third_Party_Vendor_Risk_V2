@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Clock, Copy, KeyRound, UserPlus } from "lucide-react";
+import { ErrorBanner } from "@/components/ErrorBanner";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { ApiError } from "@/lib/api";
 import { fmtDate } from "@/lib/format";
 import { useAuth } from "@/auth/AuthProvider";
 import { useOrg } from "@/org/OrgProvider";
@@ -13,6 +14,7 @@ import {
   useSetMemberRole,
 } from "@/features/members";
 import { useIntegration, useUpdateIntegration } from "@/features/integration";
+import { BillingCard } from "./BillingCard";
 import { SecurityCard } from "./SecurityCard";
 import type { Role } from "@/lib/types";
 import "./settings.css";
@@ -24,7 +26,7 @@ function AutoSyncCard({ canManage }: { canManage: boolean }) {
   const update = useUpdateIntegration();
   const [cadence, setCadence] = useState(24);
   const [keyInput, setKeyInput] = useState("");
-  const [status, setStatus] = useState<{ ok: boolean; msg: string } | null>(null);
+  const [status, setStatus] = useState<{ ok: true; msg: string } | { ok: false; error: unknown } | null>(null);
 
   const loadedCadence = integration.data?.sync_cadence_hours;
   useEffect(() => {
@@ -32,6 +34,7 @@ function AutoSyncCard({ canManage }: { canManage: boolean }) {
   }, [loadedCadence]);
 
   const keySet = integration.data?.nvd_key_set ?? false;
+  const minHours = integration.data?.min_sync_hours ?? 1;
   const clamp = (n: number) => Math.max(1, Math.min(720, n || 1));
 
   const save = () => {
@@ -45,8 +48,7 @@ function AutoSyncCard({ canManage }: { canManage: boolean }) {
         setKeyInput("");
         setStatus({ ok: true, msg: "Sync settings saved." });
       },
-      onError: (e) =>
-        setStatus({ ok: false, msg: e instanceof ApiError ? e.message : "Could not save" }),
+      onError: (e) => setStatus({ ok: false, error: e }),
     });
   };
 
@@ -56,8 +58,7 @@ function AutoSyncCard({ canManage }: { canManage: boolean }) {
       { nvd_api_key: "" },
       {
         onSuccess: () => setStatus({ ok: true, msg: "API key removed." }),
-        onError: (e) =>
-          setStatus({ ok: false, msg: e instanceof ApiError ? e.message : "Could not remove key" }),
+        onError: (e) => setStatus({ ok: false, error: e }),
       },
     );
   };
@@ -73,13 +74,13 @@ function AutoSyncCard({ canManage }: { canManage: boolean }) {
           status stay current without manual syncs.
         </p>
 
-        {status && (
-          <div
-            className={`banner ${status.ok ? "banner--ok" : "banner--error"}`}
-            style={{ margin: "var(--space-3) 0" }}
-          >
+        {status?.ok && (
+          <div className="banner banner--ok" style={{ margin: "var(--space-3) 0" }}>
             {status.msg}
           </div>
+        )}
+        {status && !status.ok && (
+          <ErrorBanner error={status.error} fallback="Could not save" style={{ margin: "var(--space-3) 0" }} />
         )}
 
         <div className="settings__field">
@@ -100,6 +101,13 @@ function AutoSyncCard({ canManage }: { canManage: boolean }) {
             />
             <span className="subtle">hours</span>
           </div>
+          {minHours > 1 && (
+            <p className="subtle settings__plan-note">
+              {cadence < minHours
+                ? `Your plan syncs at most every ${minHours} hours, so this runs every ${minHours} hours.`
+                : `Your plan allows syncing as often as every ${minHours} hours.`}
+            </p>
+          )}
         </div>
 
         <div className="settings__field">
@@ -158,6 +166,22 @@ export function Settings() {
   const { user } = useAuth();
   const { currentOrg } = useOrg();
   const canManage = currentOrg ? ["owner", "admin"].includes(currentOrg.role) : false;
+  const { hash } = useLocation();
+
+  // Deep links such as /settings#billing (the "See plans" link) land on the card.
+  // The target card may render only once its data loads, so retry briefly.
+  useEffect(() => {
+    if (!hash) return;
+    let tries = 0;
+    const t = setInterval(() => {
+      const el = document.getElementById(hash.slice(1));
+      if (el || ++tries > 20) {
+        el?.scrollIntoView({ block: "start" });
+        clearInterval(t);
+      }
+    }, 100);
+    return () => clearInterval(t);
+  }, [hash]);
 
   const members = useMembers();
   const invitations = useInvitations(canManage);
@@ -167,7 +191,7 @@ export function Settings() {
 
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<Role>("member");
-  const [inviteError, setInviteError] = useState<string | null>(null);
+  const [inviteError, setInviteError] = useState<unknown>(null);
 
   const sendInvite = () => {
     setInviteError(null);
@@ -175,7 +199,7 @@ export function Settings() {
       { email: inviteEmail, role: inviteRole },
       {
         onSuccess: () => setInviteEmail(""),
-        onError: (e) => setInviteError(e instanceof ApiError ? e.message : "Could not invite"),
+        onError: (e) => setInviteError(e),
       },
     );
   };
@@ -215,13 +239,13 @@ export function Settings() {
             <div className="settings__kv">
               <span className="subtle">Name</span>
               <span>{currentOrg?.name}</span>
-              <span className="subtle">Plan</span>
-              <span style={{ textTransform: "capitalize" }}>{currentOrg?.plan}</span>
               <span className="subtle">Your role</span>
               <span style={{ textTransform: "capitalize" }}>{currentOrg?.role}</span>
             </div>
           </div>
         </section>
+
+        <BillingCard canManage={currentOrg?.role === "owner"} />
 
         <AutoSyncCard canManage={canManage} />
 
@@ -297,11 +321,7 @@ export function Settings() {
               <span className="card__title">Invite a teammate</span>
             </div>
             <div className="card__body">
-              {inviteError && (
-                <div className="banner banner--error" style={{ marginBottom: "var(--space-4)" }}>
-                  {inviteError}
-                </div>
-              )}
+              <ErrorBanner error={inviteError} fallback="Could not invite" style={{ marginBottom: "var(--space-4)" }} />
               <div className="settings__invite">
                 <input
                   className="input"

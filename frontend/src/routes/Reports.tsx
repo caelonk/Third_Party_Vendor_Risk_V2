@@ -14,6 +14,7 @@ import {
 } from "@/features/exports";
 import type { AuditEntry, ExportFormat, ExportJob } from "@/lib/types";
 import "./reports.css";
+import { ErrorBanner } from "@/components/ErrorBanner";
 
 const ACTION_LABELS: Record<string, string> = {
   "vendor.created": "Created vendor",
@@ -22,6 +23,9 @@ const ACTION_LABELS: Record<string, string> = {
   "vendor.synced": "Synced vendor",
   "vendor.imported": "Imported vendors",
   "export.requested": "Requested export",
+  "billing.checkout_started": "Started checkout",
+  "billing.plan_changed": "Plan changed",
+  "billing.payment_failed": "Payment failed",
   "member.invited": "Invited member",
   "member.role_changed": "Changed member role",
   "member.removed": "Removed member",
@@ -33,8 +37,16 @@ function detail(e: AuditEntry): string {
   if (typeof x.name === "string") return x.name;
   if (typeof x.email === "string") return x.email;
   if (Array.isArray(x.fields)) return (x.fields as string[]).join(", ");
+  // Plan changes carry a status too; show "Team → Free (canceled)", not just the status.
+  if (typeof x.to === "string") {
+    const name = (p: unknown) => (typeof p === "string" ? p.charAt(0).toUpperCase() + p.slice(1) : "—");
+    const why = typeof x.status === "string" ? ` (${x.status.replace("_", " ")})` : "";
+    return `${name(x.from)} → ${name(x.to)}${why}`;
+  }
   if (typeof x.status === "string") return String(x.status);
   if (typeof x.format === "string") return FORMAT_LABELS[x.format as ExportFormat] ?? x.format;
+  if (typeof x.attempt === "number") return `Attempt ${x.attempt}`;
+  if (typeof x.plan === "string") return x.plan.charAt(0).toUpperCase() + x.plan.slice(1);
   if (typeof x.created === "number") {
     return `${x.created} added${x.source === "sbom" ? " from SBOM" : ""}`;
   }
@@ -162,11 +174,7 @@ function ExportPanel() {
           {button("pdf", <FileText size={16} />, "Export PDF report")}
         </div>
 
-        {create.isError && (
-          <div className="banner banner--error" role="alert" style={{ marginBottom: "var(--space-4)" }}>
-            {create.error.message}
-          </div>
-        )}
+        <ErrorBanner error={create.error} style={{ marginBottom: "var(--space-4)" }} />
 
         {jobs.length > 0 && (
           <div className="exports">

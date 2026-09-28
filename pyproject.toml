@@ -27,6 +27,7 @@ dependencies = [
     "requests>=2.31",
     "weasyprint>=61",
     "boto3>=1.34",          # S3-compatible object storage for exports
+    "stripe>=12",           # billing (test mode by design; see services/billing.py)
     "sentry-sdk>=2.0",      # inert unless SENTRY_DSN is set
     "gunicorn>=23",         # production process manager for the API
     "uvicorn-worker>=0.3",  # gunicorn worker class (uvicorn.workers is deprecated)

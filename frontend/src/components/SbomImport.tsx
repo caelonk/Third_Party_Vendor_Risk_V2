@@ -12,6 +12,7 @@ import {
 } from "@/features/sbom";
 import type { SbomCandidate, SbomImportResult, SbomPreview } from "@/lib/types";
 import "./sbom-import.css";
+import { ErrorBanner } from "./ErrorBanner";
 
 const FORMAT_LABEL = { cyclonedx: "CycloneDX", spdx: "SPDX" } as const;
 const STATUS_LABEL: Record<SbomCandidate["status"], string> = {
@@ -56,7 +57,7 @@ export function SbomImport({ onDone }: { onDone: () => void }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [step, setStep] = useState<"pick" | "review" | "done">("pick");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<unknown>(null);
   const [dragging, setDragging] = useState(false);
   const [data, setData] = useState<SbomPreview | null>(null);
   const [selected, setSelected] = useState<Set<number>>(new Set());
@@ -101,7 +102,7 @@ export function SbomImport({ onDone }: { onDone: () => void }) {
         setResult({ res, mapped });
         setStep("done");
       },
-      onError: (e) => setError(e instanceof Error ? e.message : "Import failed."),
+      onError: (e) => setError(e),
     });
   };
 
@@ -109,7 +110,7 @@ export function SbomImport({ onDone }: { onDone: () => void }) {
   if (step === "pick") {
     return (
       <div className="sbom">
-        {error && <div className="banner banner--error">{error}</div>}
+        <ErrorBanner error={error} fallback="Import failed." />
         <div
           className={`sbom__drop${dragging ? " sbom__drop--over" : ""}`}
           onDragOver={(e) => {
@@ -201,7 +202,7 @@ export function SbomImport({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="sbom">
-      {error && <div className="banner banner--error">{error}</div>}
+      <ErrorBanner error={error} fallback="Import failed." />
 
       <div className="sbom__summary">
         <span className="pill">

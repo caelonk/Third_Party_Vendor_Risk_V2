@@ -1,0 +1,124 @@
+/* ------------------------------------------------------------------ Meter -- */
+/* Fill = accent until the limit, then danger. The track is a lighter step of
+   the same hue, so the state reads across the whole bar; the caption always
+   states it in words as well. */
+.meter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.meter__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.meter__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.meter__caption {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+.meter__track {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--accent-soft);
+  overflow: hidden;
+}
+.meter__fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--accent);
+  transition: width var(--transition);
+}
+.meter--full .meter__track,
+.meter--over .meter__track {
+  background: var(--danger-soft);
+}
+.meter--full .meter__fill,
+.meter--over .meter__fill {
+  background: var(--danger);
+}
+.meter--full .meter__caption,
+.meter--over .meter__caption {
+  color: var(--danger);
+  font-weight: 600;
+}
+.meter__note {
+  font-size: var(--text-xs);
+  color: var(--text-subtle);
+}
+
+/* ------------------------------------------------------------------ Plans -- */
+.plans__intro {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-sm);
+}
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.plan--current {
+  border-color: var(--accent-border);
+  box-shadow: inset 0 0 0 1px var(--accent-border);
+}
+.plan__name {
+  font-weight: 600;
+}
+.plan__price {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+.plan__demo {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+.plan__features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--text-sm);
+  flex: 1;
+}
+.plan__features li {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+.plan__features svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--accent);
+}
+.plan__current {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--accent);
+  text-align: center;
+  padding: 6px 0;
+}
+@media (max-width: 720px) {
+  .plans {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

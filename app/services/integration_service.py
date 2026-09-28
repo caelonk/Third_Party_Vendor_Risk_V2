@@ -10,8 +10,9 @@ from __future__ import annotations
 from sqlalchemy.orm import Session
 
 from ..config import get_settings
-from ..models import OrgIntegration
+from ..models import Organization, OrgIntegration
 from ..security import decrypt_secret, encrypt_secret
+from . import entitlements
 
 # Sentinel so "field absent" is distinguishable from "set to null/clear".
 _UNSET = object()
@@ -55,9 +56,11 @@ def update_integration(
             integ.nvd_api_key_ct = encrypt_secret(str(key).strip())
 
     if sync_cadence_hours is not _UNSET and isinstance(sync_cadence_hours, int):
-        integ.sync_cadence_hours = max(
-            MIN_CADENCE_HOURS, min(MAX_CADENCE_HOURS, sync_cadence_hours)
-        )
+        hours = max(MIN_CADENCE_HOURS, min(MAX_CADENCE_HOURS, sync_cadence_hours))
+        org = db.get(Organization, org_id)
+        if org is not None:
+            entitlements.require_sync_interval(org, hours)
+        integ.sync_cadence_hours = hours
 
     db.commit()
     db.refresh(integ)
@@ -77,11 +80,12 @@ def apply_patch(db: Session, org_id: int, patch: dict) -> OrgIntegration:
 
 
 def cadence_hours(db: Session, org_id: int) -> int:
-    """The org's sync cadence, or the platform default when unconfigured."""
+    """The org's sync cadence (or the platform default), never more frequent
+    than its plan allows — so a downgrade takes effect at the next reschedule."""
     integ = get_integration(db, org_id)
-    if integ is not None:
-        return integ.sync_cadence_hours
-    return get_settings().default_sync_cadence_hours
+    hours = integ.sync_cadence_hours if integ is not None else get_settings().default_sync_cadence_hours
+    org = db.get(Organization, org_id)
+    return max(hours, entitlements.plan_for(org).min_sync_hours) if org else hours
 
 
 def resolve_nvd_api_key(db: Session, org_id: int) -> str | None:

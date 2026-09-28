@@ -120,6 +120,34 @@ restrained palette. An account created through Google has no password; in
 user unlinks Google, after which they create one (the API enforces that order).
 Accounts with a password change it by confirming the current one.
 
+**Plans and billing.** Three demo plans, enforced in the service layer (the
+API answers `402` with an "upgrade" message; the UI links to the plan comparison):
+
+| | Free | Team ($49/mo, demo) | Business ($199/mo, demo) |
+|---|---|---|---|
+| Vendors | 10 | 100 | 1,000 |
+| Members (incl. pending invites) | 3 | 10 | Unlimited |
+| Most frequent auto-sync | 24h | 6h | 1h |
+| PDF reports | No (CSV only) | Yes | Yes |
+
+A downgrade never deletes anything: an org over a limit just can't add more,
+and its sync interval is raised to the plan's minimum. Billing runs on **Stripe
+in test mode by design** (live keys are refused unless `STRIPE_ALLOW_LIVE=true`):
+Checkout for new subscriptions, the customer portal for changes, and a webhook
+(`POST /api/v1/billing/webhook`) that is signature-verified, idempotent per
+event id, and ignores out-of-order events. Without keys, Compose enables a
+built-in **stand-in** whose checkout and portal pages emit the same signed
+events through the same handler — including a simulated failed payment
+(`past_due`, which keeps the plan while showing a warning). To use real Stripe
+test mode:
+
+1. Create a Stripe account (test mode needs no business details). Add two
+   recurring prices (Team, Business) and save the customer-portal settings once.
+2. Put `STRIPE_SECRET_KEY`, `STRIPE_PRICE_TEAM` and `STRIPE_PRICE_BUSINESS` in `.env`.
+3. `docker compose --profile stripe up -d stripe-cli`, copy the `whsec_…` it
+   prints into `STRIPE_WEBHOOK_SECRET`, then `docker compose up -d api`.
+4. Pay with `4242 4242 4242 4242`, any future date and CVC.
+
 All published ports bind to `127.0.0.1`. Logs are JSON (one object per line);
 every response carries an `X-Request-ID` that also appears on the matching nginx
 and API log lines. Set `SENTRY_DSN` to enable error reporting.

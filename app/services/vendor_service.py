@@ -4,7 +4,8 @@ from __future__ import annotations
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from ..models import Vendor
+from ..models import Organization, Vendor
+from . import entitlements
 from .exceptions import ConflictError, NotFoundError
 
 _BUSINESS_FIELDS = (
@@ -39,6 +40,9 @@ def create_vendor(db: Session, org_id: int, data: dict) -> Vendor:
         select(Vendor.id).where(Vendor.org_id == org_id, Vendor.name == name)
     ) is not None:
         raise ConflictError(f"A vendor named {name!r} already exists")
+    org = db.get(Organization, org_id)
+    if org is not None:
+        entitlements.require_vendor_capacity(db, org)
     vendor = Vendor(
         org_id=org_id,
         name=name,

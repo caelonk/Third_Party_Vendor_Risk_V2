@@ -17,6 +17,7 @@ from .api import (
     alerts,
     audit,
     auth,
+    billing,
     cpe,
     dashboard,
     exports,
@@ -44,6 +45,7 @@ from .services.exceptions import (
     GoneError,
     NotFoundError,
     PermissionDeniedError,
+    PlanLimitError,
     TooManyRequestsError,
     UnavailableError,
     ValidationError,
@@ -52,6 +54,7 @@ from .services.exceptions import (
 # Domain error -> HTTP status.
 _ERROR_STATUS = {
     AuthError: 401,
+    PlanLimitError: 402,
     PermissionDeniedError: 403,
     NotFoundError: 404,
     ConflictError: 409,
@@ -114,6 +117,7 @@ def create_app() -> FastAPI:
     api_v1.include_router(exports.router)
     api_v1.include_router(exports.files_router)
     api_v1.include_router(audit.router)
+    api_v1.include_router(billing.router)
     api_v1.include_router(integrations.router)
     api_v1.include_router(dashboard.router)
     api_v1.include_router(trends.router)

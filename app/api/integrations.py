@@ -14,17 +14,20 @@ from ..db import get_session
 from ..deps import OrgContext, get_org_context, require_role
 from ..models import Role
 from ..schemas.integration import IntegrationOut, IntegrationUpdate
-from ..services import audit_service, integration_service
+from ..services import audit_service, entitlements, integration_service
 
 router = APIRouter(prefix="/orgs/{org_id}/integration", tags=["integration"])
 
 
-def _out(integ, *, default_cadence: int) -> IntegrationOut:
+def _out(integ, *, default_cadence: int, min_sync_hours: int) -> IntegrationOut:
     if integ is None:
-        return IntegrationOut(nvd_key_set=False, sync_cadence_hours=default_cadence)
+        return IntegrationOut(
+            nvd_key_set=False, sync_cadence_hours=default_cadence, min_sync_hours=min_sync_hours
+        )
     return IntegrationOut(
         nvd_key_set=bool(integ.nvd_api_key_ct),
         sync_cadence_hours=integ.sync_cadence_hours,
+        min_sync_hours=min_sync_hours,
     )
 
 
@@ -34,7 +37,11 @@ def get_integration(
     db: Session = Depends(get_session),
 ) -> IntegrationOut:
     integ = integration_service.get_integration(db, ctx.organization.id)
-    return _out(integ, default_cadence=get_settings().default_sync_cadence_hours)
+    return _out(
+        integ,
+        default_cadence=get_settings().default_sync_cadence_hours,
+        min_sync_hours=entitlements.plan_for(ctx.organization).min_sync_hours,
+    )
 
 
 @router.put("", response_model=IntegrationOut)
@@ -51,4 +58,8 @@ def update_integration(
         action="integration.updated", target_type="integration", target_id=ctx.organization.id,
         extra={"fields": sorted(patch.keys())},
     )
-    return _out(integ, default_cadence=get_settings().default_sync_cadence_hours)
+    return _out(
+        integ,
+        default_cadence=get_settings().default_sync_cadence_hours,
+        min_sync_hours=entitlements.plan_for(ctx.organization).min_sync_hours,
+    )

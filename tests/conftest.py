@@ -13,7 +13,7 @@ from app.config import get_settings
 from app.db import get_session
 from app.main import create_app
 from app.models import Base
-from app.services import object_storage, oidc
+from app.services import billing, object_storage, oidc
 
 API = "/api/v1"
 
@@ -31,6 +31,14 @@ class ApiHarness:
     def db(self):
         """A session on the same in-memory DB, for arranging test data directly."""
         return self._session_factory()
+
+    def set_plan(self, org_id: int, plan: str) -> None:
+        """Put an org on a plan directly (as a billing webhook would)."""
+        from app.models import Organization
+
+        with self.db() as db:
+            db.get(Organization, org_id).plan = plan
+            db.commit()
 
     def register(
         self,
@@ -63,9 +71,13 @@ def api(monkeypatch):
     monkeypatch.setenv("GOOGLE_CLIENT_ID", "")
     monkeypatch.setenv("GOOGLE_CLIENT_SECRET", "")
     monkeypatch.setenv("OIDC_DEV_PROVIDER", "false")
+    # ...and never talk to Stripe either.
+    monkeypatch.setenv("STRIPE_SECRET_KEY", "")
+    monkeypatch.setenv("BILLING_DEV_PROVIDER", "false")
     get_settings.cache_clear()
     oidc.get_provider.cache_clear()
     object_storage.get_storage.cache_clear()
+    billing.get_billing.cache_clear()
 
     engine = create_engine(
         "sqlite+pysqlite://",
@@ -101,3 +113,4 @@ def api(monkeypatch):
         get_settings.cache_clear()
         oidc.get_provider.cache_clear()
         object_storage.get_storage.cache_clear()
+        billing.get_billing.cache_clear()

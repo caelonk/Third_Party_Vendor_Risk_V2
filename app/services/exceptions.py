@@ -40,3 +40,7 @@ class GoneError(DomainError):
 
 class TooManyRequestsError(DomainError):
     """A per-org concurrency/rate cap was hit; retry later (HTTP 429)."""
+
+
+class PlanLimitError(DomainError):
+    """The org's plan doesn't allow this; upgrading would (HTTP 402)."""
