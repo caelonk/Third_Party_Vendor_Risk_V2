@@ -22,7 +22,7 @@ import logging
 import secrets
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
-from typing import Any, cast
+from typing import cast
 
 from sqlalchemy import CursorResult, Select, func, select, update
 from sqlalchemy.orm import Session
@@ -397,7 +397,7 @@ def _view(job: ExportJob, email: str | None, name: str | None, now: datetime) ->
     )
 
 
-def _job_query(org_id: int) -> Select[Any]:
+def _job_query(org_id: int) -> Select[ExportJob, str, str | None]:
     return (
         select(ExportJob, User.email, User.name)
         .outerjoin(User, User.id == ExportJob.requested_by_user_id)
