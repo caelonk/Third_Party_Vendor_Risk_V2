@@ -10,7 +10,7 @@ from pydantic import BaseModel
 class PlanOut(BaseModel):
     id: str
     name: str
-    price_usd_month: int
+    price_cents: int  # monthly, in US cents
     max_vendors: int | None  # None = unlimited
     max_members: int | None
     min_sync_hours: int

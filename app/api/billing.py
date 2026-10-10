@@ -49,7 +49,7 @@ def _require(provider: BillingProvider | None) -> BillingProvider:
 
 def _plan_out(plan: entitlements.Plan) -> PlanOut:
     return PlanOut(
-        id=plan.id, name=plan.name, price_usd_month=plan.price_usd_month,
+        id=plan.id, name=plan.name, price_cents=plan.price_cents,
         max_vendors=plan.max_vendors, max_members=plan.max_members,
         min_sync_hours=plan.min_sync_hours, pdf_reports=plan.pdf_reports,
     )
@@ -159,7 +159,7 @@ def _send(db: Session, dev: DevBilling, event: dict) -> str:
 
 
 def _money(plan: entitlements.Plan) -> str:
-    return f"${plan.price_usd_month}/month"
+    return f"{entitlements.format_price(plan)}/month"
 
 
 @router.get("/billing/dev/checkout", include_in_schema=False)

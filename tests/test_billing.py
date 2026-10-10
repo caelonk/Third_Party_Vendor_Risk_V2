@@ -321,6 +321,25 @@ def test_stand_in_pages_reject_bad_tokens_and_are_off_for_stripe(api, dev):
     assert client.get(f"{API}/billing/dev/checkout", params={"token": "x"}).status_code == 404
 
 
+def test_switching_provider_ignores_the_other_providers_ids(api, dev):
+    """A stand-in customer id must never be sent to real Stripe (and vice versa)."""
+    owner, oid = _owner(api)
+    assert _checkout(owner, oid, "team").status_code == 302  # stand-in subscription
+    assert owner.get(f"{API}/orgs/{oid}/billing").json()["has_subscription"] is True
+
+    fake = _FakeStripe()
+    api.app.dependency_overrides[get_billing_provider] = lambda: _stripe(fake)
+    body = owner.get(f"{API}/orgs/{oid}/billing").json()
+    assert body["provider"] == "stripe_test"
+    assert body["has_subscription"] is False and body["has_billing_account"] is False
+    assert body["status"] is None
+    # No portal for a customer Stripe has never heard of...
+    assert owner.post(f"{API}/orgs/{oid}/billing/portal").status_code == 409
+    # ...and checkout starts a fresh customer instead of sending "cus_dev_...".
+    assert owner.post(f"{API}/orgs/{oid}/billing/checkout", json={"plan": "team"}).status_code == 200
+    assert "customer" not in fake.calls[0] and fake.calls[0]["customer_email"] == "own@acme.io"
+
+
 # --------------------------------------------------------------------------- #
 # Stripe adapter (fake client, no network)                                     #
 # --------------------------------------------------------------------------- #
@@ -366,6 +385,10 @@ def test_stripe_checkout_and_portal_parameters():
     assert fake.calls[1]["customer"] == "cus_9" and "customer_email" not in fake.calls[1]
     assert s.create_portal(org_id=7, customer_id="cus_9", return_url="r") == "https://billing.stripe.test/p"
     assert fake.calls[2] == {"customer": "cus_9", "return_url": "r"}
+    # A specific portal configuration is passed through when one is set.
+    configured = _stripe(fake, portal_configuration="bpc_123")
+    configured.create_portal(org_id=7, customer_id="cus_9", return_url="r")
+    assert fake.calls[3] == {"customer": "cus_9", "return_url": "r", "configuration": "bpc_123"}
     assert s.plan_for_price("price_biz_1") == "business" and s.plan_for_price("x") is None
 
 

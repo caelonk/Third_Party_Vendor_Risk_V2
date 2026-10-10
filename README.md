@@ -123,7 +123,7 @@ Accounts with a password change it by confirming the current one.
 **Plans and billing.** Three demo plans, enforced in the service layer (the
 API answers `402` with an "upgrade" message; the UI links to the plan comparison):
 
-| | Free | Team ($49/mo, demo) | Business ($199/mo, demo) |
+| | Free | Team ($49.99/mo, demo) | Business ($199.99/mo, demo) |
 |---|---|---|---|
 | Vendors | 10 | 100 | 1,000 |
 | Members (incl. pending invites) | 3 | 10 | Unlimited |
@@ -141,12 +141,23 @@ events through the same handler — including a simulated failed payment
 (`past_due`, which keeps the plan while showing a warning). To use real Stripe
 test mode:
 
-1. Create a Stripe account (test mode needs no business details). Add two
-   recurring prices (Team, Business) and save the customer-portal settings once.
-2. Put `STRIPE_SECRET_KEY`, `STRIPE_PRICE_TEAM` and `STRIPE_PRICE_BUSINESS` in `.env`.
-3. `docker compose --profile stripe up -d stripe-cli`, copy the `whsec_…` it
-   prints into `STRIPE_WEBHOOK_SECRET`, then `docker compose up -d api`.
-4. Pay with `4242 4242 4242 4242`, any future date and CVC.
+1. Create a Stripe account (a sandbox / test mode needs no business details) and
+   put its **test** secret key in `.env` as `STRIPE_SECRET_KEY`.
+2. Run the setup script. It drives the pinned Stripe CLI container, finds or
+   creates the Team and Business monthly prices, refuses to continue if a Stripe
+   price differs from what the app displays, creates the customer-portal
+   configuration, and writes the price ids, portal id and webhook secret to `.env`:
+
+   ```bash
+   python scripts/stripe_setup.py
+   ```
+3. Restart the API and start the webhook forwarder (`stripe listen`):
+
+   ```bash
+   docker compose --profile stripe up -d
+   ```
+4. Subscribe from Settings → Plan & billing with `4242 4242 4242 4242`, any
+   future date and CVC.
 
 All published ports bind to `127.0.0.1`. Logs are JSON (one object per line);
 every response carries an `X-Request-ID` that also appears on the matching nginx

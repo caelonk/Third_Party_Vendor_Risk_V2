@@ -6,7 +6,7 @@ import { isPlanLimit, meter, planFeatures, priceLabel, statusLabel } from "./bil
 const plan = (over: Partial<Plan> = {}): Plan => ({
   id: "free",
   name: "Free",
-  price_usd_month: 0,
+  price_cents: 0,
   max_vendors: 10,
   max_members: 3,
   min_sync_hours: 24,
@@ -48,7 +48,9 @@ describe("plan copy", () => {
       "CSV + PDF reports",
     ]);
     expect(priceLabel(plan())).toBe("$0");
-    expect(priceLabel(plan({ price_usd_month: 49 }))).toBe("$49/mo");
+    expect(priceLabel(plan({ price_cents: 4999 }))).toBe("$49.99/mo");
+    expect(priceLabel(plan({ price_cents: 19999 }))).toBe("$199.99/mo");
+    expect(priceLabel(plan({ price_cents: 4900 }))).toBe("$49/mo");
   });
 
   it("labels subscription state honestly", () => {

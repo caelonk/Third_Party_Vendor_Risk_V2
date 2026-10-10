@@ -58,6 +58,9 @@ class Settings(BaseSettings):
     stripe_webhook_secret: str | None = Field(default=None)
     stripe_price_team: str | None = Field(default=None)
     stripe_price_business: str | None = Field(default=None)
+    # Optional billing-portal configuration id (bpc_...). Unset -> the account's
+    # default portal settings (which must then be saved once in the dashboard).
+    stripe_portal_configuration: str | None = Field(default=None)
     stripe_allow_live: bool = Field(default=False)
     # Built-in stand-in for Stripe while no key is set (development/tests): its
     # own checkout and billing-portal pages emit Stripe-shaped, signed webhook

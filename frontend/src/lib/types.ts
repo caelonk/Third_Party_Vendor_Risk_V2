@@ -32,7 +32,7 @@ export interface SignInMethods {
 export interface Plan {
   id: "free" | "team" | "business";
   name: string;
-  price_usd_month: number;
+  price_cents: number; // monthly, in US cents
   max_vendors: number | null; // null = unlimited
   max_members: number | null;
   min_sync_hours: number;

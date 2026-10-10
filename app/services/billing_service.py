@@ -242,12 +242,27 @@ def has_active_subscription(row: OrgBilling | None) -> bool:
     return bool(row and row.stripe_subscription_id and row.status in ENTITLED_STATUSES)
 
 
+def owned_row(row: OrgBilling | None, provider: BillingProvider | None) -> OrgBilling | None:
+    """The billing row, if its ids belong to the active provider.
+
+    The stand-in mints ids like ``cus_dev_...``; real Stripe ids never contain
+    ``_dev_``. After switching provider (stand-in -> Stripe test mode, or
+    back), the other provider's customer and subscription mean nothing to this
+    one, so they are treated as absent: checkout starts a fresh customer.
+    """
+    if row is None or provider is None:
+        return None
+    ids = [i for i in (row.stripe_customer_id, row.stripe_subscription_id) if i]
+    is_dev_provider = provider.kind == "dev_stand_in"
+    return row if all(("_dev_" in i) == is_dev_provider for i in ids) else None
+
+
 def start_checkout(
     db: Session, org: Organization, user: User, plan: str, provider: BillingProvider
 ) -> str:
     if plan not in entitlements.PAID_PLANS:
         raise ValidationError("Choose the Team or Business plan.")
-    row = get_billing_row(db, org.id)
+    row = owned_row(get_billing_row(db, org.id), provider)
     if has_active_subscription(row):
         raise ConflictError("This organization already has a subscription. "
                             "Use Manage billing to change or cancel it.")
@@ -263,7 +278,7 @@ def start_checkout(
 
 
 def open_portal(db: Session, org: Organization, provider: BillingProvider) -> str:
-    row = get_billing_row(db, org.id)
+    row = owned_row(get_billing_row(db, org.id), provider)
     if row is None or not row.stripe_customer_id:
         raise ConflictError("There's no billing account yet. Choose a plan first.")
     base = get_settings().app_base_url.rstrip("/")
@@ -273,7 +288,7 @@ def open_portal(db: Session, org: Organization, provider: BillingProvider) -> st
 
 
 def summary(db: Session, org: Organization, provider: BillingProvider | None) -> dict:
-    row = get_billing_row(db, org.id)
+    row = owned_row(get_billing_row(db, org.id), provider)
     plan = entitlements.plan_for(org)
     members = entitlements.member_count(db, org.id)
     pending = entitlements.pending_invite_count(db, org.id)

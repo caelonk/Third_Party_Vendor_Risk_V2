@@ -59,7 +59,7 @@ export function PlansModal({
             <div className="plan__name">{p.name}</div>
             <div className="plan__price">
               {priceLabel(p)}
-              {p.price_usd_month > 0 && <span className="plan__demo"> demo</span>}
+              {p.price_cents > 0 && <span className="plan__demo"> demo</span>}
             </div>
             <ul className="plan__features">
               {planFeatures(p).map((f) => (

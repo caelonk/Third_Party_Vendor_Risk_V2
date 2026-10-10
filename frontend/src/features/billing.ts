@@ -37,7 +37,10 @@ export function planFeatures(p: Plan): string[] {
 }
 
 export function priceLabel(p: Plan): string {
-  return p.price_usd_month === 0 ? "$0" : `$${p.price_usd_month}/mo`;
+  if (p.price_cents === 0) return "$0";
+  const dollars = p.price_cents / 100;
+  // "$49.99/mo", but "$49/mo" for whole dollars.
+  return `$${dollars.toLocaleString("en-US", { minimumFractionDigits: p.price_cents % 100 ? 2 : 0, maximumFractionDigits: 2 })}/mo`;
 }
 
 const STATUS_LABELS: Record<string, string> = {

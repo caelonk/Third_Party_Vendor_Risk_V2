@@ -24,7 +24,9 @@ from .exceptions import PlanLimitError
 class Plan:
     id: str
     name: str
-    price_usd_month: int  # demo pricing: billing runs in Stripe test mode only
+    # Monthly price in US cents. Demo pricing (billing runs in Stripe test mode
+    # only), and it must equal the Stripe price: scripts/stripe_setup.py checks.
+    price_cents: int
     max_vendors: int | None  # None = unlimited
     max_members: int | None  # members + pending invitations; None = unlimited
     min_sync_hours: int  # the most frequent auto-sync allowed
@@ -34,13 +36,19 @@ class Plan:
 PLANS: dict[str, Plan] = {
     "free": Plan("free", "Free", 0, max_vendors=10, max_members=3, min_sync_hours=24,
                  pdf_reports=False),
-    "team": Plan("team", "Team", 49, max_vendors=100, max_members=10, min_sync_hours=6,
+    "team": Plan("team", "Team", 4999, max_vendors=100, max_members=10, min_sync_hours=6,
                  pdf_reports=True),
-    "business": Plan("business", "Business", 199, max_vendors=1000, max_members=None,
+    "business": Plan("business", "Business", 19999, max_vendors=1000, max_members=None,
                      min_sync_hours=1, pdf_reports=True),
 }
 PLAN_ORDER = ("free", "team", "business")
 PAID_PLANS = ("team", "business")
+
+
+def format_price(plan: Plan) -> str:
+    """"$49.99" (or "$49" for whole dollars, "$0" for Free)."""
+    dollars, cents = divmod(plan.price_cents, 100)
+    return f"${dollars:,}.{cents:02d}" if cents else f"${dollars:,}"
 
 
 def plan_for(org: Organization) -> Plan:

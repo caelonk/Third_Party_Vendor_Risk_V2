@@ -91,8 +91,10 @@ class StripeBilling:
         webhook_secret: str | None,
         price_team: str | None,
         price_business: str | None,
+        portal_configuration: str | None = None,
         client: Any = None,
     ) -> None:
+        self._portal_configuration = portal_configuration or None
         self.kind = "stripe_live" if secret_key.startswith(("sk_live_", "rk_live_")) else "stripe_test"
         self.webhook_secret = webhook_secret or ""
         self._prices = {plan: price for plan, price in
@@ -143,10 +145,13 @@ class StripeBilling:
         return str(session.url)
 
     def create_portal(self, *, org_id: int, customer_id: str, return_url: str) -> str:
+        params = {"customer": customer_id, "return_url": return_url}
+        if self._portal_configuration:
+            # Without this Stripe uses the account's default portal settings,
+            # which don't exist in test mode until saved once in the dashboard.
+            params["configuration"] = self._portal_configuration
         try:
-            session = self._client.v1.billing_portal.sessions.create(
-                params={"customer": customer_id, "return_url": return_url}
-            )
+            session = self._client.v1.billing_portal.sessions.create(params=params)
         except stripe.StripeError as exc:
             log.warning("stripe portal failed: %s", exc)
             raise UnavailableError("Stripe is unavailable right now. Try again shortly.") from exc
@@ -268,6 +273,7 @@ def build_billing(settings: Settings) -> BillingProvider | None:
             webhook_secret=settings.stripe_webhook_secret,
             price_team=settings.stripe_price_team,
             price_business=settings.stripe_price_business,
+            portal_configuration=settings.stripe_portal_configuration,
         )
     if settings.billing_dev_provider:
         if settings.is_production:

@@ -171,6 +171,7 @@ def test_unknown_plan_value_is_treated_as_free(api):
 
 def test_plan_catalog_is_ordered_and_consistent():
     plans = [entitlements.PLANS[p] for p in entitlements.PLAN_ORDER]
-    assert [p.price_usd_month for p in plans] == sorted(p.price_usd_month for p in plans)
+    assert [p.price_cents for p in plans] == [0, 4999, 19999]
+    assert [entitlements.format_price(p) for p in plans] == ["$0", "$49.99", "$199.99"]
     assert [p.min_sync_hours for p in plans] == [24, 6, 1]
     assert entitlements.PLANS["business"].max_members is None
