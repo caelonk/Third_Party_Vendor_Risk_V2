@@ -292,9 +292,10 @@
     padding: 0;
     justify-content: center;
   }
-  /* No room above the button in a 68px rail: the menu opens beside it. */
+  /* No room above the button in a 68px rail: the menu opens beside it, clear of
+     the rail's edge. */
   .shell[data-nav="collapsed"] .orgswitch__menu {
-    left: calc(100% + var(--space-3));
+    left: calc(100% + var(--space-5));
     right: auto;
     bottom: 0;
     width: 240px;
