@@ -1,8 +1,21 @@
+/* The board. Widgets are placed by dashboard/layout.ts: it sets each one's `top`
+   and the board's height, and reads the gap below. Their side and width come
+   from the classes here, so the board stays fluid without measuring widths. */
 .dashgrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-5);
-  align-items: start;
+  position: relative;
+  column-gap: var(--space-5); /* not a grid: this is the value the layout code reads */
+}
+.dashgrid > .widget {
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+.dashgrid--two > .widget--left,
+.dashgrid--two > .widget--right {
+  width: calc((100% - var(--space-5)) / 2);
+}
+.dashgrid--two > .widget--right {
+  left: calc((100% + var(--space-5)) / 2);
 }
 
 .widget {
@@ -234,11 +247,3 @@
   opacity: 0.9;
 }
 
-@media (max-width: 780px) {
-  .dashgrid {
-    grid-template-columns: 1fr;
-  }
-  .widget {
-    grid-column: span 1 !important;
-  }
-}

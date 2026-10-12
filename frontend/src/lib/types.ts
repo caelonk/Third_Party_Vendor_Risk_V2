@@ -146,6 +146,8 @@ export interface Widget {
   type: WidgetType;
   config: Record<string, unknown>;
   expanded: boolean;
+  /** Which column it sits in (0 left, 1 right); unset in layouts saved before columns. */
+  col?: 0 | 1 | null;
   w: number;
   h: number;
 }

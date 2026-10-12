@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import { NARROW_SCREEN, useMediaQuery } from "@/lib/useMediaQuery";
 
-/** Matches the breakpoint in app-shell.css where the sidebar becomes a header. */
-const MOBILE_QUERY = "(max-width: 780px)";
 // Remembered separately: the sidebar (wide screens) and the header (narrow ones).
 const KEYS = { desktop: "vr-sidebar-collapsed", mobile: "vr-header-collapsed" } as const;
 // A wide screen has room for the full sidebar; a narrow one starts compact.
@@ -16,21 +15,10 @@ function read(key: string, fallback: boolean): boolean {
   }
 }
 
-function useIsMobile(): boolean {
-  const [mobile, setMobile] = useState(() => window.matchMedia(MOBILE_QUERY).matches);
-  useEffect(() => {
-    const mq = window.matchMedia(MOBILE_QUERY);
-    const onChange = () => setMobile(mq.matches);
-    onChange();
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-  return mobile;
-}
-
 /** Whether the navigation is collapsed, and a toggle that remembers the choice. */
 export function useNavCollapsed() {
-  const mobile = useIsMobile();
+  // Matches the breakpoint in app-shell.css where the sidebar becomes a header.
+  const mobile = useMediaQuery(NARROW_SCREEN);
   const [state, setState] = useState(() => ({
     desktop: read(KEYS.desktop, DEFAULTS.desktop),
     mobile: read(KEYS.mobile, DEFAULTS.mobile),

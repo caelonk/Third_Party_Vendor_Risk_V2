@@ -1,14 +1,22 @@
-import { useSortable } from "@dnd-kit/sortable";
+import { useDraggable } from "@dnd-kit/core";
 import { motion } from "framer-motion";
 import { GripVertical, Maximize2, Minimize2, X } from "lucide-react";
 import type { HTMLAttributes, KeyboardEvent } from "react";
 import { WIDGET_COMPONENTS } from "./widgets";
 import { TITLES } from "./widgetMeta";
+import type { Direction } from "./layout";
 import type { Widget } from "@/lib/types";
 
 /** How long the other widgets take to slide to their new places. */
 export const REFLOW_SECONDS = 0.22;
 const REFLOW_EASE = [0.2, 0, 0, 1] as const;
+
+const ARROWS: Record<string, Direction> = {
+  ArrowUp: "up",
+  ArrowDown: "down",
+  ArrowLeft: "left",
+  ArrowRight: "right",
+};
 
 /** The card itself: header (grip, title, actions) and the widget's content. */
 export function WidgetCard({
@@ -70,15 +78,18 @@ export function WidgetCard({
 }
 
 /**
- * A widget in the grid. While it is being dragged this is the empty slot that
- * marks where it will land; the visible card is the copy in the drag overlay.
- * The grid itself is reordered as the pointer moves, and `layout` animates each
- * card from its old place to its new one.
+ * A widget on the board, placed at `top` in its column (see dashboard/layout).
+ * While it is being dragged this is the empty slot marking where it will land;
+ * the visible card is the copy in the drag overlay. Whenever its place changes,
+ * `layout` slides it from the old place to the new one.
  */
-export function SortableWidget({
+export function BoardWidget({
   id,
   widget,
   index,
+  top,
+  place,
+  reflow,
   editing,
   onToggleExpand,
   onRemove,
@@ -87,36 +98,36 @@ export function SortableWidget({
   id: string;
   widget: Widget;
   index: number;
+  top: number;
+  place: "full" | "left" | "right";
+  /** Seconds a move takes; 0 places it at once (first layout, window resize). */
+  reflow: number;
   editing: boolean;
   onToggleExpand: (i: number) => void;
   onRemove: (i: number) => void;
-  /** Keyboard reordering: move this widget one place earlier (-1) or later (+1). */
-  onNudge: (i: number, step: -1 | 1) => void;
+  /** Keyboard reordering: up/down within its column, left/right to the other one. */
+  onNudge: (i: number, direction: Direction) => void;
 }) {
-  const { listeners, setNodeRef, setActivatorNodeRef, isDragging } = useSortable({
+  const { listeners, setNodeRef, setActivatorNodeRef, isDragging } = useDraggable({
     id,
     disabled: !editing,
   });
 
   const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
-    const step =
-      e.key === "ArrowUp" || e.key === "ArrowLeft"
-        ? -1
-        : e.key === "ArrowDown" || e.key === "ArrowRight"
-          ? 1
-          : 0;
-    if (!step) return;
+    const direction = ARROWS[e.key];
+    if (!direction) return;
     e.preventDefault();
-    onNudge(index, step);
+    onNudge(index, direction);
   };
 
   return (
     <motion.div
       layout="position"
-      transition={{ layout: { duration: REFLOW_SECONDS, ease: REFLOW_EASE } }}
+      transition={{ layout: { duration: reflow, ease: REFLOW_EASE } }}
       ref={setNodeRef}
-      style={{ gridColumn: widget.expanded ? "span 2" : "span 1" }}
-      className={`widget card${isDragging ? " widget--slot" : ""}`}
+      data-widget={id}
+      style={{ top }}
+      className={`widget widget--${place} card${isDragging ? " widget--slot" : ""}`}
     >
       <WidgetCard
         widget={widget}
@@ -125,7 +136,7 @@ export function SortableWidget({
         gripProps={{
           ...listeners,
           onKeyDown,
-          "aria-label": `Reorder ${TITLES[widget.type]}. Drag, or use the arrow keys.`,
+          "aria-label": `Move ${TITLES[widget.type]}. Drag it, or use the arrow keys.`,
           "data-grip": id,
         }}
         onToggleExpand={() => onToggleExpand(index)}

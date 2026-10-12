@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { LayoutGrid, Plus, Check } from "lucide-react";
 import { AddWidgetMenu } from "@/dashboard/AddWidgetMenu";
-import { DashboardGrid } from "@/dashboard/DashboardGrid";
+import { DashboardGrid, type DashboardGridHandle } from "@/dashboard/DashboardGrid";
+import { withColumns, type Col } from "@/dashboard/layout";
 import { CATALOG } from "@/dashboard/widgetMeta";
 import { MAX_WIDGETS } from "@/dashboard/constants";
 import { usePreferences, useUpdatePreferences } from "@/features/preferences";
@@ -9,8 +10,8 @@ import { useOrg } from "@/org/OrgProvider";
 import type { Widget, WidgetType } from "@/lib/types";
 import "@/dashboard/dashboard.css";
 
-function makeWidget(type: WidgetType): Widget {
-  return { type, config: {}, expanded: false, w: 1, h: 1 };
+function makeWidget(type: WidgetType, col: Col): Widget {
+  return { type, config: {}, expanded: false, col, w: 1, h: 1 };
 }
 
 export function Dashboard() {
@@ -22,12 +23,13 @@ export function Dashboard() {
   const [editing, setEditing] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const loaded = useRef(false);
+  const board = useRef<DashboardGridHandle>(null);
 
-  // Adopt the saved layout once.
+  // Adopt the saved layout once (giving a column to widgets saved before columns).
   useEffect(() => {
     if (prefs && !loaded.current) {
       loaded.current = true;
-      setWidgets(prefs.dashboard_layout ?? []);
+      setWidgets(withColumns(prefs.dashboard_layout ?? []));
     }
   }, [prefs]);
 
@@ -41,7 +43,8 @@ export function Dashboard() {
   const canAdd = widgets.length < MAX_WIDGETS && available.length > 0;
 
   const addWidget = (type: WidgetType) => {
-    persist([...widgets, makeWidget(type)]);
+    // A new widget goes at the bottom of whichever column has more room.
+    persist([...widgets, makeWidget(type, board.current?.shorterColumn() ?? 0)]);
     setAddOpen(false);
   };
   const removeWidget = (i: number) => persist(widgets.filter((_, idx) => idx !== i));
@@ -119,6 +122,7 @@ export function Dashboard() {
         </div>
       ) : (
         <DashboardGrid
+          ref={board}
           widgets={widgets}
           editing={editing}
           onReorder={persist}
@@ -129,8 +133,8 @@ export function Dashboard() {
 
       {editing && widgets.length > 0 && (
         <p className="subtle" style={{ fontSize: "0.78rem", marginTop: "var(--space-4)" }}>
-          {widgets.length}/{MAX_WIDGETS} widgets. Drag by the handle to reorder; expand any widget
-          for detail.
+          {widgets.length}/{MAX_WIDGETS} widgets. Drag a widget by its handle into any free space
+          in either column; expand one for detail.
         </p>
       )}
     </>

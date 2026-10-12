@@ -97,7 +97,7 @@ function PhotoAndName({ user }: { user: User }) {
               />
             </div>
             <span className="field__hint">
-              PNG, JPEG or WebP. It is cropped to a square and shown to people in your
+              PNG, JPEG or WebP. It is cropped to a circle and shown to people in your
               organizations.
             </span>
             {photoError && (

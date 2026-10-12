@@ -13,8 +13,9 @@ import {
   Settings2,
   Shield,
 } from "lucide-react";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Avatar } from "@/components/Avatar";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ThemeSync } from "@/theme/ThemeSync";
@@ -95,6 +96,7 @@ function AlertsNav() {
 export function AppShell() {
   const { user, logout } = useAuth();
   const { collapsed, mobile, toggle } = useNavCollapsed();
+  const { pathname } = useLocation();
   // The same control collapses the sidebar on a wide screen and the header on a
   // narrow one; only its wording and icon differ.
   const region = mobile ? "menu" : "sidebar";
@@ -188,7 +190,9 @@ export function AppShell() {
       <div className="main">
         <div className="main__inner">
           <PastDueBanner />
-          <Outlet />
+          <ErrorBoundary key={pathname}>
+            <Outlet />
+          </ErrorBoundary>
         </div>
       </div>
     </div>

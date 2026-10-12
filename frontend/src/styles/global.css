@@ -11,6 +11,9 @@
 }
 
 html {
+  /* Always leave room for the page scrollbar, so content does not shift (or
+     re-wrap) when a page grows long enough to scroll. */
+  scrollbar-gutter: stable;
   -webkit-text-size-adjust: 100%;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
