@@ -134,8 +134,8 @@ def test_sync_interval_floor_on_save_and_at_scheduling(api):
 
     # Downgrade: the stored choice is kept, but scheduling uses the plan floor.
     api.set_plan(oid, "free")
-    assert client.get(url).json() == {"nvd_key_set": False, "sync_cadence_hours": 6,
-                                      "min_sync_hours": 24}
+    assert client.get(url).json() == {"nvd_key_set": False, "nvd_key_verified_at": None,
+                                      "sync_cadence_hours": 6, "min_sync_hours": 24}
     with api.db() as db:
         assert integration_service.cadence_hours(db, oid) == 24
 

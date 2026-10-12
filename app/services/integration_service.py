@@ -7,12 +7,24 @@ vendor. See [[scheduled_sync_service]] for how these are consumed.
 """
 from __future__ import annotations
 
+from collections.abc import Callable
+from datetime import UTC, datetime
+
 from sqlalchemy.orm import Session
 
 from ..config import get_settings
 from ..models import Organization, OrgIntegration
 from ..security import decrypt_secret, encrypt_secret
 from . import entitlements
+from .exceptions import ValidationError
+
+# Asks NVD about a key: "valid" | "invalid" | "unknown" (core.nvd_client.check_api_key).
+KeyChecker = Callable[[str], str]
+
+KEY_REJECTED = (
+    "NVD did not accept this API key. Check that you copied all of it, and that you "
+    "activated it from the link in NVD's confirmation email."
+)
 
 # Sentinel so "field absent" is distinguishable from "set to null/clear".
 _UNSET = object()
@@ -40,11 +52,18 @@ def update_integration(
     *,
     nvd_api_key: str | None | object = _UNSET,
     sync_cadence_hours: int | None | object = _UNSET,
+    key_checker: KeyChecker | None = None,
 ) -> OrgIntegration:
     """Patch an org's integration. Absent fields are left untouched.
 
     ``nvd_api_key``: a non-empty string is encrypted and stored; ``None`` or an
     empty/blank string clears the stored key (falls back to the system key).
+
+    With a ``key_checker``, a new key is confirmed with NVD before it is saved:
+    a key NVD refuses is rejected (``ValidationError``) and nothing changes, so
+    a typo cannot silently break every later sync. If NVD cannot be reached the
+    key is saved as *unverified* (``nvd_key_verified_at`` stays null) rather
+    than refusing a key that may well be good.
     """
     integ = get_or_create(db, org_id)
 
@@ -52,8 +71,15 @@ def update_integration(
         key = nvd_api_key
         if key is None or (isinstance(key, str) and not key.strip()):
             integ.nvd_api_key_ct = None
+            integ.nvd_key_verified_at = None
         else:
-            integ.nvd_api_key_ct = encrypt_secret(str(key).strip())
+            cleaned = str(key).strip()
+            verdict = key_checker(cleaned) if key_checker else "unknown"
+            if verdict == "invalid":
+                db.rollback()
+                raise ValidationError(KEY_REJECTED)
+            integ.nvd_api_key_ct = encrypt_secret(cleaned)
+            integ.nvd_key_verified_at = datetime.now(UTC) if verdict == "valid" else None
 
     if sync_cadence_hours is not _UNSET and isinstance(sync_cadence_hours, int):
         hours = max(MIN_CADENCE_HOURS, min(MAX_CADENCE_HOURS, sync_cadence_hours))
@@ -67,7 +93,9 @@ def update_integration(
     return integ
 
 
-def apply_patch(db: Session, org_id: int, patch: dict) -> OrgIntegration:
+def apply_patch(
+    db: Session, org_id: int, patch: dict, *, key_checker: KeyChecker | None = None
+) -> OrgIntegration:
     """Apply only the fields present in ``patch`` (from ``exclude_unset``)."""
     kwargs: dict = {}
     if "nvd_api_key" in patch:
@@ -76,7 +104,7 @@ def apply_patch(db: Session, org_id: int, patch: dict) -> OrgIntegration:
         kwargs["sync_cadence_hours"] = patch["sync_cadence_hours"]
     if not kwargs:
         return get_or_create(db, org_id)
-    return update_integration(db, org_id, **kwargs)
+    return update_integration(db, org_id, key_checker=key_checker, **kwargs)
 
 
 def cadence_hours(db: Session, org_id: int) -> int:

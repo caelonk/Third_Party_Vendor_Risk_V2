@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { LayoutGrid, Plus, Check } from "lucide-react";
+import { AddWidgetMenu } from "@/dashboard/AddWidgetMenu";
 import { DashboardGrid } from "@/dashboard/DashboardGrid";
 import { CATALOG } from "@/dashboard/widgetMeta";
 import { MAX_WIDGETS } from "@/dashboard/constants";
@@ -67,20 +68,11 @@ export function Dashboard() {
                 <Plus /> Add widget
               </button>
               {addOpen && (
-                <>
-                  <div style={{ position: "fixed", inset: 0, zIndex: 10 }} onClick={() => setAddOpen(false)} />
-                  <div className="addmenu">
-                    {available.map((c) => (
-                      <button key={c.type} className="addmenu__item" onClick={() => addWidget(c.type)}>
-                        <c.icon size={17} />
-                        <span>
-                          <span className="addmenu__title">{c.title}</span>
-                          <span className="addmenu__desc">{c.description}</span>
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </>
+                <AddWidgetMenu
+                  available={available}
+                  onAdd={addWidget}
+                  onClose={() => setAddOpen(false)}
+                />
               )}
             </div>
           )}

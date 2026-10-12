@@ -25,7 +25,7 @@ const tooltipStyle = {
   boxShadow: "var(--shadow)",
 };
 
-export function CveTrend({ expanded }: { expanded: boolean }) {
+export function CveTrend({ expanded, preview }: { expanded: boolean; preview?: boolean }) {
   const { data, isLoading } = usePortfolioTrend();
   if (isLoading)
     return (
@@ -81,6 +81,7 @@ export function CveTrend({ expanded }: { expanded: boolean }) {
             strokeWidth={2}
             fill="var(--accent)"
             fillOpacity={0.12}
+            isAnimationActive={!preview}
           />
         </AreaChart>
       </ResponsiveContainer>

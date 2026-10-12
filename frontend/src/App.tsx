@@ -9,6 +9,7 @@ import { VendorDetail } from "@/routes/VendorDetail";
 import { Alerts } from "@/routes/Alerts";
 import { Reports } from "@/routes/Reports";
 import { Settings } from "@/routes/Settings";
+import { Profile } from "@/routes/Profile";
 
 function FullPageSpinner() {
   return (
@@ -36,6 +37,7 @@ export function App() {
           <Route path="alerts" element={<Alerts />} />
           <Route path="reports" element={<Reports />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
       ) : (
         <Route path="*" element={<Navigate to="/login" replace />} />

@@ -12,7 +12,12 @@ def test_defaults_when_unconfigured(api):
     client, _ = api.register("int@acme.io")
     oid = _org_id(client)
     body = client.get(f"{API}/orgs/{oid}/integration").json()
-    assert body == {"nvd_key_set": False, "sync_cadence_hours": 24, "min_sync_hours": 24}
+    assert body == {
+        "nvd_key_set": False,
+        "nvd_key_verified_at": None,
+        "sync_cadence_hours": 24,
+        "min_sync_hours": 24,
+    }
 
 
 def test_set_key_and_cadence_key_is_write_only(api):

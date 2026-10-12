@@ -18,14 +18,46 @@
 .widget__grip {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-left: -6px;
   border: none;
+  border-radius: var(--radius-sm);
   background: transparent;
   color: var(--text-subtle);
   cursor: grab;
-  padding: 2px;
+  touch-action: none; /* a touch on the grip drags the widget instead of scrolling */
+}
+.widget__grip:hover {
+  background: var(--surface-2);
+  color: var(--text);
 }
 .widget__grip:active {
   cursor: grabbing;
+}
+
+/* Reordering: the dragged card follows the pointer (in the drag overlay) while
+   its empty slot marks where it will land. */
+.widget--slot {
+  background: var(--surface-2);
+  border-style: dashed;
+  border-color: var(--border-strong);
+  box-shadow: none;
+}
+.widget--slot > * {
+  visibility: hidden;
+}
+.widget--overlay {
+  height: 100%;
+  box-shadow: var(--shadow-lg);
+  cursor: grabbing;
+}
+.widget--overlay .widget__grip {
+  cursor: grabbing;
+}
+.dashgrid--dragging {
+  user-select: none;
 }
 .widget__title {
   flex: 1;
@@ -49,7 +81,10 @@
   position: absolute;
   right: 0;
   top: calc(100% + 6px);
-  width: 300px;
+  /* Never wider than the screen; AddWidgetMenu also shifts it back on screen. */
+  width: min(300px, calc(100vw - 2 * var(--space-4)));
+  max-height: min(70vh, 460px);
+  overflow-y: auto;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -130,6 +165,25 @@
 }
 .wlist__row--wide {
   justify-content: flex-start;
+}
+/* Tier rows: counts and shares sit in fixed-width, right-aligned columns so the
+   digits line up from row to row whatever the tier name's length. */
+.wtier {
+  justify-content: flex-start;
+}
+.wtier > :first-child {
+  margin-right: auto;
+}
+.wtier__count,
+.wtier__share {
+  text-align: right;
+}
+.wtier__count {
+  width: 5ch;
+}
+.wtier__share {
+  width: 5ch;
+  font-size: var(--text-xs);
 }
 
 .wbig {

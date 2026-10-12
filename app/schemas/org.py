@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 from ..models.base import Role
 
@@ -24,7 +24,12 @@ class OrgOut(BaseModel):
 
 
 class OrgWithRole(OrgOut):
+    """An org as seen by one of its members: their role plus the details the
+    org's admins recorded about them."""
+
     role: Role
+    employee_id: str | None = None
+    team: str | None = None
 
 
 class MemberOut(BaseModel):
@@ -34,6 +39,25 @@ class MemberOut(BaseModel):
     email: EmailStr
     name: str | None
     role: Role
+    employee_id: str | None = None
+    team: str | None = None
+    avatar_url: str | None = None
+
+
+def _blank_to_none(value: str | None) -> str | None:
+    cleaned = " ".join((value or "").split())
+    return cleaned or None
+
+
+class MemberUpdate(BaseModel):
+    """Patch a member. Absent fields are left unchanged; blank or null clears
+    ``employee_id`` / ``team``."""
+
+    role: Role | None = None
+    employee_id: str | None = Field(default=None, max_length=64)
+    team: str | None = Field(default=None, max_length=100)
+
+    _clean = field_validator("employee_id", "team")(_blank_to_none)
 
 
 class InviteCreate(BaseModel):
@@ -50,7 +74,3 @@ class InviteOut(BaseModel):
     token: str
     expires_at: datetime
     accepted_at: datetime | None
-
-
-class RoleUpdate(BaseModel):
-    role: Role

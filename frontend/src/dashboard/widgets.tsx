@@ -47,10 +47,10 @@ function TierDistribution({ expanded }: { expanded: boolean }) {
       {expanded ? (
         <div className="wlist">
           {TIER_ORDER.map((t) => (
-            <div key={t} className="wlist__row">
+            <div key={t} className="wlist__row wtier">
               <TierBadge tier={t} />
-              <span className="mono">{dist[t] ?? 0}</span>
-              <span className="subtle mono" style={{ fontSize: "0.75rem" }}>
+              <span className="mono wtier__count">{dist[t] ?? 0}</span>
+              <span className="subtle mono wtier__share">
                 {total ? Math.round(((dist[t] ?? 0) / total) * 100) : 0}%
               </span>
             </div>
@@ -206,10 +206,13 @@ function KevExposure({ expanded }: { expanded: boolean }) {
   );
 }
 
-export const WIDGET_COMPONENTS: Record<
-  WidgetType,
-  (props: { expanded: boolean }) => JSX.Element
-> = {
+export interface WidgetProps {
+  expanded: boolean;
+  /** Rendered as the copy that follows the pointer during a drag: no entry animation. */
+  preview?: boolean;
+}
+
+export const WIDGET_COMPONENTS: Record<WidgetType, (props: WidgetProps) => JSX.Element> = {
   tier_distribution: TierDistribution,
   risk_heatmap: RiskHeatmap,
   watchlist: Watchlist,

@@ -6,6 +6,8 @@ export interface User {
   id: number;
   email: string;
   name: string | null;
+  /** Same-origin URL of the profile photo; null when none is uploaded. */
+  avatar_url: string | null;
   is_active: boolean;
   last_login_at: string | null;
 }
@@ -27,6 +29,14 @@ export interface LinkedIdentity {
 export interface SignInMethods {
   has_password: boolean;
   identities: LinkedIdentity[];
+}
+
+/** One successful sign-in, as listed on the profile page. */
+export interface SignInEvent {
+  created_at: string;
+  method: string; // "password" | "google"
+  ip: string | null;
+  user_agent: string | null;
 }
 
 export interface Plan {
@@ -67,6 +77,9 @@ export interface Org {
   plan: string;
   created_at: string;
   role: Role;
+  /** Set by the org's admins; null when not recorded. Yours, in this org. */
+  employee_id: string | null;
+  team: string | null;
 }
 
 export interface Member {
@@ -74,6 +87,9 @@ export interface Member {
   email: string;
   name: string | null;
   role: Role;
+  employee_id: string | null;
+  team: string | null;
+  avatar_url: string | null;
 }
 
 export interface Invitation {
@@ -214,6 +230,8 @@ export interface Notification {
 
 export interface Integration {
   nvd_key_set: boolean;
+  /** When NVD last accepted the stored key; null with a key set = saved unconfirmed. */
+  nvd_key_verified_at: string | null;
   sync_cadence_hours: number;
   /** The most frequent auto-sync the org's plan allows. */
   min_sync_hours: number;

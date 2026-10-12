@@ -1,8 +1,12 @@
-"""Object storage for generated files (exports), behind one small interface.
+"""Object storage for generated and uploaded files, behind one small interface.
 
-A worker writes the file; a browser downloads it. So the contract is: ``put``
-bytes under a key, then issue a **short-lived signed URL** for it. File bytes
-never flow back through the API, and no link is permanent.
+Exports: a worker writes the file; a browser downloads it. So the contract is:
+``put`` bytes under a key, then issue a **short-lived signed URL** for it. Export
+bytes never flow back through the API, and no link is permanent.
+
+Profile photos are the exception: they are small (a few KB after resizing), so
+the API reads them back with ``get`` and serves them itself, same-origin and
+behind the session (see :mod:`app.services.profile_service`).
 
 * :class:`S3Storage` — any S3-compatible store (AWS S3, MinIO, Cloudflare R2, ...).
   Download links are presigned GETs. Presigning is offline (no network call) and
@@ -48,8 +52,16 @@ def content_disposition(filename: str) -> str:
     return f"attachment; filename=\"{fallback}\"; filename*=UTF-8''{quote(filename, safe='')}"
 
 
+class ObjectNotFoundError(Exception):
+    """No object is stored under the key."""
+
+
 class ObjectStorage(Protocol):
     def put(self, key: str, data: bytes, *, content_type: str) -> None: ...
+
+    def get(self, key: str) -> bytes:
+        """The object's bytes. Raises :class:`ObjectNotFoundError` if absent."""
+        ...
 
     def signed_url(
         self, key: str, *, filename: str, content_type: str, expires_in: int
@@ -134,6 +146,17 @@ class S3Storage:
             Bucket=self.bucket, Key=check_key(key), Body=data, ContentType=content_type
         )
 
+    def get(self, key: str) -> bytes:
+        from botocore.exceptions import ClientError
+
+        try:
+            obj = self.client.get_object(Bucket=self.bucket, Key=check_key(key))
+        except ClientError as exc:
+            if exc.response.get("Error", {}).get("Code") in ("NoSuchKey", "NoSuchBucket", "404"):
+                raise ObjectNotFoundError(key) from exc
+            raise
+        return bytes(obj["Body"].read())
+
     def signed_url(self, key: str, *, filename: str, content_type: str, expires_in: int) -> str:
         return str(
             self.signing_client.generate_presigned_url(
@@ -179,6 +202,12 @@ class LocalStorage:
         partial = path.with_name(path.name + ".part")
         partial.write_bytes(data)
         os.replace(partial, path)  # atomic: a reader never sees half a file
+
+    def get(self, key: str) -> bytes:
+        try:
+            return self.path_for(key).read_bytes()
+        except FileNotFoundError as exc:
+            raise ObjectNotFoundError(key) from exc
 
     def delete(self, key: str) -> None:
         self.path_for(key).unlink(missing_ok=True)

@@ -36,6 +36,7 @@ from ..services import oidc, sso_service
 from ..services.oidc import DevOidcProvider, OidcError, OidcProvider
 from . import _dev_pages
 from ._cookies import set_auth_cookies
+from ._signins import record_sign_in
 
 log = logging.getLogger(__name__)
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -166,6 +167,7 @@ def google_start(
 
 @router.get("/google/callback")
 def google_callback(
+    request: Request,
     code: str | None = Query(default=None, max_length=4096),
     state: str | None = Query(default=None, max_length=512),
     error: str | None = Query(default=None, max_length=200),
@@ -202,6 +204,7 @@ def google_callback(
 
     resp = RedirectResponse(flow["next"], status_code=302)
     set_auth_cookies(resp, user.id)
+    record_sign_in(db, request, user, method=identity.provider)
     _clear_flow(resp)
     _no_store(resp)
     return resp

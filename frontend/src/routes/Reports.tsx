@@ -28,6 +28,7 @@ const ACTION_LABELS: Record<string, string> = {
   "billing.payment_failed": "Payment failed",
   "member.invited": "Invited member",
   "member.role_changed": "Changed member role",
+  "member.updated": "Updated member details",
   "member.removed": "Removed member",
   "integration.updated": "Updated sync settings",
 };

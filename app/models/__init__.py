@@ -17,7 +17,7 @@ from .base import (
 from .billing import BillingEvent, OrgBilling
 from .ops import AuditLog, ExportJob, SyncRun
 from .org import Invitation, Membership, Organization, OrgIntegration
-from .user import MAX_DASHBOARD_WIDGETS, User, UserIdentity, UserPreference
+from .user import MAX_DASHBOARD_WIDGETS, LoginEvent, User, UserIdentity, UserPreference
 from .vendor import RiskSnapshot, Vendor, VendorVulnerability
 from .vulnerability import CpeSyncState, Vulnerability
 
@@ -40,6 +40,7 @@ __all__ = [
     "User",
     "UserPreference",
     "UserIdentity",
+    "LoginEvent",
     "MAX_DASHBOARD_WIDGETS",
     "Vulnerability",
     "CpeSyncState",

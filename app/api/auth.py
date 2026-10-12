@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import jwt
-from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Request, Response, status
 from sqlalchemy.orm import Session
 
 from ..db import get_session
@@ -12,6 +12,7 @@ from ..schemas.auth import LoginRequest, RegisterRequest, UserOut
 from ..security import decode_token
 from ..services import auth_service
 from ._cookies import clear_auth_cookies, set_auth_cookies
+from ._signins import record_sign_in
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -19,6 +20,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 @router.post("/register", response_model=UserOut, status_code=status.HTTP_201_CREATED)
 def register(
     body: RegisterRequest,
+    request: Request,
     response: Response,
     db: Session = Depends(get_session),
 ) -> User:
@@ -30,17 +32,20 @@ def register(
         org_name=body.org_name,
     )
     set_auth_cookies(response, user.id)
+    record_sign_in(db, request, user, method="password")  # registering signs you in
     return user
 
 
 @router.post("/login", response_model=UserOut)
 def login(
     body: LoginRequest,
+    request: Request,
     response: Response,
     db: Session = Depends(get_session),
 ) -> User:
     user = auth_service.authenticate(db, email=body.email, password=body.password)
     set_auth_cookies(response, user.id)
+    record_sign_in(db, request, user, method="password")
     return user
 
 

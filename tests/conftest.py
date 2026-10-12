@@ -9,6 +9,7 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
+from app.api.integrations import get_nvd_key_checker
 from app.config import get_settings
 from app.db import get_session
 from app.main import create_app
@@ -105,6 +106,8 @@ def api(monkeypatch):
 
     app = create_app()
     app.dependency_overrides[get_session] = _override_session
+    # Saving an NVD key asks NVD to confirm it; tests never make that call.
+    app.dependency_overrides[get_nvd_key_checker] = lambda: (lambda _key: "valid")
     try:
         yield ApiHarness(app, TestingSession)
     finally:

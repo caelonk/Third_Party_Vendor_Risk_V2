@@ -87,6 +87,20 @@ Every NVD call (worker syncs, the Sync button, CPE search) draws from one Redis
 token bucket per API key, so NVD's rate limit holds across all processes;
 backfills must leave a 30% cushion (`NVD_BACKFILL_RESERVE_FRACTION`).
 
+**NVD API key.** Without a key, NVD allows 5 requests per 30 seconds; a free key
+from <https://nvd.nist.gov/developers/request-an-api-key> raises that to 50. An
+organization's admins paste theirs under Settings → Automated sync, where it is
+stored encrypted and never shown again. Saving asks NVD to confirm the key with
+one small request: a key NVD refuses is rejected on the spot (nothing is saved),
+and if NVD can't be reached the key is saved and labeled unconfirmed. A key that
+is refused later (revoked, say) fails that sync with "NVD rejected the API key"
+instead of a generic error. `NVD_API_KEY` in `.env` is the system-wide fallback
+for organizations without their own; check it with:
+
+```bash
+docker compose exec api python -c "import os; from core.nvd_client import check_api_key; print(check_api_key(os.environ['NVD_API_KEY']))"
+```
+
 **Exports** (CSV data, PDF report) are background jobs: the API queues one, a
 worker renders it into the bucket, and the SPA polls and then follows
 `/exports/{id}/download`, which checks membership and redirects to a signed URL
@@ -115,10 +129,22 @@ refused when `ENV=production`. To switch to real Google:
 The button follows Google's branding guidelines (their light/dark button colors,
 Google Sans Medium, and the official "G" from Google's pre-approved assets in
 `frontend/src/assets/google/`) — the one deliberate exception to the app's
-restrained palette. An account created through Google has no password; in
-**Settings → Sign-in & security** its password form stays greyed out until the
-user unlinks Google, after which they create one (the API enforces that order).
-Accounts with a password change it by confirming the current one.
+restrained palette. An account created through Google has no password; on the
+**profile page**, under Sign-in & security, its password form stays greyed out
+until the user unlinks Google, after which they create one (the API enforces
+that order). An account that started with a password keeps it when Google is
+linked later: either one signs in, the form stays active, and the password is
+changed by confirming the current one.
+
+**Profile.** Clicking your name in the sidebar opens your profile: photo,
+display name, email, your organization, role, and (when an admin has recorded
+them under Settings → Members) your employee ID and team, the password form, and
+your last five sign-ins with method, browser and address. An uploaded photo is
+never stored as received: it is decoded from a short allow-list of formats
+(PNG, JPEG, WebP), size-checked before the pixels are read, and re-encoded as a
+256 px WebP, which drops metadata such as GPS. It lives in the same object store
+as exports and is served same-origin, only to signed-in members of an
+organization you share.
 
 **Plans and billing.** Three demo plans, enforced in the service layer (the
 API answers `402` with an "upgrade" message; the UI links to the plan comparison):

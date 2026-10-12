@@ -1,0 +1,186 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 760px;
+}
+.profile__sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.profile__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.profile__sections > * + * {
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+}
+.profile__heading {
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+.profile__note {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+.profile__wrap {
+  overflow-wrap: anywhere;
+}
+
+/* Photo */
+.profile__photo {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+.profile__photo-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.profile__photo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.profile__spinner {
+  width: 14px;
+  height: 14px;
+}
+
+/* Display name: the field and its button share a row, then stack on a phone. */
+.profile__name {
+  max-width: 480px;
+}
+.profile__inline {
+  display: flex;
+  gap: var(--space-2);
+}
+.profile__inline .input {
+  flex: 1;
+  min-width: 0;
+}
+@media (max-width: 420px) {
+  .profile__inline {
+    flex-direction: column;
+  }
+  .profile__inline .input {
+    flex: none; /* stacked: keep the field's own height instead of sharing the column */
+  }
+}
+
+/* Recent sign-ins */
+.signins {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.signins__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+}
+.signins__row:first-child {
+  padding-top: 0;
+}
+.signins__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.signins__when {
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+.signins__where {
+  font-size: var(--text-xs);
+  overflow-wrap: anywhere;
+}
+
+/* Sign-in & security */
+.security {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.security__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.security__section + .security__section {
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+}
+.security__heading {
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+.security__hint {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+.security__account {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.security__account-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.security__account-name {
+  font-weight: 500;
+  font-size: var(--text-sm);
+}
+.security__account-meta {
+  font-size: var(--text-xs);
+  overflow-wrap: anywhere;
+}
+.security__locked-note {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+.security__locked-note svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.security__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 420px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+/* Google-created accounts: visible but greyed out until Google is unlinked. */
+.security__fields:disabled {
+  opacity: 0.5;
+}
+.security__fields:disabled .input {
+  cursor: not-allowed;
+  background: var(--surface-2);
+}
+.security__modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}

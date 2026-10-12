@@ -40,24 +40,36 @@ def create_org(db: Session, *, name: str, owner: User, slug: str | None = None) 
     return org
 
 
-def list_orgs_for_user(db: Session, user: User) -> list[tuple[Organization, Role]]:
+def list_orgs_for_user(db: Session, user: User) -> list[tuple[Organization, Membership]]:
+    """The user's orgs, each with their own membership (role, employee ID, team)."""
     rows = db.execute(
-        select(Organization, Membership.role)
+        select(Organization, Membership)
         .join(Membership, Membership.org_id == Organization.id)
         .where(Membership.user_id == user.id)
         .order_by(Organization.name)
     ).all()
-    return [(org, role) for org, role in rows]
+    return [(org, membership) for org, membership in rows]
 
 
-def list_members(db: Session, org_id: int) -> list[tuple[User, Role]]:
+def list_members(db: Session, org_id: int) -> list[tuple[User, Membership]]:
     rows = db.execute(
-        select(User, Membership.role)
+        select(User, Membership)
         .join(Membership, Membership.user_id == User.id)
         .where(Membership.org_id == org_id)
         .order_by(User.email)
     ).all()
-    return [(user, role) for user, role in rows]
+    return [(user, membership) for user, membership in rows]
+
+
+def get_member(db: Session, org_id: int, user_id: int) -> tuple[User, Membership]:
+    row = db.execute(
+        select(User, Membership)
+        .join(Membership, Membership.user_id == User.id)
+        .where(Membership.org_id == org_id, Membership.user_id == user_id)
+    ).first()
+    if row is None:
+        raise NotFoundError("Membership not found")
+    return row[0], row[1]
 
 
 def add_member(db: Session, org_id: int, *, user_id: int, role: Role) -> Membership:
@@ -91,6 +103,40 @@ def set_member_role(db: Session, org_id: int, *, user_id: int, role: Role) -> Me
     if membership.role is Role.owner and role is not Role.owner and _owner_count(db, org_id) <= 1:
         raise ConflictError("Cannot demote the last owner")
     membership.role = role
+    db.commit()
+    db.refresh(membership)
+    return membership
+
+
+def update_member_details(
+    db: Session, org_id: int, *, user_id: int, changes: dict[str, str | None]
+) -> Membership:
+    """Set a member's ``employee_id`` and/or ``team`` (only the keys present in
+    ``changes``; None clears). An employee ID is unique within an org."""
+    membership = db.scalar(
+        select(Membership).where(
+            Membership.org_id == org_id, Membership.user_id == user_id
+        )
+    )
+    if membership is None:
+        raise NotFoundError("Membership not found")
+    if "employee_id" in changes:
+        employee_id = changes["employee_id"]
+        if employee_id is not None:
+            holder = db.scalar(
+                select(User.email)
+                .join(Membership, Membership.user_id == User.id)
+                .where(
+                    Membership.org_id == org_id,
+                    Membership.user_id != user_id,
+                    func.lower(Membership.employee_id) == employee_id.lower(),
+                )
+            )
+            if holder is not None:
+                raise ConflictError(f"Employee ID {employee_id} already belongs to {holder}.")
+        membership.employee_id = employee_id
+    if "team" in changes:
+        membership.team = changes["team"]
     db.commit()
     db.refresh(membership)
     return membership

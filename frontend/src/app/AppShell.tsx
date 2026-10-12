@@ -2,14 +2,19 @@ import { useState } from "react";
 import {
   Bell,
   Check,
+  ChevronDown,
+  ChevronUp,
   ChevronsUpDown,
   FileText,
   LayoutDashboard,
   LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
   Settings2,
   Shield,
 } from "lucide-react";
 import { Link, NavLink, Outlet } from "react-router-dom";
+import { Avatar } from "@/components/Avatar";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ThemeSync } from "@/theme/ThemeSync";
@@ -17,16 +22,9 @@ import { useAuth } from "@/auth/AuthProvider";
 import { useOrg } from "@/org/OrgProvider";
 import { useUnreadCount } from "@/features/alerts";
 import { useBilling } from "@/features/billing";
+import { useNavCollapsed } from "./useNavCollapsed";
 import "./app-shell.css";
 import "@/routes/alerts.css";
-
-function initials(name: string | null, email: string) {
-  if (name) {
-    const parts = name.trim().split(/\s+/);
-    return (parts[0][0] + (parts[1]?.[0] ?? "")).toUpperCase();
-  }
-  return email.slice(0, 2).toUpperCase();
-}
 
 function OrgSwitcher() {
   const { orgs, currentOrg, setCurrentOrgId } = useOrg();
@@ -34,10 +32,17 @@ function OrgSwitcher() {
   if (!currentOrg) return null;
   return (
     <div className="orgswitch">
-      <button className="orgswitch__btn" onClick={() => setOpen((o) => !o)} type="button">
+      <button
+        className="orgswitch__btn"
+        onClick={() => setOpen((o) => !o)}
+        type="button"
+        title={`Organization: ${currentOrg.name}`}
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
         <Shield size={16} style={{ color: "var(--text-subtle)" }} />
         <span className="orgswitch__name">{currentOrg.name}</span>
-        <ChevronsUpDown size={15} style={{ color: "var(--text-subtle)" }} />
+        <ChevronsUpDown className="orgswitch__caret" size={15} style={{ color: "var(--text-subtle)" }} />
       </button>
       {open && (
         <>
@@ -45,12 +50,13 @@ function OrgSwitcher() {
             style={{ position: "fixed", inset: 0, zIndex: 10 }}
             onClick={() => setOpen(false)}
           />
-          <div className="orgswitch__menu">
+          <div className="orgswitch__menu" role="menu">
             {orgs.map((o) => (
               <button
                 key={o.id}
                 className="orgswitch__item"
                 type="button"
+                role="menuitem"
                 onClick={() => {
                   setCurrentOrgId(o.id);
                   setOpen(false);
@@ -67,85 +73,111 @@ function OrgSwitcher() {
   );
 }
 
+const navClass = ({ isActive }: { isActive: boolean }) =>
+  `navlink${isActive ? " navlink--active" : ""}`;
+
 function AlertsNav() {
   const { data } = useUnreadCount();
   const unread = data?.unread ?? 0;
   return (
-    <NavLink
-      to="/alerts"
-      className={({ isActive }) => `navlink${isActive ? " navlink--active" : ""}`}
-    >
+    <NavLink to="/alerts" title="Alerts" className={navClass}>
       <Bell />
-      <span>Alerts</span>
-      {unread > 0 && <span className="navbadge">{unread > 99 ? "99+" : unread}</span>}
+      <span className="navlink__label">Alerts</span>
+      {unread > 0 && (
+        <span className="navbadge" aria-label={`${unread} unread`}>
+          {unread > 99 ? "99+" : unread}
+        </span>
+      )}
     </NavLink>
   );
 }
 
 export function AppShell() {
   const { user, logout } = useAuth();
+  const { collapsed, mobile, toggle } = useNavCollapsed();
+  // The same control collapses the sidebar on a wide screen and the header on a
+  // narrow one; only its wording and icon differ.
+  const region = mobile ? "menu" : "sidebar";
+  const ToggleIcon = mobile
+    ? collapsed
+      ? ChevronDown
+      : ChevronUp
+    : collapsed
+      ? PanelLeftOpen
+      : PanelLeftClose;
+  const toggleLabel = `${collapsed ? "Expand" : "Collapse"} ${region}`;
 
   return (
-    <div className="shell">
+    <div className="shell" data-nav={collapsed ? "collapsed" : "expanded"}>
       <ThemeSync />
       <aside className="sidebar">
         <div className="sidebar__brand">
-          <NavLink to="/" style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
-            <span style={{ color: "var(--text)", display: "inline-flex" }}>
-              <Logo size={24} />
-            </span>
-            <span style={{ fontWeight: 600, color: "var(--text)", letterSpacing: "-0.01em" }}>
-              Vendor<span style={{ color: "var(--text-subtle)" }}>Risk</span>
+          <NavLink to="/" className="sidebar__logo" title="VendorRisk">
+            <Logo size={24} />
+            <span className="sidebar__wordmark">
+              Vendor<span>Risk</span>
             </span>
           </NavLink>
+          <button
+            type="button"
+            className="icon-btn sidebar__toggle"
+            onClick={toggle}
+            aria-expanded={!collapsed}
+            aria-controls="sidebar-more"
+            aria-label={toggleLabel}
+            title={toggleLabel}
+          >
+            <ToggleIcon />
+          </button>
         </div>
 
-        <nav className="sidebar__nav">
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) => `navlink${isActive ? " navlink--active" : ""}`}
-          >
+        <nav className="sidebar__nav" aria-label="Main">
+          <NavLink to="/" end title="Dashboard" className={navClass}>
             <LayoutDashboard />
-            <span>Dashboard</span>
+            <span className="navlink__label">Dashboard</span>
           </NavLink>
-          <NavLink
-            to="/vendors"
-            className={({ isActive }) => `navlink${isActive ? " navlink--active" : ""}`}
-          >
+          <NavLink to="/vendors" title="Vendors" className={navClass}>
             <Shield />
-            <span>Vendors</span>
+            <span className="navlink__label">Vendors</span>
           </NavLink>
           <AlertsNav />
-          <NavLink
-            to="/reports"
-            className={({ isActive }) => `navlink${isActive ? " navlink--active" : ""}`}
-          >
+          <NavLink to="/reports" title="Reports" className={navClass}>
             <FileText />
-            <span>Reports</span>
+            <span className="navlink__label">Reports</span>
           </NavLink>
-          <NavLink
-            to="/settings"
-            className={({ isActive }) => `navlink${isActive ? " navlink--active" : ""}`}
-          >
+          <NavLink to="/settings" title="Settings" className={navClass}>
             <Settings2 />
-            <span>Settings</span>
+            <span className="navlink__label">Settings</span>
           </NavLink>
         </nav>
 
         <div className="sidebar__spacer" />
 
-        <div className="sidebar__foot">
+        <div className="sidebar__foot" id="sidebar-more">
           <OrgSwitcher />
           <ThemeToggle />
           {user && (
             <div className="userbar">
-              <div className="avatar">{initials(user.name, user.email)}</div>
-              <div className="userbar__meta">
-                <div className="userbar__name">{user.name ?? "You"}</div>
-                <div className="userbar__email">{user.email}</div>
-              </div>
-              <button className="icon-btn" title="Sign out" onClick={() => void logout()}>
+              <NavLink
+                to="/profile"
+                title="Your profile"
+                className={({ isActive }) =>
+                  `userbar__link${isActive ? " userbar__link--active" : ""}`
+                }
+              >
+                <Avatar user={user} />
+                <span className="userbar__meta">
+                  <span className="userbar__name">{user.name ?? "You"}</span>
+                  <span className="userbar__email">{user.email}</span>
+                </span>
+              </NavLink>
+              <button
+                type="button"
+                className="icon-btn"
+                title="Sign out"
+                aria-label="Sign out"
+                onClick={() => void logout()}
+              >
                 <LogOut />
               </button>
             </div>

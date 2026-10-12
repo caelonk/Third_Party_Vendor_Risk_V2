@@ -40,7 +40,12 @@ class Organization(Base, TimestampMixin):
 
 class Membership(Base, TimestampMixin):
     __tablename__ = "memberships"
-    __table_args__ = (UniqueConstraint("org_id", "user_id"),)
+    __table_args__ = (
+        UniqueConstraint("org_id", "user_id"),
+        # An employee ID identifies one person within an org (unset = NULL, and
+        # NULLs never collide).
+        UniqueConstraint("org_id", "employee_id", name="uq_memberships_org_id_employee_id"),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True)
     org_id: Mapped[int] = mapped_column(
@@ -50,6 +55,11 @@ class Membership(Base, TimestampMixin):
         ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
     )
     role: Mapped[Role] = mapped_column(role_enum, nullable=False, default=Role.member)
+    # Optional details an org's admins record about a member. They belong to the
+    # membership, not the user: the same person can have a different employee ID
+    # and team in each organization.
+    employee_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    team: Mapped[str | None] = mapped_column(String(100), nullable=True)
 
     organization: Mapped[Organization] = relationship(back_populates="memberships")
     user: Mapped[User] = relationship(back_populates="memberships")
@@ -88,6 +98,11 @@ class OrgIntegration(Base, TimestampMixin):
         index=True,
     )
     nvd_api_key_ct: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # When NVD last accepted the stored key. Null with a key set = saved but not
+    # confirmed (NVD was unreachable when it was saved).
+    nvd_key_verified_at: Mapped[datetime | None] = mapped_column(
+        SADateTime(timezone=True), nullable=True
+    )
     slack_webhook_ct: Mapped[str | None] = mapped_column(Text, nullable=True)
     smtp_host: Mapped[str | None] = mapped_column(String(255), nullable=True)
     smtp_port: Mapped[int | None] = mapped_column(Integer, nullable=True)

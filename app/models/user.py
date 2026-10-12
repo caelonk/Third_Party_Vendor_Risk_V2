@@ -1,5 +1,5 @@
-"""Users, their external sign-in identities, and per-user preferences (theme +
-customizable dashboard layout)."""
+"""Users, their external sign-in identities, recent sign-ins, and per-user
+preferences (theme + customizable dashboard layout)."""
 from __future__ import annotations
 
 from datetime import datetime
@@ -10,8 +10,10 @@ from sqlalchemy import (
     Boolean,
     DateTime,
     ForeignKey,
+    Index,
     String,
     UniqueConstraint,
+    func,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -37,6 +39,8 @@ class User(Base, TimestampMixin):
     # Null for accounts that only sign in through an identity provider (Google).
     password_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
     name: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    # Object-storage key of the profile photo (see services/profile_service).
+    avatar_key: Mapped[str | None] = mapped_column(String(255), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
@@ -77,6 +81,28 @@ class UserIdentity(Base, TimestampMixin):
     last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     user: Mapped[User] = relationship(back_populates="identities")
+
+
+class LoginEvent(Base):
+    """One successful sign-in, shown to the user as their recent sign-ins.
+
+    Only the newest few per user are kept (pruned on insert), so this is a
+    short activity list for the account owner, not an audit trail.
+    """
+
+    __tablename__ = "login_events"
+    __table_args__ = (Index("ix_login_events_user_id_created_at", "user_id", "created_at"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    method: Mapped[str] = mapped_column(String(32), nullable=False)  # "password" | "google"
+    ip: Mapped[str | None] = mapped_column(String(45), nullable=True)  # fits IPv6
+    user_agent: Mapped[str | None] = mapped_column(String(300), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
 
 
 class UserPreference(Base, TimestampMixin):

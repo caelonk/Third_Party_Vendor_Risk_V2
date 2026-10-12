@@ -21,6 +21,8 @@ interface AuthContextValue {
     org_name?: string;
   }) => Promise<void>;
   logout: () => Promise<void>;
+  /** Replace the signed-in user after they edit their own profile. */
+  updateUser: (user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -63,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ user, loading, login, register, logout }),
+    () => ({ user, loading, login, register, logout, updateUser: setUser }),
     [user, loading, login, register, logout],
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

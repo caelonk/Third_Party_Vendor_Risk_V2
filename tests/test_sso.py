@@ -133,6 +133,14 @@ def test_signing_in_again_reuses_the_same_account(api, sso):
         assert db.query(UserIdentity).count() == 1
 
 
+def test_google_sign_ins_appear_in_the_sign_in_history(api, sso):
+    client = api.client()
+    sign_in(client, "history@example.com")
+    sign_in(api.client(), "history@example.com")
+    events = client.get(f"{API}/me/logins").json()
+    assert [e["method"] for e in events] == ["google", "google"]
+
+
 def test_links_to_an_existing_password_account_with_the_same_email(api, sso):
     owner, _ = api.register("owner@acme.io", org_name="Acme")
     uid = owner.get(f"{API}/auth/me").json()["id"]

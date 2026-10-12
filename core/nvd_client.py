@@ -40,8 +40,43 @@ PACE_KEYLESS = 6.0
 QUERY_TYPES = ("recent", "kev")
 
 
+# A well-known CVE (Log4Shell): a single-record lookup is the cheapest request
+# that still makes NVD check the key.
+KEY_CHECK_CVE = "CVE-2021-44228"
+
+
 class VendorFetchError(Exception):
     """Raised when a vendor query cannot be completed after retries."""
+
+
+class InvalidApiKeyError(VendorFetchError):
+    """NVD refused the API key. Retrying cannot help; the key must be replaced."""
+
+
+def key_rejected(resp: requests.Response) -> bool:
+    """Whether a response is NVD refusing the key (as opposed to rate limiting).
+
+    NVD answers a bad key with 404 and a ``message: Invalid apiKey.`` header.
+    The header, not the status, is the signal: 404 alone is ambiguous and 403 is
+    what NVD uses for rate limiting.
+    """
+    return "invalid apikey" in (resp.headers.get("message") or "").lower()
+
+
+def check_api_key(api_key: str, *, session=None, timeout: float = 15.0) -> str:
+    """Ask NVD whether it accepts ``api_key``, with one small request.
+
+    Returns ``"valid"``, ``"invalid"``, or ``"unknown"`` when NVD could not be
+    reached or answered with anything else (rate limited, down): no verdict.
+    """
+    session = session or make_session(NVDConfig(api_key=api_key))
+    try:
+        resp = session.get(BASE_URL, params={"cveId": KEY_CHECK_CVE}, timeout=timeout)
+    except requests.RequestException:
+        return "unknown"
+    if key_rejected(resp):
+        return "invalid"
+    return "valid" if resp.status_code == 200 else "unknown"
 
 
 @dataclass(frozen=True)
@@ -129,6 +164,10 @@ def _get(session, params, config: NVDConfig, *, url: str = BASE_URL, log, sleepe
             continue
         if resp.status_code == 200:
             return resp.json()
+        if key_rejected(resp):
+            raise InvalidApiKeyError(
+                "NVD rejected the API key. Replace or remove it in Settings > Automated sync."
+            )
         if resp.status_code in RETRY_STATUS:
             last_error = f"HTTP {resp.status_code}"
             continue

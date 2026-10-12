@@ -157,6 +157,12 @@ export function SecurityCard() {
               Your account has no password yet. Create one to sign in with your email.
             </p>
           )}
+          {mode === "change" && google && (
+            <p className="subtle security__hint">
+              This account has a password and Google connected, so either one signs you in.
+              Unlinking Google leaves the password in place.
+            </p>
+          )}
 
           <fieldset className="security__fields" disabled={locked} aria-disabled={locked}>
             {mode === "change" && field("current", "Current password", "current-password", firstField)}
